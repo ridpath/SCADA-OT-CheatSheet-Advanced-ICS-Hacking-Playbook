@@ -78,7 +78,7 @@ This tool is designed **solely for use by authorized personnel** in environments
 - Output in JSON or plaintext
 - Supports advanced logging, structured output, and risk ratings
 
-## usage 
+## Usage 
 Install dependencies:
 
 ```bash
@@ -93,12 +93,3 @@ python3 s7comm_exploit.py <command> [options]
 - Requires explicit user confirmation for dangerous actions (STOP, write)
 - Performs S7Comm header validation before scan/overflow
 - Designed to fail gracefully on invalid targets
-
-
-
-
-
----
-
-## 📁 Directory Structure
-
