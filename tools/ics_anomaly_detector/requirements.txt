@@ -1,0 +1,38 @@
+# Core ML libraries
+numpy
+pandas
+scikit-learn
+scipy
+joblib
+matplotlib
+seaborn
+shap
+
+# Network & packet analysis
+scapy
+pyshark
+
+# ICS Protocols
+pymodbus
+opcua
+cpppo
+python-dnp3
+
+# Suricata integration
+suricatasc
+redis
+
+# Monitoring and observability
+psutil
+prometheus_client
+
+# Production deployment
+fastapi
+uvicorn
+aiofiles
+PyYAML
+elasticsearch
+docker
+
+# Optional (for safety, but recommended)
+argcomplete
