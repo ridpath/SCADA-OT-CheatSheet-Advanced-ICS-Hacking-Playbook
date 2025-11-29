@@ -101,7 +101,7 @@ Red/Blue Team Scenarios:
 - Evaluate alert noise from watchdog bypass
 
 ## Ethics & Legal Notice
-his tool is for educational, research, and authorized red teaming only.
+This tool is for educational, research, and authorized red teaming only.
 
 Do not use on any ICS/OT environment unless you have explicit legal permission.
 
