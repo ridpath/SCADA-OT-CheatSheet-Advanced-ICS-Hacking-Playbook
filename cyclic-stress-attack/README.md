@@ -115,9 +115,3 @@ Scenario YAML runner (Caldera-style)
 HMI manipulation / fake sensor values
 
 Integration with OpenPLC or FactoryIO
-
-
-
-
-  --dry-run \
-  --log-json telemetry.json
