@@ -41,10 +41,12 @@ Always follow your local laws and obtain **explicit permission** before conducti
 The author assumes **no liability** for misuse or unauthorized activity involving this material.
 
 ---
-
-contents
+# Table of contents
 
 - [SCADA / OT Hacking Mega Cheat Sheet](#scada--ot-hacking-mega-cheat-sheet)
+  - [ICS/SCADA Offensive & Defensive Operations Cheat Sheet](#icsscada-offensive--defensive-operations-cheat-sheet)
+    - [Contents Include:](#contents-include)
+  - [Legal & Ethical Disclaimer](#legal--ethical-disclaimer)
   - [1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES](#1-landscape-protocols-and-attack-surfaces)
     - [1. ICS/OT ARCHITECTURE - ADVANCED PURDUE MODEL WITH TRUST MODELING](#1-icsot-architecture---advanced-purdue-model-with-trust-modeling)
     - [CORE ASSETS, THREATS & ADVANCED TARGETING](#core-assets-threats--advanced-targeting)
@@ -299,6 +301,12 @@ contents
     - [11.10 ADVERSARY SIMULATION CALIBRATION & SCORING FRAMEWORK](#1110-adversary-simulation-calibration--scoring-framework)
     - [ICS MITRE-Style ATT&CK Map Integration](#ics-mitre-style-attck-map-integration)
     - [11.11 ADVANCED OPERATIONAL TRADECRAFT & ENHANCED DETECTION AVOIDANCE](#1111-advanced-operational-tradecraft--enhanced-detection-avoidance)
+
+
+
+
+
+
 ## 1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES
 
 ### 1. ICS/OT ARCHITECTURE - ADVANCED PURDUE MODEL WITH TRUST MODELING
