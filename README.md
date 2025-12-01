@@ -17,6 +17,10 @@ Keywords for Search Optimization:
 ## ICS/SCADA Offensive & Defensive Operations Cheat Sheet
 
 This advanced ICS/SCADA cybersecurity cheat sheet delivers full spectrum tactics and defensive correlations for real-world operational environments. Built for red teams, defenders, and ICS incident responders.
+![status: active](https://img.shields.io/badge/status-active-success)
+![license: MIT](https://img.shields.io/badge/license-MIT-blue)
+![OT/ICS](https://img.shields.io/badge/domain-ICS/SCADA-critical)
+
 
 ### Contents Include:
 - Protocol-aware attack patterns for Modbus, DNP3, S7Comm, OPC UA
