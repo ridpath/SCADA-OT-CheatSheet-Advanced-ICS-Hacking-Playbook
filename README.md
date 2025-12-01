@@ -142,7 +142,6 @@ This advanced ICS/SCADA cybersecurity cheat sheet delivers- [SCADA / OT Hacking 
         - [IDE Integration Plugin](#ide-integration-plugin)
     - [Deployment Integration Matrix](#deployment-integration-matrix)
   - [ICS/SCADA Security Tools by Ridpath](#icsscada-security-tools-by-ridpath)
-  - [| **ICS Anomaly Detector Suite** | Behavioral anomaly detection using ML, Suricata, FastAPI | T0855, T0860, T0801 | `/tools/ics_anomaly_detector/` |](#-ics-anomaly-detector-suite--behavioral-anomaly-detection-using-ml-suricata-fastapi--t0855-t0860-t0801--toolsics_anomaly_detector-)
   - [SECTION 4: ADVANCED DETECTION TECHNIQUES](#section-4-advanced-detection-techniques)
     - [4.1 MEMORY-BASED PLC EXECUTION TRAPS](#41-memory-based-plc-execution-traps)
       - [PLC Execution Fingerprint Baseline](#plc-execution-fingerprint-baseline)
