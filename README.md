@@ -5839,6 +5839,7 @@ if __name__ == "__main__":
 
 ### 3.1 ENHANCED DIRECTORY STRUCTURE & DEPLOYMENT
 #### Framework Architecture (Example)
+```bash
 ICS-Security-Framework/
 ├── detectors/
 │   ├── logic_analysis/
@@ -5905,7 +5906,7 @@ ICS-Security-Framework/
     │   └── troubleshooting.md       # Troubleshooting guide
     ├── api_reference/               # API documentation
     └── security_policies/           # Security policy templates
-
+```
 
 ### Deployment Configuration Matrix
 | Component Type | Deployment Method | Resource Requirements | Security Considerations |
