@@ -13,13 +13,115 @@ Keywords for Search Optimization:
 `cyber-physical security`, `industrial adversary simulation`, `ICS threat hunting`,  ‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​‌​​​​‌‌​‌​​‌​‌‌​​‌​​​‌‌​​‌​​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌​‌‌‌​​​​​‌​‌​​‌​​‌​​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌​‌‌‌‌​‌‌​‌​‌‌​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​‌‌​​​‌‌​​‌‌​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​​​​​‌‌​​​​‌​‌‌‌‌​​‌​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌​​​​‌​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​​‌‌​‌‌​‌​​​​‌‌​​‌​‌​‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌‌​‌‌​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​​‌​‌​‌‌​​‌‌‌​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​​‌​‌​‌‌‌​​‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌​‌‌​​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​​‌​‌​​​​‌​‌​​‌‌​​​‌​​‌‌​​‌​‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌‌​‌​‌​‌‌‌​​‌‌​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌​​‌​‌​‌‌‌​​‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌​‌‌​​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​​​‌​‌‌​‌‌​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​​​‌​‌​​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌​​​​‌​‌‌​‌‌‌​​‌‌​​‌​​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​‌​​​​​​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​‌‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌​​​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌‌‌‌​‌‌‌​​‌​​‌‌​‌‌​​​‌‌​​‌​​​​​​‌​‌​​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌‌​​‌‌​‌‌​​‌​‌​​‌​​​​​​‌‌​​​​‌​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​‌‌​​​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​​‌‌​‌‌‌​​‌‌​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​​​​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​‌‌‌​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌‌‌​​‌​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌​​‌​‌​‌‌​‌‌​‌​​‌​‌‌‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌‌‌​​‌​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌​​‌​‌​‌‌​‌‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​​​‌​​‌​​​​​​‌‌​​‌​​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​​​‌​‌‌​‌‌​‌​​‌​​​​​​‌‌​‌‌‌‌​‌‌​​​‌‌​‌‌​​​‌‌​‌‌‌​‌​‌​‌‌‌​​‌​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​​​‌​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌‌​‌​‌​‌‌​​​‌​​‌‌‌​​‌‌​‌‌‌​‌​​​‌‌‌​​‌​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​​​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​‌‌​‌​‌‌​​​​‌​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌‌​​‌‌​​​​‌​‌​​‌‌‌​‌‌‌​‌‌​‌​​​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌​​​‌‌​‌‌​‌‌‌‌​‌‌​‌‌‌​​‌‌​​​‌‌​‌‌​​‌​‌​‌‌‌​​​​​‌‌‌​‌​​​​‌​​​​​​‌‌​‌‌‌‌​‌‌​​‌‌​​​‌​​​​​‌‌‌​​​‌​‌​​​​​​​‌​​‌‌‌​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​​‌​​​‌‌‌​​​​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​‌​​​‌‌‌​​​‌​‌​​​​​​​‌​​‌‌‌​‌​​​​‌​‌​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​‌​​​‌‌​‌​​‌​‌‌‌​​‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌‌​​‌​​‌‌​​‌​​​‌‌​​‌​‌​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​​​​‌​‌‌​​​‌‌​‌‌‌​‌​​​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​‌‌​​​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​‌​​​‌‌​​​​‌​‌‌‌​​‌​​‌‌​​‌‌‌​‌‌​​‌​‌​‌‌‌​‌​​​​‌​‌‌​​​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌​​​‌‌​‌‌‌​‌​​​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​‌‌‌​​​​​‌​‌​​‌​​‌‌‌‌​‌‌​‌‌‌​​‌‌​‌‌​​​‌‌‌‌​​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​​‌​​‌‌​‌‌‌‌​‌‌‌​​‌​​‌‌​‌‌‌​​​‌​​​​​​‌‌​​​​‌​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​​‌‌​‌‌‌​​‌‌​​​​‌​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌​​​​‌‌​‌​​‌​‌‌​​​‌‌​‌‌​‌​​​​​‌​​​​​​‌‌​​​​‌​‌‌​‌‌​​​‌‌​‌‌​​​​‌​​​​​​‌‌​​‌​‌​‌‌‌‌​​​​‌‌‌​​​​​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌​‌​​‌​‌‌‌​‌​​​‌‌‌​​‌‌​​‌​‌‌​​​​​​‌​‌​​‌‌​​​​‌​‌‌​‌‌​​​‌‌​‌‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌​​‌​​​‌‌​​‌​‌​‌‌​‌‌‌​​‌‌‌​‌​​​‌‌​‌​​‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌​​‌​‌​‌‌‌​​‌‌​​‌​‌‌​​​​​​‌​‌​​‌‌​​​​‌​‌‌​‌‌​​​‌‌​‌‌​​​​‌​​​​​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌‌​​​​​‌‌​‌‌‌‌​‌‌‌​​‌‌​‌‌​‌​​‌​‌‌‌​‌​​​‌‌​‌‌‌‌​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​​‌​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​​​‌​‌‌‌​​​​​‌‌‌​​​​​‌‌​​‌​‌​‌‌​​​​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​​​​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌‌​​‌‌​‌‌‌​‌​‌​‌‌​​​‌​​‌‌‌​​‌‌​‌‌​‌​​‌​‌‌​​‌​​​‌‌​​‌​‌​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌​‌‌‌​‌‌​‌​​​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​​‌​‌​‌‌​‌​‌‌​‌‌​​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​​‌​​​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌‌​​​​​‌‌‌​​‌‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​​‌​‌​‌‌​‌​‌‌​‌‌​​‌​‌​‌‌‌​​‌​​​‌​‌‌​​​​​​‌​‌​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌​​‌​​​‌‌​‌‌‌‌​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​​​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​​​‌‌​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​​‌​​​​‌​​​​​​‌‌‌​​‌‌​‌‌‌​‌‌‌​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌‌​‌‌‌​​​​​‌‌​​‌​‌​‌‌​‌‌‌​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​‌​‌​‌‌‌​​‌​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌‌​‌​​​‌‌‌​​‌‌​‌‌​‌​​‌​‌‌​​‌​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​‌​​​​​​​‌‌​​​​​​‌​‌‌‌​​​​​‌​‌​​‌​‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​‌​​​​​​​‌‌​​​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​​​‌​​‌​​​​​​‌‌​​‌​​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​​​​‌​‌‌​‌‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌‌​​‌‌​‌‌​‌​​‌​‌‌​​‌​​​‌‌​​‌​‌​​‌​​​​​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​​​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌​​​​‌‌​‌​​‌​‌‌​​​‌‌​‌‌​‌​​​​​‌​​​​​​‌‌​‌​​​​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌‌‌​​‌​‌‌​​​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​‌‌​​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌​‌‌​​​​‌​‌‌​​​​‌​​​​​​‌‌​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​​​‌​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​​‌​​​‌‌​​​​‌​‌‌‌​​‌​​‌‌‌‌​​‌​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​​‌‌‌‌​‌‌​‌‌​‌​‌‌​‌​​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​‌‌​​​‌‌​​‌‌​​​‌​​​​​​‌‌​​​​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​‌​‌‌​‌‌‌​​‌‌​‌​​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌‌​​‌​​‌‌‌​​‌‌​‌‌​​‌​‌​​​​‌​‌​​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌​​‌‌‌​‌‌‌​​‌‌​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌​‌‌‌​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌​​‌​‌‌‌​‌​​​‌‌​‌​​​​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌‌​‌​​​​‌​​​​​​‌‌‌​​​​​‌‌​​​​‌​‌‌‌​​‌‌​‌‌‌​​‌‌​‌‌‌​‌‌‌​‌‌​‌‌‌‌​‌‌‌​​‌​​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​​‌​​​‌‌‌​​​​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​‌​​​​‌​​​​​​​‌‌‌​‌‌​​‌‌​‌‌‌‌​‌‌​‌​​‌​‌‌​​‌​​​​‌‌‌​‌​​‌‌‌‌‌‌​​​‌​​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​‌​​​​‌‌​‌‌‌‌​‌‌​​​​‌​‌‌​‌‌​‌​‌‌​‌​​‌​​​​‌​‌​​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌​​​​​​‌​‌​​​​​‌​‌​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​​‌​​​‌‌‌​​​​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​‌​​​​‌​​​​​​​‌‌‌​‌‌​​‌‌​‌‌‌‌​‌‌​‌​​‌​‌‌​​‌​​​​‌‌‌​‌​​‌‌‌‌‌‌​​​‌​​‌​​​​‌​​​​​​‌‌‌​​​​​‌‌‌​‌‌‌​‌‌​​‌​​​​​​‌​‌​​​‌​‌‌‌‌​​​​‌​‌​​​​​‌​‌​​‌​​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​​​‌‌​‌‌​‌‌‌‌​‌‌​‌‌​‌​‌‌​‌‌​‌​‌‌​​​​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​‌​‌​‌‌‌‌​​​​‌‌​​‌​‌​‌‌​​​‌‌​‌‌‌​‌​‌​‌‌‌​‌​​​‌‌​​‌​‌​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​‌​​‌‌‌​​‌‌​‌‌‌‌​​‌​​​​​​‌‌‌​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌‌​‌‌​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​​‌​‌​‌‌​​‌‌‌​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​‌‌‌​‌‌​​​​‌​‌‌​‌​​‌​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​‌​​‌‌‌‌​‌‌​‌‌‌​​‌‌​‌‌​​​‌‌‌‌​​‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌​‌​​‌​‌‌​‌‌​​​‌‌​‌‌​​​‌‌‌​‌​‌​‌‌‌​​‌‌​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌​‌‌‌​​​‌​​​​​​‌‌​‌‌‌‌​‌‌​​‌‌​​​‌​​​​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌‌​​​​​‌‌​​​​‌​‌‌‌​​‌​​‌‌​​​​‌​‌‌‌​‌​​​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌​‌‌‌​​​​​‌​‌​​‌‌‌​‌‌‌​‌‌​​​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​​‌‌‌​‌‌​​‌​‌​‌‌​‌‌‌​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌‌‌​​‌​​‌​​​​​​‌‌​​‌​​​‌‌​​‌​‌​‌‌​​​​‌​‌‌​‌‌​​​‌‌​‌‌​​​‌‌​‌‌‌‌​‌‌​​​‌‌​‌‌​​​​‌​‌‌‌​‌​​​‌‌​​‌​‌​‌‌​​‌​​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌‌​​‌‌​‌‌‌‌​‌‌​‌​​‌​‌‌​​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​​‌‌​​‌​​​​​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​‌​​‌​​​​​​‌‌‌​‌​​​‌‌‌​​‌​​‌‌‌​‌​‌​‌‌​​‌​‌​​‌​​​​​​‌‌‌​​‌​​‌‌​‌‌‌‌​‌‌​‌‌‌‌​‌‌‌​‌​​​​‌​‌‌‌​​​​​‌​‌​​‌​​​​​‌​‌‌​‌‌‌​​‌‌​​‌​​​​‌​​​​​​‌‌‌‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​​‌​​​​​​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​‌‌​​‌‌​​‌​‌​‌‌‌​​‌​​​‌​​​​​​‌‌​‌‌​​​‌‌​​‌​‌​‌‌​​‌‌​​‌‌‌​‌​​​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​​‌​‌‌‌​​​​​‌​‌​​​​​‌​‌​​‌​‌​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌‌‌‌​​‌​​​​​​‌​​​‌‌‌​‌‌​‌​​‌​‌‌‌​‌​​​‌​​‌​​​​‌‌‌​‌​‌​‌‌​​​‌​​​‌​‌‌​​​​‌​​​​​​‌‌‌​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌‌‌‌​​‌​​​​​​‌​​​‌‌‌​‌‌​‌​​‌​‌‌‌​‌​​​​‌​‌‌​​​​​​‌​‌​​‌‌‌​​​​​‌‌‌​​‌​​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌‌​​‌​​​‌​​​​​​‌‌‌​‌​​​‌‌​‌‌‌‌​​‌​​​​​​‌‌​​​‌‌​‌‌​‌‌‌‌​‌‌​‌‌‌​​‌‌‌​​‌‌​‌‌​​​‌‌​‌‌​‌​​‌​‌‌​‌‌‌‌​‌‌‌​‌​‌​‌‌‌​​‌‌​‌‌​‌‌‌​​‌‌​​‌​‌​‌‌‌​​‌‌​‌‌‌​​‌‌​​‌​​​​​​‌‌​‌​​‌​‌‌‌​‌​​​‌‌‌​​‌‌​‌‌​​‌​‌​‌‌​‌‌​​​‌‌​​‌‌​​​‌‌‌​‌​​​​​‌​‌​​‌​​‌​​‌​​‌​​​​​​‌‌‌​​‌​​‌‌​​‌​‌​‌‌​‌‌​‌​‌‌​​​​‌​‌‌​‌​​‌​‌‌​‌‌‌​​​‌​‌‌‌​
 -->
 
+<!--
+SEO: ICS cybersecurity, SCADA hacking, industrial control security, OT cyber defense, PLC hacking,
+red team playbooks for ICS, ICS reverse engineering, SCADA malware detection, ICS/SCADA threat intelligence,
+Modbus exploitation, S7Comm fuzzing, EtherNet/IP attacks, CIP protocol analysis, DNP3 exploitation,
+OPC-UA security, Siemens S7 PLC manipulation, Rockwell Studio 5000 exploitation,
+ICS payload development, industrial protocol fuzzing, OT red teaming, cyber ranges,
+critical infrastructure cyber warfare, national infrastructure protection, refinery security,
+oil & gas cybersecurity, industrial zero-days, ICS exploit development, firmware analysis,
+ICS protocol reverse engineering, ICS ladder logic analysis, safety instrumented systems (SIS) attacks,
+TRITON malware detection, Stuxnet centrifuge sabotage, Industroyer grid attacks, GreyEnergy,
+ICS MITRE ATT&CK, ICS ATT&CK TTPs, SCADA kill chain, PLC code injection, ICS digital forensics,
+ICS SIEM rules, industrial anomaly detection, SCADA SOC operations, blue team engineering,
+IEC 61131-3 security, ladder logic sabotage, structured text security, TIA Portal security,
+Studio 5000 security, ICS CI/CD validation, critical register modification detection,
+ICS segmentation bypass, industrial protocol DPI, ICS covert persistence,
+ICS firmware modification, networked control systems protection, ICS compliance,
+NERC CIP, ISA/IEC 62443, OT visibility, industrial network monitoring,
+Zeek ICS detection, Suricata ICS rules, PCAP replay for cyber ranges,
+ICS malware signature packs, physical process manipulation attacks,
+grid cybersecurity, water treatment plant security, manufacturing plant security,
+robotics hacking, industrial wireless exploitation, IoT SCADA convergence,
+cyber-physical system defense, distributed control systems (DCS) security,
+Operational Technology attack lab, offensive ICS testing framework,
+ICS attack simulation, safety override detection, industrial espionage,
+industrial crown jewel protection, production line security, smart factory defense,
+HMI exploitation, historian tampering, OT SOC automation, SIEM correlation for ICS,
+ICS logging best practices, ICS asset discovery, PLC stop/start detection,
+process integrity monitoring, ICS threat hunting, ICS automation scanning detection,
+peak performance industrial cyber defense cheat sheet, top-tier OT security guide,
+ultimate ICS hacking reference, industry-leading SCADA security knowledge base
+-->
+
+
 # SCADA / OT Hacking Mega Cheat Sheet
 ## ICS/SCADA Offensive & Defensive Operations Cheat Sheet
+**Operational Technology Adversary Emulation | Blue Team Detection | Industrial Protocol Exploitation**
 
-This advanced ICS/SCADA cybersecurity cheat sheet delivers full spectrum tactics and defensive correlations for real-world operational environments. Built for red teams, defenders, and ICS incident responders.
-![status: active](https://img.shields.io/badge/status-active-success)
-![license: MIT](https://img.shields.io/badge/license-MIT-blue)
-![OT/ICS](https://img.shields.io/badge/domain-ICS/SCADA-critical)
+This advanced ICS/SCADA cybersecurity playbook delivers **full-spectrum offensive and defensive tactics** for  
+**real-world operational technology environments** including:
+
+- Power Grid & Energy Systems
+- Oil & Gas Production + Pipeline Control
+- Water & Wastewater Treatment Facilities
+- Manufacturing & Robotics Automation
+- Factory / Smart Industrial Systems
+- Railway & Mass Transit Control Systems
+- Chemical Production & Safety Instrumented Systems (SIS)
+
+Built for:
+- **Red Teams** testing cyber & physical exploitation paths
+- **Blue Teams / SOC Analysts** defending industrial networks
+- **ICS Incident Responders** in high-pressure outage events
+
+Designed for:
+- **Critical Infrastructure**, **Industrial Plants**, and **Large Scale SCADA Deployments**
+with PLC manipulation, anomaly detection, firmware threats, and MITRE ATT&CK ICS mapping.
+.
+<!--
+SEO Layer 1 — Core OT/ICS Security Keywords:
+ICS cybersecurity, SCADA hacking, OT cyber defense, PLC exploitation, industrial control system security,
+Modbus attacks, S7Comm fuzzing, EtherNet/IP security, CIP protocol exploitation, DNP3 intrusion detection,
+OPC-UA hacking, industrial protocol reverse engineering, PLC malware analysis, Stuxnet TRITON detection,
+critical infrastructure cyber range, industrial protocol fuzzers, ICS exploit development, SCADA kill chain,
+MITRE ATT&CK ICS defense, industrial anomaly detection, refinery cyber defense, grid cyber warfare
+
+SEO Layer 2 — Specialized Search Phrases:
+ICS red team playbook, SCADA blue team analytics, OT adversary emulation, PLC rootkit development,
+IEC 61131-3 structured text analysis, ladder logic sabotage, historian tampering detection, HMI exploitation,
+Zeek ICS monitoring, Suricata ICS rules, ICS SIEM correlation, OT SOC automation, ICS PCAP replay lab,
+DCS cybersecurity, smart factory defense, OT zero-days, industrial firmware exploitation
+
+SEO Layer 3 — Long-Tail and Trending Phrases:
+“ICS hacking cheat sheet”, “best SCADA security guide”, “Stuxnet TRITON Industroyer detection lab”,
+“ICS offensive security training”, “ultimate OT/ICS hardening reference”, “PLC backdoor detection”
+
+SEO Layer 4 — GitHub Topic Boosting:
+ics-security, scada, plc, suricata, zeek, s7, modbus, opcua, mitre-attack-ics, cyber-range, fuzzing,
+siem, intrusion-detection, threat-hunting, industrial-control-systems, blue-team, red-team,
+pentest, cyber-defense, malware-analysis, exploit-development
+
+SEO Layer 5 — Compliance/Industry Search:
+NERC CIP guidance, ISA/IEC 62443 compliance, OT monitoring, industrial asset protection,
+safety instrumented systems protection, critical infrastructure continuity
+
+Search Engine Tip:
+This comment improves organic discovery + GitHub code search ranking + domain relevance.
+-->
+
+<!-- Top Visible Banner -->
+
+---
+
+<!-- Badges Row 1: Domain + Project Status -->
+![Domain: ICS/SCADA](https://img.shields.io/badge/domain-ICS%2FSCADA-critical)
+![Focus: Red/Blue](https://img.shields.io/badge/focus-red%20%26%20blue%20team-purple)
+![Status: Active](https://img.shields.io/badge/status-active-success)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+
+<!-- Badges Row 2: Tooling & Protocol Support -->
+![Protocols: Modbus](https://img.shields.io/badge/Modbus-supported-informational)
+![Protocols: S7Comm](https://img.shields.io/badge/S7Comm-supported-informational)
+![Protocols: CIP/ENIP](https://img.shields.io/badge/CIP%2FENIP-supported-informational)
+![Protocols: OPC-UA](https://img.shields.io/badge/OPC--UA-under%20integration-yellow)
+
+<!-- Badges Row 3: Framework + Docs Links -->
+[![Suricata Docs](https://img.shields.io/badge/Suricata-Documentation-red)](https://suricata.io/documentation/)
+[![Zeek Docs](https://img.shields.io/badge/Zeek-Network%20Security-blue)](https://docs.zeek.org/)
+[![MITRE ATT&CK ICS](https://img.shields.io/badge/MITRE%20ATT%26CK-ICS-orange)](https://attack.mitre.org/matrices/ics/)
+
 
 
 ### Contents Include:
@@ -573,7 +675,36 @@ This advanced ICS/SCADA cybersecurity cheat sheet delivers- [SCADA / OT Hacking 
 
 
 
+<!--
+SEO Layer 1 — Core OT/ICS Security Keywords:
+ICS cybersecurity, SCADA hacking, OT cyber defense, PLC exploitation, industrial control system security,
+Modbus attacks, S7Comm fuzzing, EtherNet/IP security, CIP protocol exploitation, DNP3 intrusion detection,
+OPC-UA hacking, industrial protocol reverse engineering, PLC malware analysis, Stuxnet TRITON detection,
+critical infrastructure cyber range, industrial protocol fuzzers, ICS exploit development, SCADA kill chain,
+MITRE ATT&CK ICS defense, industrial anomaly detection, refinery cyber defense, grid cyber warfare
 
+SEO Layer 2 — Specialized Search Phrases:
+ICS red team playbook, SCADA blue team analytics, OT adversary emulation, PLC rootkit development,
+IEC 61131-3 structured text analysis, ladder logic sabotage, historian tampering detection, HMI exploitation,
+Zeek ICS monitoring, Suricata ICS rules, ICS SIEM correlation, OT SOC automation, ICS PCAP replay lab,
+DCS cybersecurity, smart factory defense, OT zero-days, industrial firmware exploitation
+
+SEO Layer 3 — Long-Tail and Trending Phrases:
+“ICS hacking cheat sheet”, “best SCADA security guide”, “Stuxnet TRITON Industroyer detection lab”,
+“ICS offensive security training”, “ultimate OT/ICS hardening reference”, “PLC backdoor detection”
+
+SEO Layer 4 — GitHub Topic Boosting:
+ics-security, scada, plc, suricata, zeek, s7, modbus, opcua, mitre-attack-ics, cyber-range, fuzzing,
+siem, intrusion-detection, threat-hunting, industrial-control-systems, blue-team, red-team,
+pentest, cyber-defense, malware-analysis, exploit-development
+
+SEO Layer 5 — Compliance/Industry Search:
+NERC CIP guidance, ISA/IEC 62443 compliance, OT monitoring, industrial asset protection,
+safety instrumented systems protection, critical infrastructure continuity
+
+Search Engine Tip:
+This comment improves organic discovery + GitHub code search ranking + domain relevance.
+-->
 ## 1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES
 
 ### 1. ICS/OT ARCHITECTURE - ADVANCED PURDUE MODEL WITH TRUST MODELING
@@ -12450,6 +12581,43 @@ class HMICredentialExploiter:
 - Session hijacking techniques
 - Memory scraping from HMI processes
 
+<!--
+ICS cybersecurity master reference,
+SCADA red team tactics, ICS offensive security,
+PLC exploitation techniques, blue team ICS detection engineering,
+Suricata OT rules and Zeek industrial protocol analysis,
+ICS protocol hacking, S7Comm exploitation, Modbus attacks,
+EtherNet/IP reverse engineering, ICS threat emulation,
+Stuxnet Triton Industroyer Havex malware analysis,
+OT exploit development, SCADA pentesting guide,
+DNP3 fuzzing, OPC UA security testing,
+NERC CIP compliance security controls,
+ICS CERt guidance, industrial DMZ architecture,
+cyber-physical system exploitation,
+OT/ICS incident response playbooks,
+critical infrastructure cyber defense framework,
+SIEM correlation content for OT networks,
+MITRE ATT&CK ICS TTP mapping,
+ICS cyber range hands-on labs,
+Industrial network reconnaissance, Purdue model segmentation,
+Safety system compromise scenarios,
+rootkit persistence on industrial controllers,
+firmware modification on PLCs,
+ICS vulnerability scanning methodology,
+HMI tampering, historian data integrity attacks,
+Zero-day research for OT platforms,
+ICS intrusion monitoring with Suricata and Zeek,
+Safety override and logic manipulation alerts,
+ICS anomaly detection with machine learning,
+ICS exploit payload development cheat sheet,
+Fieldbus, Profinet, and Power grid protocol security,
+OT SOC operational playbooks, ICS log forensics,
+wired and wireless industrial protocol spoofing,
+technician laptop backdoor defense,
+real-world ICS breach case studies,
+Advanced persistent threat ICS tradecraft,
+TTPs of state-sponsored ICS adversaries
+-->
   
 ## SECTION 4: CUSTOM PAYLOAD DEVELOPMENT & SHELLCODE TECHNIQUES
 
@@ -18208,6 +18376,13 @@ Your defense must:
 - Track logic changes, not just port scans
 - Validate who made every PLC change, when, and why
 - Know your protocols well enough to spot subtle misuse
+<!--
+Industrial Control System hacking reference, SCADA malware signatures,
+PLC backdoor toolkit, ICS blue team detection pack,
+ICS exploit development training, critical OT system protection,
+Suricata Zeek Sigma ICS rule repository,
+industrial cybersecurity roadmap for defenders and adversaries
+-->
 
 
 <!--‌​ICS/SCADA Offensive & Defensive Operations Cheat Sheet
