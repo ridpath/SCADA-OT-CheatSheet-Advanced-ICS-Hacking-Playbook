@@ -23,7 +23,7 @@ and safety system attacks.
 ![Type](https://img.shields.io/badge/type-detection%2Fblue--team-lightgrey)
 
 Author: Ridpath  
-Path: `/tools/configs/`
+Path: `/configs/`
 
 ---
 
