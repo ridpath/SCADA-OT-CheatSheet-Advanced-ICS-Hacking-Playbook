@@ -105,6 +105,7 @@ This comment improves organic discovery + GitHub code search ranking + domain re
 
 ---
 
+
 <!-- Badges Row 1: Domain + Project Status -->
 ![Domain: ICS/SCADA](https://img.shields.io/badge/domain-ICS%2FSCADA-critical)
 ![Focus: Red/Blue](https://img.shields.io/badge/focus-red%20%26%20blue%20team-purple)
@@ -122,7 +123,19 @@ This comment improves organic discovery + GitHub code search ranking + domain re
 [![Zeek Docs](https://img.shields.io/badge/Zeek-Network%20Security-blue)](https://docs.zeek.org/)
 [![MITRE ATT&CK ICS](https://img.shields.io/badge/MITRE%20ATT%26CK-ICS-orange)](https://attack.mitre.org/matrices/ics/)
 
+## Important Information Regarding Large README File
 
+**Note on GitHub Truncation:**
+
+The main `README.md` file is very large and may appear **truncated** when viewed in GitHub’s web interface. However, the full content is available through click on README.md file directy or **Raw view** or by cloning the repository.
+
+To access the complete README:
+
+1. **View the full file directly:**
+    [Click here for the full README.md](https://github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook/blob/main/README.md)
+    ```
+
+We are working on breaking this into multiple smaller files for easier navigation. Thank you for your understanding!
 
 ### Contents Include:
 - Protocol-aware attack patterns for Modbus, DNP3, S7Comm, OPC UA
