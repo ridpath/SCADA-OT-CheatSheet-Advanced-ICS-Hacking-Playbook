@@ -133,8 +133,6 @@ To access the complete README:
 
 1. **View the full file directly:**
     [Click here for the full README.md](https://github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook/blob/main/README.md)
-    ```
-
 We are working on breaking this into multiple smaller files for easier navigation. Thank you for your understanding!
 
 ### Contents Include:
