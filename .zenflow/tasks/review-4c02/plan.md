@@ -18,7 +18,8 @@ Do not make assumptions on important decisions — get clarification first.
 
 ## Workflow Steps
 
-### [ ] Step: Technical Specification
+### [x] Step: Technical Specification
+<!-- chat-id: 45fb3467-f63d-4d95-9e4f-d08e318056b4 -->
 
 Assess the task's difficulty, as underestimating it leads to poor outcomes.
 - easy: Straightforward implementation, trivial bug fix or feature
@@ -50,15 +51,229 @@ Save to `{@artifacts_path}/plan.md`. If the feature is trivial and doesn't warra
 
 ---
 
-### [ ] Step: Implementation
+### [ ] Step: Code Audit - Modbus Protocol Implementation
+Audit and enhance `tools/modbus-stealth-toolkit/modbus_stealth_attack.py`:
+- Validate packet structures against Modbus specification
+- Add missing function codes (0x14-0x17 for file transfer)
+- Add Modbus RTU/ASCII support
+- Add comprehensive error handling
+- Add type hints and docstrings
+- Verify MITRE technique mappings
+- Test against modbus-simulator
 
-Implement the task according to the technical specification and general engineering best practices.
+Verification: Run unit tests, validate packet captures with Wireshark
 
-1. Break the task into steps where possible.
-2. Implement the required changes in the codebase.
-3. Add and run relevant tests and linters.
-4. Perform basic manual verification if applicable.
-5. After completion, write a report to `{@artifacts_path}/report.md` describing:
-   - What was implemented
-   - How the solution was tested
-   - The biggest issues or challenges encountered
+---
+
+### [ ] Step: Code Audit - S7Comm Protocol Implementation
+Audit and enhance `tools/s7comm_security_framework/s7comm_exploit.py`:
+- Validate S7Comm packet structures
+- Add S7CommPlus protocol support
+- Add data block export automation
+- Add symbol table extraction
+- Add protection level bypass techniques
+- Improve error handling
+- Test against snap7 server
+
+Verification: Test with real/simulated Siemens PLCs, PCAP validation
+
+---
+
+### [ ] Step: Code Audit - CIP/EtherNet/IP Implementation
+Audit and enhance `tools/cip_security_assessment/cip_exploiter.py`:
+- Validate CIP packet structures
+- Add Safety I/O exploitation methods
+- Add implicit messaging manipulation
+- Add CIP Security assessment capabilities
+- Add class-based fuzzing
+- Improve documentation
+
+Verification: Test against Allen-Bradley simulators
+
+---
+
+### [ ] Step: Code Audit - Detection Rules
+Audit and enhance detection rules:
+- `configs/suricata_rules/ics_malware_detection.rules` - reduce false positives
+- `configs/zeek/ics_detection.zeek` - add missing protocol coverage
+- Test rules against known-good and known-bad traffic
+- Add protocol coverage for gaps
+
+Verification: PCAP replay testing, false positive analysis
+
+---
+
+### [ ] Step: Implement OPC-UA Security Framework
+Create new `tools/opcua_security_framework/`:
+- Certificate validation bypass techniques
+- Subscription manipulation
+- Node enumeration
+- Session hijacking
+- Fuzzing implementation
+- MITRE mapping (T0801, T0819, T0855)
+- Comprehensive documentation
+
+Verification: Test against FreeOpcUa simulator
+
+---
+
+### [ ] Step: Implement PROFINET Exploitation Module
+Create new `tools/profinet_exploitation/`:
+- DCP (Discovery and Configuration Protocol) manipulation
+- Real-time class exploitation
+- Device reprogramming techniques
+- MITRE mapping (T0800, T0878)
+- Documentation and examples
+
+Verification: Test against PROFINET simulator
+
+---
+
+### [ ] Step: Implement BACnet Security Assessment
+Create new `tools/bacnet_security_assessment/`:
+- WriteProperty attacks
+- Device binding manipulation
+- MS/TP network attacks
+- MITRE mapping (T0855, T0836)
+- Documentation
+
+Verification: Test against BACnet simulator
+
+---
+
+### [ ] Step: Enhance Detection Rules for New Protocols
+Add detection coverage:
+- Create `configs/suricata_rules/opcua_detection.rules`
+- Create `configs/suricata_rules/profinet_detection.rules`
+- Create `configs/suricata_rules/bacnet_detection.rules`
+- Create `configs/zeek/opcua_monitor.zeek`
+- Create `configs/zeek/profinet_monitor.zeek`
+- Create `configs/zeek/bacnet_monitor.zeek`
+
+Verification: Rule validation, PCAP testing
+
+---
+
+### [ ] Step: README Code Accuracy Audit (Part 1: Lines 1-5000)
+Review README.md lines 1-5000:
+- Verify all code examples are technically accurate
+- Add cross-references to actual implementations
+- Mark theoretical code as such
+- Fix protocol packet structures
+- Update MITRE mappings
+- Add file:line references
+
+Verification: Manual review, cross-check with tools
+
+---
+
+### [ ] Step: README Code Accuracy Audit (Part 2: Lines 5001-10000)
+Review README.md lines 5001-10000:
+- Continue accuracy verification
+- Add cross-references
+- Fix errors
+- Update content
+
+Verification: Manual review
+
+---
+
+### [ ] Step: README Code Accuracy Audit (Part 3: Lines 10001-15000)
+Review README.md lines 10001-15000:
+- Continue accuracy verification
+- Add cross-references
+- Fix errors
+- Update content
+
+Verification: Manual review
+
+---
+
+### [ ] Step: README Code Accuracy Audit (Part 4: Lines 15001-18416)
+Review README.md lines 15001-18416:
+- Complete accuracy verification
+- Add cross-references
+- Fix errors
+- Update content
+
+Verification: Manual review
+
+---
+
+### [ ] Step: Create Protocol Quick Reference Guides
+Create `docs/protocol_quick_reference/`:
+- `modbus.md` - Modbus attack/defense reference
+- `s7comm.md` - S7Comm attack/defense reference
+- `cip.md` - CIP/EtherNet/IP reference
+- `dnp3.md` - DNP3 reference
+- `opcua.md` - OPC-UA reference
+- `profinet.md` - PROFINET reference
+- `bacnet.md` - BACnet reference
+
+Each with: attack methods, detection signatures, MITRE mappings, tool references
+
+Verification: Technical accuracy review
+
+---
+
+### [ ] Step: Create Attack Scenario Playbooks
+Create `docs/attack_scenarios/`:
+- `historian_poisoning.md` - End-to-end historian attack scenario
+- `plc_logic_injection.md` - Logic manipulation scenario
+- `safety_system_bypass.md` - Safety system attack scenario
+- `network_reconnaissance.md` - ICS network discovery scenario
+
+Each with: objectives, tools, commands, detection indicators
+
+Verification: Walkthrough testing
+
+---
+
+### [ ] Step: Implement Testing Framework
+Create `tools/test_framework/`:
+- `test_modbus.py` - Unit tests for Modbus toolkit
+- `test_s7comm.py` - Unit tests for S7Comm framework
+- `test_cip.py` - Unit tests for CIP assessment
+- `test_opcua.py` - Unit tests for OPC-UA framework
+- `mock_plc_server.py` - Mock PLC for testing
+
+Verification: pytest execution, coverage >70%
+
+---
+
+### [ ] Step: Standardize Tool Interfaces
+Apply standardization across all tools:
+- Add common base class `ICSSecurityTool`
+- Add YAML/JSON configuration support
+- Add dry-run mode to all tools
+- Add result export in multiple formats
+- Add safety validation checks
+
+Verification: Interface consistency check
+
+---
+
+### [ ] Step: Create Master Index and Cross-Reference System
+Update README.md:
+- Add comprehensive table of contents with line anchors
+- Create method index: `protocol:method → file:line`
+- Add "See implementation" links after all code examples
+- Create attack technique matrix
+- Add navigation aids
+
+Verification: Link validation, navigation testing
+
+---
+
+### [ ] Step: Final Validation and Report
+Final quality assurance:
+- Run all tests (unit + integration)
+- Validate all cross-references work
+- Check MITRE mapping accuracy
+- Verify protocol implementations
+- Run linters and type checkers
+- PCAP validation of generated traffic
+- False positive testing of detection rules
+- Write completion report to `{@artifacts_path}/report.md`
+
+Verification: Comprehensive testing suite
