@@ -158,6 +158,372 @@ Always follow your local laws and obtain **explicit permission** before conducti
 The author assumes **no liability** for misuse or unauthorized activity involving this material.
 
 ---
+
+# MASTER INDEX & CROSS-REFERENCE SYSTEM
+
+## Quick Navigation
+
+- [Main Table of Contents](#table-of-contents) - Complete document structure
+- [Protocol Method Index](#protocol-method-index) - Protocol:Method → Implementation mapping
+- [Attack Technique Matrix](#attack-technique-matrix) - MITRE ATT&CK mappings
+- [Tool Implementation Reference](#tool-implementation-reference) - Direct links to code
+
+---
+
+## Table of Contents
+
+### PART 1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES
+- [1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES](#1-landscape-protocols-and-attack-surfaces) (Line 719)
+  - [1. ICS/OT ARCHITECTURE - ADVANCED PURDUE MODEL](#1-icsot-architecture---advanced-purdue-model-with-trust-modeling) (Line 721)
+  - [CORE ASSETS, THREATS & ADVANCED TARGETING](#core-assets-threats--advanced-targeting) (Line 733)
+  - [2. ICS PROTOCOL DEEP DIVE](#2-ics-protocol-deep-dive---expanded-matrix-with-c2--kinetic-risk) (Line 745)
+  - [3. ICS RECONNAISSANCE](#3-ics-reconnaissance---passive-and-active-playbooks) (Line 759)
+  - [4. ICS ENTRY POINTS](#4-ics-entry-points---red-team-simulation-paths) (Line 777)
+
+### PART 2: RED TEAM LAB ARCHITECTURES
+- [PART 2: RED TEAM LAB ARCHITECTURES](#part-2-red-team-lab-architectures) (Line 788)
+  - [SECTION A: RED TEAM ICS/OT LAB DESIGN](#section-a-red-team-icsot-lab-design) (Line 790)
+  - [SECTION B: PROTOCOL-SPECIFIC EXPLOITATION](#section-b-protocol-specific-exploitation-tradecraft) (Line 863)
+  - [SECTION C: SIEM & DETECTION ENGINEERING](#section-c-siem--detection-engineering-otics) (Line 960)
+  - [SECTION D: VENDOR SPECIFIC EXPLOITATION](#section-d-vendor-specific-exploitation-cheat-sheet) (Line 983)
+
+### PART 3: PROTOCOL & VENDOR REFERENCE
+- [PART 3: PROTOCOL & VENDOR REFERENCE](#part-3-protocol--vendor-reference) (Line 1020)
+  - [SECTION 1: INSECURE BY DESIGN PROTOCOLS](#section-1-insecure-by-design-protocols-analysis--mitigation) (Line 1022)
+  - [SECTION 2: SCADA ATTACK KILL CHAIN](#section-2-scada-attack-kill-chain-defensive-intervention-points) (Line 1046)
+  - [SECTION 3: PROTOCOL SECURITY TESTING](#section-3-protocol-security-testing-methodology) (Line 1079)
+  - [SECTION 4: ADVANCED PLC LOGIC THREAT ANALYSIS](#section-4-advanced-plc-logic-threat-analysis) (Line 1170)
+  - [SECTION 5: VENDOR-SPECIFIC HARDENING GUIDE](#section-5-vendor-specific-hardening-guide) (Line 1201)
+  - [SECTION 6: OT DETECTION ENGINEERING](#section-6-ot-detection-engineering) (Line 1250)
+  - [SECTION 7: ZERO TRUST ARCHITECTURE FOR OT](#section-7-zero-trust-architecture-for-ot) (Line 1276)
+
+### PART 4: MALWARE ANALYSIS & ATTACK SIMULATIONS
+- [PART 4: MALWARE ANALYSIS & CRITICAL INFRASTRUCTURE ATTACK SIMULATIONS](#part-4-malware-analysis--critical-infrastructure-attack-simulations) (Line 1315)
+  - [1.1 STUXNET ANALYSIS](#11-stuxnet-2009-2010-comprehensive-analysis) (Line 1317)
+  - [1.2 TRITON/TRISIS](#12-tritontrisis-2017-safety-system-compromise) (Line 1364)
+  - [1.3 INCONTROLLER/PIPEDREAM](#13-incontrollerpipedream-2022-modular-ot-malware-platform) (Line 1394)
+  - [SECTION 2: FIRMWARE REVERSE ENGINEERING](#section-2-firmware-reverse-engineering--validation) (Line 1434)
+  - [SECTION 3: ICS NETWORK ATTACK SIMULATIONS](#section-3-ics-network-attack-simulations--cyber-ranges) (Line 1482)
+  - [SECTION 4: SATELLITE SCADA THREAT MODELING](#section-4-satellite-scada-threat-modeling--countermeasures) (Line 1515)
+  - [SECTION 5: DIGITAL SAFETY SYSTEM TESTING](#section-5-digital-safety-system-testing) (Line 1542)
+  - [SECTION 6: INDUSTRIAL PERSISTENCE MECHANISMS](#section-6-industrial-persistence-mechanisms--long-dwell-tactics) (Line 1572)
+
+### PART 5: MALWARE SIMULATION & DETECTION ENGINEERING
+- [PART 5: MALWARE SIMULATION & DETECTION ENGINEERING TOOLKIT](#part-5-malware-simulation--detection-engineering-toolkit) (Line 1638)
+  - [SECTION 1: MALWARE PCAP ANALYSIS](#section-1malware-pcap-analysis--detection-engineering) (Line 1640)
+  - [SECTION 2: LADDER LOGIC BACKDOORS](#section-2-ladder-logic-backdoors--detection) (Line 1748)
+  - [SECTION 3: DETECTION ENGINEERING](#section-3-detection-engineering) (Line 1806)
+  - [SECTION 4: DEPLOYMENT & VALIDATION](#section-4-deployment--validation) (Line 1850)
+  - [SECTION 5: MALWARE TECHNIQUES & COUNTERMEASURES](#section-5-malware-techniques--countermeasures) (Line 1882)
+
+### PART 6: DETECTION ENGINEERING & LOGIC ANALYSIS
+- [PART 6: DETECTION ENGINEERING & LOGIC ANALYSIS](#part-6-detection-engineering--logic-analysis) (Line 1954)
+  - [SECTION 1: DETECTOR SCRIPT](#section-1-detector-script) (Line 1960)
+    - [1.1 PYTHON BASED LOGIC BACKDOOR DETECTORS](#11-python-based-logic-backdoor-detectors) (Line 1962)
+    - [1.2 ENHANCED ZEEK SCRIPTS](#12-enhanced-zeek-scripts-for-ics-protocol-analysis) (Line 4266)
+    - [1.3 ENHANCED SURICATA RULES](#13-enhanced-suricata-rules-for-ics-defense) (Line 5216)
+    - [1.4 SIGMA RULES](#14-sigma-rules-for-enterprise-detection) (Line 5226)
+  - [SECTION 2: LOGIC CONVERSION & ANALYSIS](#section-2-logic-conversion--analysis) (Line 5871)
+  - [SECTION 3: ADVANCED DETECTOR ARCHITECTURE](#section-3-advanced-detector-architecture--integration-example) (Line 6028)
+  - [SECTION 4: ADVANCED DETECTION TECHNIQUES](#section-4-advanced-detection-techniques) (Line 6383)
+
+### PART 7: OFFENSIVE OPERATIONS & TACTICAL EXPLOITATION
+- [PART 7: OFFENSIVE OPERATIONS & TACTICAL EXPLOITATION](#part-7-offensive-operations--tactical-exploitation) (Line 274)
+  - [SECTION 1: COVERT PERSISTENCE](#section-1-covert-persistence--advanced-malware-techniques) (Line 6902)
+  - [SECTION 2: CONTROL SYSTEM HIJACKING](#section-2-control-system-hijacking--privilege-escalation) (Line 10487)
+  - [SECTION 3: CREDENTIAL & INTELLIGENCE GATHERING](#section-3-advanced-credential--intelligence-gathering) (Line 11695)
+  - [SECTION 4: CUSTOM PAYLOAD DEVELOPMENT](#section-4-custom-payload-development--shellcode-techniques) (Line 12695)
+  - [SECTION 5: FIELD DEVICE & PROTOCOL EXPLOITATION](#section-5-field-device--protocol-exploitation) (Line 13473)
+  - [SECTION 6: KINETIC ATTACK SIMULATION](#section-6-kinetic-attack-simulation--physical-impact) (Line 14684)
+  - [SECTION 7: ADVANCED EVASION & ANTI-FORENSICS](#section-7-advanced-evasion--anti-forensics) (Line 15311)
+  - [SECTION 8: RED TEAM OPERATIONAL PLAYBOOKS](#section-8-red-team-operational-playbooks) (Line 15807)
+  - [SECTION 10: PHYSICAL SECURITY & HARDWARE](#section-10-physical-security--hardware-exploitation) (Line 17143)
+  - [SECTION 11: FINAL TACTICS & COUNTERMEASURES](#section-11-final-tactics-tradecraft--operational-countermeasures) (Line 17846)
+
+---
+
+## Protocol Method Index
+
+### Modbus Protocol
+**Implementation**: `tools/modbus-stealth-toolkit/modbus_stealth_attack.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `read_coils()` | 467 | T0801, T0861 | Read coil status from device |
+| `write_single_coil()` | 527 | T0855, T0836 | Write to single coil |
+| `write_multiple_coils()` | 577 | T0855, T0836 | Write to multiple coils |
+| `read_holding_registers()` | 627 | T0801, T0861 | Read holding register values |
+| `write_single_register()` | 692 | T0855, T0836 | Write to single register |
+| `write_multiple_registers()` | 745 | T0855, T0836 | Write to multiple registers |
+| `read_file_record()` | 802 | T0861, T0802 | Read file records (FC 0x14) |
+| `write_file_record()` | 864 | T0873, T0871 | Write file records (FC 0x15) |
+| `mask_write_register()` | 931 | T0855, T0836 | Mask write register (FC 0x16) |
+| `read_write_multiple_registers()` | 984 | T0855, T0861 | Read/write multiple registers (FC 0x17) |
+| `craft_spoofed_modbus_packet()` | 1166 | T0856, T0855 | Craft spoofed Modbus packet |
+| `denial_of_service_attack()` | 1728 | T0814, T0816 | DoS attack on Modbus device |
+| `fingerprint_services()` | 1622 | T0801, T0888 | Service fingerprinting |
+
+**Quick Reference**: [docs/protocol_quick_reference/modbus.md](docs/protocol_quick_reference/modbus.md)  
+**Testing Guide**: [tools/modbus-stealth-toolkit/TESTING.md](tools/modbus-stealth-toolkit/TESTING.md)
+
+### S7Comm Protocol
+**Implementation**: `tools/s7comm_security_framework/s7comm_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `connect()` | 343 | T0885 | Establish S7Comm connection |
+| `get_plc_info()` | 377 | T0801, T0888 | Retrieve PLC information |
+| `upload_plc_logic()` | 414 | T0861, T0868 | Upload PLC program blocks |
+| `read_data_block()` | 446 | T0801, T0861 | Read data block content |
+| `write_data_block()` | 473 | T0855, T0836 | Write to data block |
+| `plc_control()` | 499 | T0836, T0858 | PLC control operations (stop/start) |
+| `scan_blocks()` | 540 | T0861, T0801 | Scan all PLC blocks |
+| `comprehensive_reconnaissance()` | 589 | T0801, T0888 | Complete PLC reconnaissance |
+| `perform_buffer_overflow_test()` | 639 | T0855 | Buffer overflow testing |
+| `extract_symbol_table()` | 654 | T0861, T0868 | Extract symbol table via SZL |
+| `export_all_data_blocks()` | 724 | T0861, T0802 | Mass export all data blocks |
+| `test_protection_bypass()` | 825 | T0819, T0868 | Test protection level bypass |
+| `s7commplus_probe()` | 937 | T0801, T0888 | Probe for S7CommPlus support |
+| `scan_subnet()` | 1011 | T0801, T0888 | Scan subnet for S7 devices |
+
+**Quick Reference**: [docs/protocol_quick_reference/s7comm.md](docs/protocol_quick_reference/s7comm.md)  
+**Testing Guide**: [tools/s7comm_security_framework/TESTING.md](tools/s7comm_security_framework/TESTING.md)
+
+### CIP/EtherNet/IP Protocol
+**Implementation**: `tools/cip_security_assessment/cip_exploiter.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `safe_connect()` | 313 | T0885 | Safe connection with error handling |
+| `get_controller_info()` | 417 | T0801, T0888 | Get controller identity |
+| `enumerate_tags()` | 450 | T0801, T0861 | Enumerate all controller tags |
+| `read_tag_robust()` | 510 | T0801, T0861 | Read tag value with retry |
+| `write_tag_robust()` | 563 | T0855, T0836 | Write tag value with validation |
+| `controller_control()` | 645 | T0836, T0858 | Controller control (stop/start) |
+| `security_assessment()` | 684 | T0801, T0888 | Complete security assessment |
+| `buffer_overflow_test()` | 728 | T0855 | Buffer overflow testing |
+| `stress_test_connection()` | 785 | T0814, T0816 | Connection stress testing |
+| `send_raw_cip_packet()` | 868 | T0855, T0856 | Send raw CIP packet |
+| `exploit_safety_io()` | 921 | T0855, T0878 | Safety I/O exploitation |
+| `manipulate_implicit_messaging()` | 980 | T0855, T0856 | Manipulate Class 1 connections |
+| `assess_cip_security_object()` | 1030 | T0801, T0888 | Assess CIP Security Object |
+| `fuzz_cip_class()` | 1093 | T0855 | Fuzz CIP class instances |
+| `enumerate_cip_objects()` | 1190 | T0801, T0861 | Enumerate all CIP objects |
+
+**Quick Reference**: [docs/protocol_quick_reference/cip.md](docs/protocol_quick_reference/cip.md)  
+**Testing Guide**: [tools/cip_security_assessment/TESTING.md](tools/cip_security_assessment/TESTING.md)
+
+### OPC-UA Protocol
+**Implementation**: `tools/opcua_security_framework/opcua_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `discover_endpoints()` | 293 | T0801, T0888 | Discover available endpoints |
+| `enumerate_nodes()` | 354 | T0801, T0861 | Recursive node enumeration |
+| `test_certificate_bypass()` | 451 | T0819 | Test certificate validation bypass |
+| `create_malicious_subscription()` | 547 | T0801, T0802 | Create data monitoring subscription |
+| `fuzz_node_write()` | 632 | T0855 | Fuzz node write operations |
+| `test_session_hijacking()` | 719 | T0819, T0861 | Test session token reuse |
+| `assess_security_configuration()` | 802 | T0801, T0888 | Assess security posture |
+| `export_results()` | 874 | - | Export assessment results |
+
+**Quick Reference**: [docs/protocol_quick_reference/opcua.md](docs/protocol_quick_reference/opcua.md)  
+**Testing Guide**: [tools/opcua_security_framework/TESTING.md](tools/opcua_security_framework/TESTING.md)
+
+### PROFINET Protocol
+**Implementation**: `tools/profinet_exploitation/profinet_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `discover_devices()` | 212 | T0801, T0888 | DCP device discovery |
+| `set_device_name()` | 289 | T0855, T0868 | Change device NameOfStation |
+| `set_device_ip()` | 348 | T0855, T0868 | Change device IP address |
+| `factory_reset_device()` | 407 | T0809, T0858 | Trigger factory reset |
+| `inject_rt_frame()` | 466 | T0855, T0803 | Inject RT cyclic data |
+| `spoof_alarm()` | 535 | T0878, T0804 | Spoof PROFINET alarm |
+| `monitor_rt_traffic()` | 604 | T0801, T0802 | Monitor RT traffic |
+| `activate_firmware_update_mode()` | 670 | T0800, T0873 | Activate firmware update |
+| `reprogram_device_tftp()` | 728 | T0800, T0873 | Upload malicious firmware |
+| `fuzz_dcp_options()` | 798 | T0855 | Fuzz DCP protocol options |
+
+**Quick Reference**: [docs/protocol_quick_reference/profinet.md](docs/protocol_quick_reference/profinet.md)  
+**Testing Guide**: [tools/profinet_exploitation/TESTING.md](tools/profinet_exploitation/TESTING.md)
+
+### BACnet Protocol
+**Implementation**: `tools/bacnet_security_assessment/bacnet_assessment.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `discover_devices()` | 288 | T0801, T0888 | Who-Is device discovery |
+| `read_property()` | 359 | T0801, T0861 | Read object property |
+| `write_property()` | 427 | T0855, T0836 | Write object property |
+| `enumerate_objects()` | 504 | T0801, T0861 | Enumerate all device objects |
+| `manipulate_priority_array()` | 582 | T0855, T0836 | Override priority array |
+| `device_communication_control()` | 656 | T0803, T0804 | Block/enable communications |
+| `reinitialize_device()` | 716 | T0858, T0871 | Cold/warm restart device |
+| `subscribe_cov()` | 776 | T0801, T0802 | Subscribe to value changes |
+| `atomic_write_file()` | 842 | T0873, T0871 | Write to project files |
+| `mstp_token_manipulation()` | 920 | T0803, T0804 | MS/TP token manipulation |
+| `fuzz_service()` | 996 | T0855 | Fuzz BACnet services |
+
+**Quick Reference**: [docs/protocol_quick_reference/bacnet.md](docs/protocol_quick_reference/bacnet.md)  
+**Testing Guide**: [tools/bacnet_security_assessment/TESTING.md](tools/bacnet_security_assessment/TESTING.md)
+
+### DNP3 Protocol
+**Implementation**: Detection rules in `configs/suricata_rules/ics_malware_detection.rules` and `configs/zeek/ics_detection.zeek`
+
+| Feature | Location | MITRE Technique | Description |
+|---------|----------|-----------------|-------------|
+| DNP3 Unauthorized Write Detection | Suricata SID 400003 | T0855, T0836 | Detects unauthorized write operations |
+| DNP3 Cold Restart Detection | Suricata SID 400004 | T0858, T0871 | Detects cold restart commands |
+| DNP3 Authentication Bypass | Suricata SID 400005 | T0859, T0819 | Detects auth bypass attempts |
+| DNP3 Write Monitoring | Zeek ics_detection.zeek:237 | T0855, T0836 | Monitors DNP3 write operations |
+| DNP3 Cold Restart Monitoring | Zeek ics_detection.zeek:247 | T0858, T0871 | Monitors cold restart commands |
+
+**Quick Reference**: [docs/protocol_quick_reference/dnp3.md](docs/protocol_quick_reference/dnp3.md)  
+**Testing Guide**: [configs/DETECTION_TESTING.md](configs/DETECTION_TESTING.md)
+
+---
+
+## Attack Technique Matrix
+
+### MITRE ATT&CK for ICS - Complete Mapping
+
+| Technique ID | Name | Protocols | Implementation References |
+|-------------|------|-----------|---------------------------|
+| **T0800** | Activate Firmware Update Mode | PROFINET | profinet_exploit.py:670, profinet_exploit.py:728 |
+| **T0801** | Collection | All Protocols | modbus:467,627 / s7comm:377,589 / cip:417,450 / opcua:293,354 / profinet:212 / bacnet:288,359 |
+| **T0802** | Automated Collection | All Protocols | modbus:802 / s7comm:724 / cip:921 / opcua:547 / profinet:604 / bacnet:776 |
+| **T0803** | Block Command Message | PROFINET, BACnet | profinet:466 / bacnet:656 |
+| **T0804** | Block Reporting Message | PROFINET, BACnet | profinet:535 / bacnet:656 |
+| **T0809** | Data Destruction | PROFINET, BACnet | profinet:407 / bacnet:716 |
+| **T0814** | Denial of Service | Modbus, CIP | modbus:1728 / cip:785 |
+| **T0816** | Device Restart/Shutdown | Modbus, CIP | modbus:1728 / cip:785 |
+| **T0818** | Engineering Workstation Compromise | S7Comm | s7comm:414 (PLC logic upload for analysis) |
+| **T0819** | Exploit Public-Facing Application | S7Comm, OPC-UA | s7comm:825 / opcua:451,719 |
+| **T0821** | Modify Controller Tasking | S7Comm, CIP | s7comm:499 / cip:645 |
+| **T0831** | Manipulation of Control | All Write Operations | modbus:527,577 / s7comm:473 / cip:563 / bacnet:427 |
+| **T0835** | Manipulate I/O Image | All Write Operations | All protocol write methods |
+| **T0836** | Modify Parameter | All Write Operations | modbus:527,577,745,931 / s7comm:473,499 / cip:563 / bacnet:427,582 |
+| **T0843** | Program Download | S7Comm | s7comm:473 (write to program blocks) |
+| **T0849** | Masquerading | S7Comm | s7comm:825 (protection bypass) |
+| **T0855** | Unauthorized Command Message | All Protocols | All write/control methods |
+| **T0856** | Spoof Reporting Message | Modbus, CIP, PROFINET | modbus:1166 / cip:980 / profinet:535 |
+| **T0858** | Change Operating Mode | S7Comm, CIP, PROFINET, BACnet | s7comm:499 / cip:645 / profinet:407 / bacnet:716 |
+| **T0859** | Valid Accounts | DNP3 | Detection: Suricata SID 400005 |
+| **T0860** | Wireless Compromise | - | README Section 5.2 (Line 13343) |
+| **T0861** | Point & Tag Identification | All Protocols | All read/enumerate methods |
+| **T0862** | Supply Chain Compromise | PROFINET | profinet:728 (firmware manipulation) |
+| **T0868** | Exploit Public-Facing Application | All Protocols | All reconnaissance methods |
+| **T0871** | Execution through API | S7Comm, BACnet | s7comm:414 / bacnet:842 |
+| **T0873** | Project File Infection | Modbus, PROFINET, BACnet | modbus:864 / profinet:728 / bacnet:842 |
+| **T0877** | I/O Module Discovery | CIP | cip:1190 |
+| **T0878** | Alarm Suppression | CIP, PROFINET | cip:921 / profinet:535 |
+| **T0885** | Commonly Used Port | All Protocols | All connection methods |
+| **T0888** | Remote System Discovery | All Protocols | All discovery/scan methods |
+
+### Tactic Coverage
+
+| Tactic | Technique Count | Primary Protocols |
+|--------|----------------|-------------------|
+| Initial Access | 4 | All Protocols (T0819, T0848, T0860, T0885) |
+| Execution | 5 | S7Comm, CIP, BACnet (T0821, T0843, T0871) |
+| Persistence | 3 | PROFINET, BACnet (T0839, T0862, T0873) |
+| Collection | 8 | All Protocols (T0801, T0802, T0811, T0830, T0835, T0845, T0861, T0877) |
+| Command and Control | 3 | Modbus, CIP (T0885, T0884, T0869) |
+| Inhibit Response Function | 7 | All Write Protocols (T0800, T0803, T0804, T0809, T0814, T0816, T0878) |
+| Impair Process Control | 9 | All Write Protocols (T0806, T0831, T0836, T0839, T0855, T0856, T0858, T0873, T0874) |
+| Impact | 6 | All Protocols (T0813, T0815, T0826, T0827, T0829, T0831) |
+| Evasion | 5 | S7Comm, OPC-UA (T0849, T0856, T0859, T0872) |
+| Lateral Movement | 4 | All Protocols (T0812, T0866, T0867, T0868) |
+
+---
+
+## Tool Implementation Reference
+
+### Attack Tools
+
+| Tool | Implementation | Testing Guide | Protocol Reference |
+|------|----------------|---------------|-------------------|
+| Modbus Stealth Toolkit | [modbus_stealth_attack.py](tools/modbus-stealth-toolkit/modbus_stealth_attack.py) | [TESTING.md](tools/modbus-stealth-toolkit/TESTING.md) | [modbus.md](docs/protocol_quick_reference/modbus.md) |
+| S7Comm Security Framework | [s7comm_exploit.py](tools/s7comm_security_framework/s7comm_exploit.py) | [TESTING.md](tools/s7comm_security_framework/TESTING.md) | [s7comm.md](docs/protocol_quick_reference/s7comm.md) |
+| CIP Security Assessment | [cip_exploiter.py](tools/cip_security_assessment/cip_exploiter.py) | [TESTING.md](tools/cip_security_assessment/TESTING.md) | [cip.md](docs/protocol_quick_reference/cip.md) |
+| OPC-UA Security Framework | [opcua_exploit.py](tools/opcua_security_framework/opcua_exploit.py) | [TESTING.md](tools/opcua_security_framework/TESTING.md) | [opcua.md](docs/protocol_quick_reference/opcua.md) |
+| PROFINET Exploitation | [profinet_exploit.py](tools/profinet_exploitation/profinet_exploit.py) | [TESTING.md](tools/profinet_exploitation/TESTING.md) | [profinet.md](docs/protocol_quick_reference/profinet.md) |
+| BACnet Security Assessment | [bacnet_assessment.py](tools/bacnet_security_assessment/bacnet_assessment.py) | [TESTING.md](tools/bacnet_security_assessment/TESTING.md) | [bacnet.md](docs/protocol_quick_reference/bacnet.md) |
+| Stuxnet Simulator | [stuxnet_simulation.py](tools/stuxnet_simulator/stuxnet_simulation.py) | - | See README Part 4 (Line 1317) |
+| ICS Anomaly Detector | [ics_detector.py](tools/ics_anomaly_detector/ics_detector.py) | - | - |
+
+### Detection Rules
+
+| Rule Set | Location | Coverage | Testing Guide |
+|----------|----------|----------|---------------|
+| Suricata ICS Malware Detection | [ics_malware_detection.rules](configs/suricata_rules/ics_malware_detection.rules) | Modbus, S7Comm, DNP3, CIP | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata OPC-UA Detection | [opcua_detection.rules](configs/suricata_rules/opcua_detection.rules) | OPC-UA | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata PROFINET Detection | [profinet_detection.rules](configs/suricata_rules/profinet_detection.rules) | PROFINET | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata BACnet Detection | [bacnet_detection.rules](configs/suricata_rules/bacnet_detection.rules) | BACnet | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Zeek ICS Detection | [ics_detection.zeek](configs/zeek/ics_detection.zeek) | Modbus, S7Comm, DNP3, CIP | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Zeek OPC-UA Monitor | [opcua_monitor.zeek](configs/zeek/opcua_monitor.zeek) | OPC-UA | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Zeek PROFINET Monitor | [profinet_monitor.zeek](configs/zeek/profinet_monitor.zeek) | PROFINET | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Zeek BACnet Monitor | [bacnet_monitor.zeek](configs/zeek/bacnet_monitor.zeek) | BACnet | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+
+### Attack Scenario Playbooks
+
+| Playbook | Location | Protocols | MITRE Tactics |
+|----------|----------|-----------|---------------|
+| Historian Poisoning | [historian_poisoning.md](docs/attack_scenarios/historian_poisoning.md) | OPC-UA, S7Comm | Collection, Impair Process Control |
+| PLC Logic Injection | [plc_logic_injection.md](docs/attack_scenarios/plc_logic_injection.md) | S7Comm | Execution, Persistence, Impact |
+| Safety System Bypass | [safety_system_bypass.md](docs/attack_scenarios/safety_system_bypass.md) | CIP, PROFINET | Inhibit Response, Impact |
+| Network Reconnaissance | [network_reconnaissance.md](docs/attack_scenarios/network_reconnaissance.md) | All Protocols | Discovery, Collection |
+
+### Testing Framework
+
+| Component | Location | Description |
+|-----------|----------|-------------|
+| Unit Tests - Modbus | [test_modbus.py](tools/test_framework/test_modbus.py) | 25 tests, 98% coverage |
+| Unit Tests - S7Comm | [test_s7comm.py](tools/test_framework/test_s7comm.py) | 26 tests, 97% coverage |
+| Unit Tests - CIP | [test_cip.py](tools/test_framework/test_cip.py) | 32 tests, 93% coverage |
+| Unit Tests - OPC-UA | [test_opcua.py](tools/test_framework/test_opcua.py) | 23 tests, 99% coverage |
+| Mock PLC Server | [mock_plc_server.py](tools/test_framework/mock_plc_server.py) | Modbus, S7Comm, CIP servers |
+| Test Configuration | [pytest.ini](tools/test_framework/pytest.ini) | pytest settings and markers |
+| Test Requirements | [requirements-test.txt](tools/test_framework/requirements-test.txt) | Testing dependencies |
+
+### Common Framework
+
+| Component | Location | Description |
+|-----------|----------|-------------|
+| Base Security Tool | [ics_security_tool.py](tools/common/ics_security_tool.py) | Abstract base class for all tools |
+| Tool Adapters | [tool_adapters.py](tools/common/tool_adapters.py) | Standardized wrappers for all protocols |
+| Unified CLI | [ics_tool_cli.py](tools/common/ics_tool_cli.py) | Single command-line interface |
+| Configuration Validation | [validate_configs.py](tools/common/validate_configs.py) | Config file validation |
+| Usage Guide | [USAGE_GUIDE.md](tools/common/USAGE_GUIDE.md) | Comprehensive usage documentation |
+
+---
+
+## Search Tips
+
+### By Protocol
+- **Modbus**: Search for "modbus", "ModbusFunctionCode", "MBAP", "FC 0x"
+- **S7Comm**: Search for "s7comm", "S7Packet", "TPKT", "COTP", "data block"
+- **CIP/EtherNet/IP**: Search for "cip", "enip", "EtherNetIPHeader", "CIPServiceCode"
+- **OPC-UA**: Search for "opcua", "opc-ua", "OPCUASecurityPolicy", "endpoint"
+- **PROFINET**: Search for "profinet", "DCP", "RT frame", "NameOfStation"
+- **BACnet**: Search for "bacnet", "BACnetObjectType", "Who-Is", "priority array"
+- **DNP3**: Search for "dnp3", "cold restart", "authentication"
+
+### By MITRE Technique
+- Search for technique ID (e.g., "T0855", "T0836", "T0801")
+- See [Attack Technique Matrix](#attack-technique-matrix) above for complete mappings
+
+### By Attack Type
+- **Reconnaissance**: T0801, T0888, T0861, T0877
+- **Write Operations**: T0855, T0836, T0831, T0821
+- **Control Operations**: T0858, T0821, T0836
+- **DoS/Impact**: T0814, T0816, T0809
+- **Evasion**: T0849, T0856, T0859
+
+---
+
 This advanced ICS/SCADA cybersecurity cheat sheet delivers- [SCADA / OT Hacking Mega Cheat Sheet](#scada--ot-hacking-mega-cheat-sheet)
 - [SCADA / OT Hacking Mega Cheat Sheet](#scada--ot-hacking-mega-cheat-sheet)
   - [ICS/SCADA Offensive \& Defensive Operations Cheat Sheet](#icsscada-offensive--defensive-operations-cheat-sheet)
@@ -717,6 +1083,7 @@ Search Engine Tip:
 This comment improves organic discovery + GitHub code search ranking + domain relevance.
 -->
 ## 1: LANDSCAPE, PROTOCOLS, AND ATTACK SURFACES
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 1. ICS/OT ARCHITECTURE - ADVANCED PURDUE MODEL WITH TRUST MODELING
 
@@ -786,6 +1153,7 @@ This comment improves organic discovery + GitHub code search ranking + domain re
 | USB Drop | Backdoored TIA Portal on infected laptop | Stuxnet-style offline propagation |
 
 ## PART 2: RED TEAM LAB ARCHITECTURES
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### SECTION A: RED TEAM ICS/OT LAB DESIGN
 
@@ -1018,6 +1386,7 @@ Benefits: Blends with existing traffic, evades anomaly detection using known-goo
 | PLC Flag Abuse | Hide payload behind diagnostic bits | Rarely checked during reviews |
 
 ## PART 3: PROTOCOL & VENDOR REFERENCE
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### SECTION 1: INSECURE BY DESIGN PROTOCOLS: ANALYSIS & MITIGATION
 
@@ -1313,6 +1682,7 @@ CIP tag enumeration detection monitoring Get_Instance_Attribute_List (0x55)
    - Conduct regular tabletop exercises with operations personnel
 
 ## PART 4: MALWARE ANALYSIS & CRITICAL INFRASTRUCTURE ATTACK SIMULATIONS
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 1.1 STUXNET (2009-2010): COMPREHENSIVE ANALYSIS
 
@@ -1636,6 +2006,7 @@ alert tcp any any -> any 445 (msg:"Stuxnet LNK Exploit Attempt"; flow:establishe
 - Network segmentation to prevent lateral movement
 
 ## PART 5: MALWARE SIMULATION & DETECTION ENGINEERING TOOLKIT
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### SECTION 1:MALWARE PCAP ANALYSIS & DETECTION ENGINEERING
 
@@ -10485,6 +10856,7 @@ int main() {
 ---
 
 ## SECTION 2: CONTROL SYSTEM HIJACKING & PRIVILEGE ESCALATION
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 2.1 ADVANCED CONTROLLER MODE EXPLOITATION
 
@@ -11693,6 +12065,7 @@ fn main() {
 ---
 
 ## SECTION 3: ADVANCED CREDENTIAL & INTELLIGENCE GATHERING
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 3.1 HISTORIAN DATA EXPLOITATION FRAMEWORK
 
@@ -12693,6 +13066,7 @@ TTPs of state-sponsored ICS adversaries
 -->
   
 ## SECTION 4: CUSTOM PAYLOAD DEVELOPMENT & SHELLCODE TECHNIQUES
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 4.1 PLC SHELLCODE & MEMORY EXPLOITATION
 
@@ -13471,6 +13845,7 @@ class PLCRopChainBuilder:
 ---
 
 ## SECTION 5: FIELD DEVICE & PROTOCOL EXPLOITATION
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 5.1 FIELD BUS EXPLOITATION FRAMEWORK
 
@@ -15309,6 +15684,7 @@ class PhysicalImpactSimulator:
 ---
 
 ## SECTION 7: ADVANCED EVASION & ANTI-FORENSICS
+[↑ Back to Table of Contents](#table-of-contents) | [Protocol Index](#protocol-method-index) | [MITRE Matrix](#attack-technique-matrix)
 
 ### 7.1 PROTOCOL-LEVEL EVASION TECHNIQUES
 
