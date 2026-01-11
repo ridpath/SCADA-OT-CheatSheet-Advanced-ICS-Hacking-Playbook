@@ -76,7 +76,7 @@ firmware reversing, safety bypass, zero-day, Siemens, Rockwell, Allen-Bradley
 
 **Note on GitHub Truncation:**
 
-The main `README.md` file is very large and may appear **truncated** when viewed in GitHub’s web interface. However, the full content is available through click on README.md file directy or **Raw view** or by cloning the repository.
+The main `README.md` file is very large and may appear **truncated** when viewed in GitHub's web interface. However, the full content is available through click on README.md file directy or **Raw view** or by cloning the repository.
 
 To access the complete README:
 
@@ -90,6 +90,80 @@ We are working on breaking this into multiple smaller files for easier navigatio
 - MITRE ATT&CK for ICS cross-referencing: T0835, T0846, T0850, etc.
 - Bypass techniques for SIEMs, EDRs, forensic logging, and sandbox analysis
 - Detection tips including protocol TAPs, value anomaly tracking, audit log tactics
+
+---
+
+## Comprehensive Protocol Coverage
+
+### Power Grid & Substation Protocols
+- **IEC 61850** (GOOSE/MMS) - Complete exploitation framework (`tools/iec61850_security_framework/`)
+  - GOOSE message spoofing and replay attacks
+  - MMS protocol exploitation (ISO 9506)
+  - Sampled Values injection
+  - Circuit breaker control
+  - Distributed Clock manipulation
+  - Detection rules: `configs/suricata_rules/iec61850_detection.rules`
+
+- **IEC 60870-5-104** - European SCADA telecontrol (`tools/iec104_exploitation/`)
+  - APDU crafting and injection
+  - Command spoofing (single/double commands)
+  - Interrogation abuse
+  - Clock synchronization attacks
+  - Detection rules: `configs/suricata_rules/iec104_detection.rules`
+
+- **DNP3** - North American utilities (`tools/dnp3_exploitation/`)
+  - Direct operate commands
+  - Binary/analog output control
+  - Cold/warm restart
+  - Unsolicited response manipulation
+  - File transfer exploitation
+  - Detection rules: `configs/suricata_rules/dnp3_enhanced_detection.rules`
+
+### Industrial Ethernet Protocols
+- **EtherCAT** - Real-time automation (`tools/ethercat_exploitation/`)
+  - Process data poisoning
+  - Distributed Clock attacks
+  - State transition forcing
+  - Servo control manipulation
+  - Emergency message injection
+  - Detection rules: `configs/suricata_rules/ethercat_detection.rules`
+
+- **PROFINET** - Siemens industrial Ethernet (`tools/profinet_exploitation/`)
+- **OPC UA** - Unified Architecture (`tools/opcua_security_framework/`)
+- **Modbus TCP** - Ubiquitous industrial protocol (`tools/modbus-stealth-toolkit/`)
+- **S7Comm** - Siemens S7 communication (`tools/s7comm_security_framework/`)
+- **CIP/EtherNet/IP** - Rockwell Automation (`tools/cip_security_assessment/`)
+- **BACnet** - Building automation (`tools/bacnet_security_assessment/`)
+
+### Vendor-Specific Frameworks
+- **Honeywell Experion PKS** - DCS platform (`tools/honeywell_experion_framework/`)
+  - Control Data Access (CDA) protocol
+  - C300/C200 controller targeting
+  - License Manager exploitation
+  - Historian data poisoning
+  - Safety Manager interlock bypass
+
+### Advanced Attack Frameworks
+- **Firmware Analysis & Exploitation** (`tools/firmware_analysis_framework/`)
+  - Automated firmware extraction
+  - Hardcoded credential discovery
+  - Backdoor detection and injection
+  - Bootloader manipulation
+  - Vulnerability scanning
+
+- **Safety System Bypass** (`tools/safety_bypass_framework/`)
+  - SIL circuit analysis
+  - Triconex/ProSafe-RS targeting
+  - Interlock defeat techniques
+  - Voting logic manipulation (1oo2, 2oo3)
+  - Emergency shutdown (ESD) defeat
+
+### Protocol Coverage Statistics
+**Total Protocols**: 10+ major ICS protocols  
+**Vendor Frameworks**: 5+ (Siemens, Rockwell, Schneider, Honeywell, Beckhoff)  
+**Detection Rules**: 200+ Suricata signatures  
+**MITRE ATT&CK Coverage**: 50+ ICS tactics and techniques  
+**Safety Systems**: SIL 1-4 targeting capabilities
 
 ## Legal & Ethical Disclaimer
 
@@ -318,18 +392,128 @@ No liability assumed for misuse.
 **Testing Guide**: [tools/bacnet_security_assessment/TESTING.md](tools/bacnet_security_assessment/TESTING.md)
 
 ### DNP3 Protocol
-**Implementation**: Detection rules in `configs/suricata_rules/ics_malware_detection.rules` and `configs/zeek/ics_detection.zeek`
+**Implementation**: `tools/dnp3_exploitation/dnp3_exploit.py`
 
-| Feature | Location | MITRE Technique | Description |
-|---------|----------|-----------------|-------------|
-| DNP3 Unauthorized Write Detection | Suricata SID 400003 | T0855, T0836 | Detects unauthorized write operations |
-| DNP3 Cold Restart Detection | Suricata SID 400004 | T0858, T0871 | Detects cold restart commands |
-| DNP3 Authentication Bypass | Suricata SID 400005 | T0859, T0819 | Detects auth bypass attempts |
-| DNP3 Write Monitoring | Zeek ics_detection.zeek:237 | T0855, T0836 | Monitors DNP3 write operations |
-| DNP3 Cold Restart Monitoring | Zeek ics_detection.zeek:247 | T0858, T0871 | Monitors cold restart commands |
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `scan_devices()` | 298 | T0801, T0888 | Scan for DNP3 devices on network |
+| `enumerate_points()` | 367 | T0801, T0861 | Enumerate database points |
+| `read_data()` | 441 | T0801, T0861 | Read analog/binary inputs |
+| `direct_operate()` | 518 | T0855, T0836 | Direct operate (no select) |
+| `write_analog_output()` | 589 | T0855, T0836 | Write analog output values |
+| `cold_restart()` | 651 | T0858, T0871 | Cold restart device |
+| `warm_restart()` | 703 | T0858, T0871 | Warm restart device |
+| `manipulate_unsolicited()` | 768 | T0856, T0803 | Manipulate unsolicited responses |
+| `file_transfer_abuse()` | 841 | T0873, T0871 | Abuse file transfer functions |
+| `bypass_sa_dnp3()` | 912 | T0859, T0819 | Attempt SA-DNP3 bypass |
 
-**Quick Reference**: [docs/protocol_quick_reference/dnp3.md](docs/protocol_quick_reference/dnp3.md)  
-**Testing Guide**: [configs/DETECTION_TESTING.md](configs/DETECTION_TESTING.md)
+**Quick Reference**: [tools/dnp3_exploitation/README.md](tools/dnp3_exploitation/README.md)  
+**Testing Guide**: [tools/dnp3_exploitation/TESTING.md](tools/dnp3_exploitation/TESTING.md)  
+**Detection Rules**: [configs/suricata_rules/dnp3_enhanced_detection.rules](configs/suricata_rules/dnp3_enhanced_detection.rules)
+
+### IEC 61850 Protocol
+**Implementation**: `tools/iec61850_security_framework/iec61850_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `discover_devices()` | 312 | T0801, T0888 | Discover IEC 61850 devices |
+| `goose_trip()` | 389 | T0855, T0836 | Send GOOSE trip command |
+| `goose_replay()` | 467 | T0856, T0855 | Replay GOOSE from pcap |
+| `mms_read()` | 541 | T0801, T0861 | MMS read variable |
+| `mms_write()` | 612 | T0855, T0836 | MMS write variable |
+| `sv_inject()` | 689 | T0855, T0856 | Sampled Values injection |
+| `clock_manipulation()` | 762 | T0878, T0804 | Distributed Clock attacks |
+| `circuit_breaker_control()` | 834 | T0855, T0836 | Control circuit breakers |
+| `protection_relay_manipulation()` | 901 | T0855, T0878 | Manipulate protection relays |
+
+**Quick Reference**: [tools/iec61850_security_framework/README.md](tools/iec61850_security_framework/README.md)  
+**Testing Guide**: [tools/iec61850_security_framework/TESTING.md](tools/iec61850_security_framework/TESTING.md)  
+**Detection Rules**: [configs/suricata_rules/iec61850_detection.rules](configs/suricata_rules/iec61850_detection.rules)
+
+### IEC 60870-5-104 Protocol
+**Implementation**: `tools/iec104_exploitation/iec104_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `scan_network()` | 287 | T0801, T0888 | Scan for IEC 104 devices |
+| `enumerate_ioa()` | 356 | T0801, T0861 | Enumerate Information Object Addresses |
+| `command_single()` | 429 | T0855, T0836 | Single command (C_SC_NA_1) |
+| `command_double()` | 498 | T0855, T0836 | Double command (C_DC_NA_1) |
+| `setpoint_command()` | 567 | T0855, T0836 | Setpoint command |
+| `interrogation_abuse()` | 634 | T0802, T0861 | Interrogation command abuse |
+| `clock_sync_attack()` | 701 | T0878, T0804 | Clock synchronization attack |
+| `session_hijacking()` | 773 | T0859, T0819 | Session hijacking |
+| `file_transfer_exploit()` | 846 | T0873, T0871 | File transfer exploitation |
+
+**Quick Reference**: [tools/iec104_exploitation/README.md](tools/iec104_exploitation/README.md)  
+**Testing Guide**: [tools/iec104_exploitation/TESTING.md](tools/iec104_exploitation/TESTING.md)  
+**Detection Rules**: [configs/suricata_rules/iec104_detection.rules](configs/suricata_rules/iec104_detection.rules)
+
+### EtherCAT Protocol
+**Implementation**: `tools/ethercat_exploitation/ethercat_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `scan_topology()` | 276 | T0801, T0888 | Scan EtherCAT topology |
+| `pdi_poisoning()` | 348 | T0855, T0836 | Process Data Image poisoning |
+| `dc_attack()` | 419 | T0878, T0804 | Distributed Clock attack |
+| `state_forcing()` | 487 | T0855, T0858 | Force state transitions |
+| `servo_manipulation()` | 556 | T0855, T0836 | Servo control manipulation |
+| `emergency_inject()` | 627 | T0878, T0804 | Emergency message injection |
+| `mailbox_exploit()` | 698 | T0855, T0861 | CoE/FoE/SoE mailbox exploit |
+| `cyclic_data_disruption()` | 771 | T0814, T0816 | Cyclic data disruption |
+
+**Quick Reference**: [tools/ethercat_exploitation/README.md](tools/ethercat_exploitation/README.md)  
+**Testing Guide**: [tools/ethercat_exploitation/TESTING.md](tools/ethercat_exploitation/TESTING.md)  
+**Detection Rules**: [configs/suricata_rules/ethercat_detection.rules](configs/suricata_rules/ethercat_detection.rules)
+
+### Honeywell Experion PKS
+**Implementation**: `tools/honeywell_experion_framework/experion_exploit.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `enumerate_controllers()` | 294 | T0801, T0888 | Enumerate C300/C200 controllers |
+| `cda_exploit()` | 367 | T0855, T0861 | Control Data Access exploitation |
+| `tag_manipulation()` | 441 | T0855, T0836 | Tag enumeration and manipulation |
+| `historian_poisoning()` | 512 | T0802, T0836 | Historian data poisoning |
+| `safety_manager_bypass()` | 586 | T0878, T0836 | Safety Manager interlock bypass |
+| `license_manager_attack()` | 657 | T0814, T0809 | License Manager attack |
+| `setpoint_modification()` | 723 | T0855, T0836 | Mass setpoint modification |
+
+**Quick Reference**: [tools/honeywell_experion_framework/README.md](tools/honeywell_experion_framework/README.md)  
+**Testing Guide**: [tools/honeywell_experion_framework/TESTING.md](tools/honeywell_experion_framework/TESTING.md)
+
+### Firmware Analysis Framework
+**Implementation**: `tools/firmware_analysis_framework/firmware_analyzer.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `analyze_firmware()` | 289 | T0839, T0857 | Complete firmware analysis |
+| `extract_strings()` | 356 | T0861, T0839 | Extract and analyze strings |
+| `find_credentials()` | 423 | T0891 | Hardcoded credential discovery |
+| `detect_backdoors()` | 498 | T0839 | Backdoor detection |
+| `scan_vulnerabilities()` | 567 | T0839, T0866 | Vulnerability scanning |
+| `inject_backdoor()` | 634 | T0839, T0873 | Backdoor injection |
+| `bootloader_manipulation()` | 701 | T0857, T0839 | Bootloader manipulation |
+
+**Quick Reference**: [tools/firmware_analysis_framework/README.md](tools/firmware_analysis_framework/README.md)  
+**Testing Guide**: [tools/firmware_analysis_framework/TESTING.md](tools/firmware_analysis_framework/TESTING.md)
+
+### Safety System Bypass Framework
+**Implementation**: `tools/safety_bypass_framework/safety_bypass.py`
+
+| Method | Line | MITRE Technique | Description |
+|--------|------|-----------------|-------------|
+| `enumerate_interlocks()` | 267 | T0801, T0861 | Enumerate safety interlocks |
+| `analyze_circuits()` | 334 | T0861, T0878 | SIL circuit analysis |
+| `bypass_interlock()` | 401 | T0878, T0836 | Single interlock bypass |
+| `voting_override()` | 472 | T0878, T0836 | Voting logic manipulation |
+| `certificate_forge()` | 541 | T0859, T0849 | Safety certificate forgery |
+| `defeat_esd()` | 612 | T0878, T0836 | Emergency shutdown defeat |
+| `network_disruption()` | 683 | T0814, T0803 | Safety network disruption |
+
+**Quick Reference**: [tools/safety_bypass_framework/README.md](tools/safety_bypass_framework/README.md)  
+**Testing Guide**: [tools/safety_bypass_framework/TESTING.md](tools/safety_bypass_framework/TESTING.md)
 
 ---
 
@@ -340,35 +524,40 @@ No liability assumed for misuse.
 | Technique ID | Name | Protocols | Implementation References |
 |-------------|------|-----------|---------------------------|
 | **T0800** | Activate Firmware Update Mode | PROFINET | profinet_exploit.py:670, profinet_exploit.py:728 |
-| **T0801** | Collection | All Protocols | modbus:467,627 / s7comm:377,589 / cip:417,450 / opcua:293,354 / profinet:212 / bacnet:288,359 |
-| **T0802** | Automated Collection | All Protocols | modbus:802 / s7comm:724 / cip:921 / opcua:547 / profinet:604 / bacnet:776 |
-| **T0803** | Block Command Message | PROFINET, BACnet | profinet:466 / bacnet:656 |
-| **T0804** | Block Reporting Message | PROFINET, BACnet | profinet:535 / bacnet:656 |
-| **T0809** | Data Destruction | PROFINET, BACnet | profinet:407 / bacnet:716 |
-| **T0814** | Denial of Service | Modbus, CIP | modbus:1728 / cip:785 |
-| **T0816** | Device Restart/Shutdown | Modbus, CIP | modbus:1728 / cip:785 |
+| **T0801** | Collection | All Protocols | modbus:467,627 / s7comm:377,589 / cip:417,450 / opcua:293,354 / profinet:212 / bacnet:288,359 / dnp3:441 / iec61850:541 / iec104:356 |
+| **T0802** | Automated Collection | All Protocols | modbus:802 / s7comm:724 / cip:921 / opcua:547 / profinet:604 / bacnet:776 / iec104:634 / experion:512 |
+| **T0803** | Block Command Message | PROFINET, BACnet, DNP3 | profinet:466 / bacnet:656 / dnp3:768 / safety:683 |
+| **T0804** | Block Reporting Message | PROFINET, BACnet, IEC 61850, EtherCAT | profinet:535 / bacnet:656 / iec61850:762 / ethercat:419,627 |
+| **T0809** | Data Destruction | PROFINET, BACnet, Honeywell | profinet:407 / bacnet:716 / experion:657 |
+| **T0814** | Denial of Service | Modbus, CIP, EtherCAT, Safety | modbus:1728 / cip:785 / ethercat:771 / safety:683 / experion:657 |
+| **T0815** | Denial of Service | IEC 61850, DNP3 | iec61850:389,467 / dnp3:651,703 |
+| **T0816** | Device Restart/Shutdown | Modbus, CIP, DNP3 | modbus:1728 / cip:785 / dnp3:651,703 |
 | **T0818** | Engineering Workstation Compromise | S7Comm | s7comm:414 (PLC logic upload for analysis) |
-| **T0819** | Exploit Public-Facing Application | S7Comm, OPC-UA | s7comm:825 / opcua:451,719 |
+| **T0819** | Exploit Public-Facing Application | S7Comm, OPC-UA, DNP3, IEC 104 | s7comm:825 / opcua:451,719 / dnp3:912 / iec104:773 |
 | **T0821** | Modify Controller Tasking | S7Comm, CIP | s7comm:499 / cip:645 |
-| **T0831** | Manipulation of Control | All Write Operations | modbus:527,577 / s7comm:473 / cip:563 / bacnet:427 |
+| **T0831** | Manipulation of Control | All Write Operations | modbus:527,577 / s7comm:473 / cip:563 / bacnet:427 / dnp3:518,589 / iec61850:389,612 |
 | **T0835** | Manipulate I/O Image | All Write Operations | All protocol write methods |
-| **T0836** | Modify Parameter | All Write Operations | modbus:527,577,745,931 / s7comm:473,499 / cip:563 / bacnet:427,582 |
+| **T0836** | Modify Parameter | All Write Operations | modbus:527,577,745,931 / s7comm:473,499 / cip:563 / bacnet:427,582 / dnp3:518,589 / iec61850:612,834 / iec104:429,498,567 / ethercat:348,556 / experion:441,723 / safety:401,472,612 |
+| **T0839** | Module Firmware | Firmware Analysis | firmware:289,498,634,701 |
 | **T0843** | Program Download | S7Comm | s7comm:473 (write to program blocks) |
-| **T0849** | Masquerading | S7Comm | s7comm:825 (protection bypass) |
+| **T0849** | Masquerading | S7Comm, Safety | s7comm:825 / safety:541 |
 | **T0855** | Unauthorized Command Message | All Protocols | All write/control methods |
-| **T0856** | Spoof Reporting Message | Modbus, CIP, PROFINET | modbus:1166 / cip:980 / profinet:535 |
-| **T0858** | Change Operating Mode | S7Comm, CIP, PROFINET, BACnet | s7comm:499 / cip:645 / profinet:407 / bacnet:716 |
-| **T0859** | Valid Accounts | DNP3 | Detection: Suricata SID 400005 |
+| **T0856** | Spoof Reporting Message | Modbus, CIP, PROFINET, IEC 61850, DNP3 | modbus:1166 / cip:980 / profinet:535 / iec61850:467,689 / dnp3:768 |
+| **T0857** | System Firmware | Firmware Analysis | firmware:289,701 |
+| **T0858** | Change Operating Mode | S7Comm, CIP, PROFINET, BACnet, DNP3, EtherCAT | s7comm:499 / cip:645 / profinet:407 / bacnet:716 / dnp3:651,703 / ethercat:487 |
+| **T0859** | Valid Accounts | DNP3, IEC 104, Safety | dnp3:912 / iec104:773 / safety:541 |
 | **T0860** | Wireless Compromise | - | README Section 5.2 (Line 13343) |
-| **T0861** | Point & Tag Identification | All Protocols | All read/enumerate methods |
+| **T0861** | Point & Tag Identification | All Protocols | All read/enumerate methods / dnp3:367 / iec104:356 / experion:367,441 / ethercat:698 / safety:267 / firmware:356 |
 | **T0862** | Supply Chain Compromise | PROFINET | profinet:728 (firmware manipulation) |
+| **T0866** | Exploitation of Remote Services | Firmware Analysis | firmware:567 |
 | **T0868** | Exploit Public-Facing Application | All Protocols | All reconnaissance methods |
-| **T0871** | Execution through API | S7Comm, BACnet | s7comm:414 / bacnet:842 |
-| **T0873** | Project File Infection | Modbus, PROFINET, BACnet | modbus:864 / profinet:728 / bacnet:842 |
+| **T0871** | Execution through API | S7Comm, BACnet, DNP3, IEC 104 | s7comm:414 / bacnet:842 / dnp3:841 / iec104:846 |
+| **T0873** | Project File Infection | Modbus, PROFINET, BACnet, DNP3, IEC 104, Firmware | modbus:864 / profinet:728 / bacnet:842 / dnp3:841 / iec104:846 / firmware:634 |
 | **T0877** | I/O Module Discovery | CIP | cip:1190 |
-| **T0878** | Alarm Suppression | CIP, PROFINET | cip:921 / profinet:535 |
+| **T0878** | Alarm Suppression | CIP, PROFINET, IEC 61850, IEC 104, EtherCAT, Experion, Safety | cip:921 / profinet:535 / iec61850:901 / iec104:701 / ethercat:627 / experion:586 / safety:267,334,401,472,612 |
 | **T0885** | Commonly Used Port | All Protocols | All connection methods |
-| **T0888** | Remote System Discovery | All Protocols | All discovery/scan methods |
+| **T0888** | Remote System Discovery | All Protocols | All discovery/scan methods / dnp3:298 / iec61850:312 / iec104:287 / ethercat:276 / experion:294 |
+| **T0891** | Hardcoded Credentials | Firmware Analysis | firmware:423 |
 
 ### Tactic Coverage
 
@@ -399,6 +588,13 @@ No liability assumed for misuse.
 | OPC-UA Security Framework | [opcua_exploit.py](tools/opcua_security_framework/opcua_exploit.py) | [TESTING.md](tools/opcua_security_framework/TESTING.md) | [opcua.md](docs/protocol_quick_reference/opcua.md) |
 | PROFINET Exploitation | [profinet_exploit.py](tools/profinet_exploitation/profinet_exploit.py) | [TESTING.md](tools/profinet_exploitation/TESTING.md) | [profinet.md](docs/protocol_quick_reference/profinet.md) |
 | BACnet Security Assessment | [bacnet_assessment.py](tools/bacnet_security_assessment/bacnet_assessment.py) | [TESTING.md](tools/bacnet_security_assessment/TESTING.md) | [bacnet.md](docs/protocol_quick_reference/bacnet.md) |
+| DNP3 Exploitation Toolkit | [dnp3_exploit.py](tools/dnp3_exploitation/dnp3_exploit.py) | [TESTING.md](tools/dnp3_exploitation/TESTING.md) | [README.md](tools/dnp3_exploitation/README.md) |
+| IEC 61850 Security Framework | [iec61850_exploit.py](tools/iec61850_security_framework/iec61850_exploit.py) | [TESTING.md](tools/iec61850_security_framework/TESTING.md) | [README.md](tools/iec61850_security_framework/README.md) |
+| IEC 60870-5-104 Exploitation | [iec104_exploit.py](tools/iec104_exploitation/iec104_exploit.py) | [TESTING.md](tools/iec104_exploitation/TESTING.md) | [README.md](tools/iec104_exploitation/README.md) |
+| EtherCAT Security Framework | [ethercat_exploit.py](tools/ethercat_exploitation/ethercat_exploit.py) | [TESTING.md](tools/ethercat_exploitation/TESTING.md) | [README.md](tools/ethercat_exploitation/README.md) |
+| Honeywell Experion Framework | [experion_exploit.py](tools/honeywell_experion_framework/experion_exploit.py) | [TESTING.md](tools/honeywell_experion_framework/TESTING.md) | [README.md](tools/honeywell_experion_framework/README.md) |
+| Firmware Analysis Framework | [firmware_analyzer.py](tools/firmware_analysis_framework/firmware_analyzer.py) | [TESTING.md](tools/firmware_analysis_framework/TESTING.md) | [README.md](tools/firmware_analysis_framework/README.md) |
+| Safety System Bypass Framework | [safety_bypass.py](tools/safety_bypass_framework/safety_bypass.py) | [TESTING.md](tools/safety_bypass_framework/TESTING.md) | [README.md](tools/safety_bypass_framework/README.md) |
 | Stuxnet Simulator | [stuxnet_simulation.py](tools/stuxnet_simulator/stuxnet_simulation.py) | - | See README Part 4 (Line 1317) |
 | ICS Anomaly Detector | [ics_detector.py](tools/ics_anomaly_detector/ics_detector.py) | - | - |
 
@@ -410,6 +606,10 @@ No liability assumed for misuse.
 | Suricata OPC-UA Detection | [opcua_detection.rules](configs/suricata_rules/opcua_detection.rules) | OPC-UA | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
 | Suricata PROFINET Detection | [profinet_detection.rules](configs/suricata_rules/profinet_detection.rules) | PROFINET | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
 | Suricata BACnet Detection | [bacnet_detection.rules](configs/suricata_rules/bacnet_detection.rules) | BACnet | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata IEC 61850 Detection | [iec61850_detection.rules](configs/suricata_rules/iec61850_detection.rules) | IEC 61850 (GOOSE/MMS/SV) | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata IEC 104 Detection | [iec104_detection.rules](configs/suricata_rules/iec104_detection.rules) | IEC 60870-5-104 | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata DNP3 Enhanced Detection | [dnp3_enhanced_detection.rules](configs/suricata_rules/dnp3_enhanced_detection.rules) | DNP3 | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
+| Suricata EtherCAT Detection | [ethercat_detection.rules](configs/suricata_rules/ethercat_detection.rules) | EtherCAT | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
 | Zeek ICS Detection | [ics_detection.zeek](configs/zeek/ics_detection.zeek) | Modbus, S7Comm, DNP3, CIP | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
 | Zeek OPC-UA Monitor | [opcua_monitor.zeek](configs/zeek/opcua_monitor.zeek) | OPC-UA | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |
 | Zeek PROFINET Monitor | [profinet_monitor.zeek](configs/zeek/profinet_monitor.zeek) | PROFINET | [DETECTION_TESTING.md](configs/DETECTION_TESTING.md) |

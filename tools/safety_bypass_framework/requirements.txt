@@ -1,0 +1,5 @@
+# No external dependencies required - uses Python standard library only
+
+# WARNING: This framework is for authorized security testing only.
+# Bypassing safety systems can cause loss of life, environmental disasters,
+# and equipment destruction. Use only in isolated test environments.

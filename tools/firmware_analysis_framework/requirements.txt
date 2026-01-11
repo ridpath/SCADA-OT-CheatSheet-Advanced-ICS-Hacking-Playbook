@@ -1,0 +1,4 @@
+# No external dependencies required - uses Python standard library only
+# Optional dependencies for enhanced analysis:
+# binwalk>=2.3.0  # Firmware extraction and analysis
+# python-magic>=0.4.0  # File type detection

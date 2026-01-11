@@ -1,0 +1,121 @@
+# EtherCAT Detection Rules
+# Protocol: EtherCAT (Ethernet for Control Automation Technology)
+# Author: Ridpath
+# Version: 1.0
+
+# EtherCAT Protocol Detection (Ethertype 0x88A4)
+alert ethernet any any -> any any (msg:"ICS PROTOCOL EtherCAT Traffic Detected"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    classtype:protocol-command-decode; sid:6188001; rev:1;)
+
+# EtherCAT Broadcast Write (BWR)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Broadcast Write Command"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|08|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6188010; rev:1;)
+
+# EtherCAT Auto-Increment Physical Write (APWR)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Auto-Increment Physical Write"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|02|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6188011; rev:1;)
+
+# EtherCAT Fixed Physical Write (FPWR)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Fixed Physical Write"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|05|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6188012; rev:1;)
+
+# EtherCAT Logical Write (LWR)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Logical Write"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|0b|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6188013; rev:1;)
+
+# EtherCAT State Change to INIT (Potential Reset Attack)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT State Change to INIT"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|20 01|"; distance:0; \
+    content:"|01 00|"; distance:0; \
+    classtype:attempted-dos; sid:6188020; rev:1;)
+
+# EtherCAT State Change to OP (Unauthorized)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT State Change to OPERATIONAL"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|20 01|"; distance:0; \
+    content:"|08 00|"; distance:0; \
+    classtype:attempted-admin; sid:6188021; rev:1;)
+
+# EtherCAT Distributed Clock Write
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Distributed Clock Manipulation"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|00 09|"; distance:4; within:2; \
+    classtype:attempted-admin; sid:6188030; rev:1;)
+
+# EtherCAT High Frame Rate (Possible Flood)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT High Frame Rate - Possible DoS"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    threshold: type both, track by_src, count 1000, seconds 1; \
+    classtype:attempted-dos; sid:6188040; rev:1;)
+
+# EtherCAT Emergency Message
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Emergency Message Injection"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|34 01|"; distance:0; \
+    classtype:attempted-dos; sid:6188050; rev:1;)
+
+# EtherCAT from Unexpected Source
+alert ethernet !$HOME_NET any -> any any (msg:"ICS ATTACK EtherCAT Traffic from External Network"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    classtype:attempted-admin; sid:6188060; rev:1;)
+
+# EtherCAT Mailbox Access
+alert ethernet any any -> any any (msg:"ICS PROTOCOL EtherCAT Mailbox Communication"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|00 10|"; distance:4; within:2; \
+    classtype:protocol-command-decode; sid:6188070; rev:1;)
+
+# CoE (CANopen over EtherCAT) SDO Write
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT CoE SDO Write"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|03|"; distance:0; \
+    content:"|23|"; distance:0; \
+    classtype:attempted-admin; sid:6188080; rev:1;)
+
+# FoE (File Access over EtherCAT)
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT File Transfer Detected"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|04|"; distance:0; \
+    classtype:attempted-user; sid:6188090; rev:1;)
+
+# SoE (Servo Drive over EtherCAT) Write
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Servo Drive Write"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|05|"; distance:0; \
+    classtype:attempted-admin; sid:6188100; rev:1;)
+
+# EtherCAT Multiple Masters Detected
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT Multiple Masters Detected"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    threshold: type both, track by_dst, count 2, seconds 60; \
+    classtype:attempted-dos; sid:6188110; rev:1;)
+
+# EtherCAT Broadcast Read-Write (Scanning)
+alert ethernet any any -> any any (msg:"ICS RECON EtherCAT Broadcast Read-Write Scanning"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|09|"; distance:2; within:1; \
+    threshold: type both, track by_src, count 10, seconds 5; \
+    classtype:attempted-recon; sid:6188120; rev:1;)
+
+# EtherCAT Working Counter Zero (Communication Failure)
+alert ethernet any any -> any any (msg:"ICS INFO EtherCAT Working Counter Zero - Communication Issue"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|00 00|"; distance:0; \
+    classtype:protocol-command-decode; sid:6188130; rev:1;)
+
+# EtherCAT Process Data Image Manipulation
+alert ethernet any any -> any any (msg:"ICS ATTACK EtherCAT PDI Write to Process Data"; \
+    content:"|88 a4|"; offset:12; depth:2; \
+    content:"|00 10|"; distance:4; within:2; \
+    content:"|0b|"; distance:0; within:10; \
+    classtype:attempted-admin; sid:6188140; rev:1;)

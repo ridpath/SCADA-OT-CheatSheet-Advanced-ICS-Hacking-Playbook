@@ -1,0 +1,117 @@
+# IEC 60870-5-104 Detection Rules
+# Protocol: IEC 60870-5-104 Telecontrol
+# Author: Ridpath
+# Version: 1.0
+
+# IEC 104 Connection Detection
+alert tcp any any -> any 2404 (msg:"ICS PROTOCOL IEC 104 Connection Attempt"; \
+    flow:to_server,established; \
+    classtype:protocol-command-decode; sid:6104001; rev:1;)
+
+# STARTDT_ACT (Start Data Transfer)
+alert tcp any any -> any 2404 (msg:"ICS PROTOCOL IEC 104 STARTDT_ACT"; \
+    flow:to_server,established; \
+    content:"|68 04 07 00 00 00|"; offset:0; depth:6; \
+    classtype:protocol-command-decode; sid:6104002; rev:1;)
+
+# STOPDT_ACT (Stop Data Transfer)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 STOPDT_ACT - Possible DoS"; \
+    flow:to_server,established; \
+    content:"|68 04 13 00 00 00|"; offset:0; depth:6; \
+    classtype:attempted-dos; sid:6104003; rev:1;)
+
+# General Interrogation Command (C_IC_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS RECON IEC 104 General Interrogation"; \
+    flow:to_server,established; \
+    content:"|64|"; distance:6; within:1; \
+    content:"|06|"; distance:2; within:1; \
+    classtype:attempted-recon; sid:6104010; rev:1;)
+
+# Single Command (C_SC_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Single Command"; \
+    flow:to_server,established; \
+    content:"|2d|"; distance:6; within:1; \
+    content:"|06|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6104011; rev:1;)
+
+# Double Command (C_DC_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Double Command"; \
+    flow:to_server,established; \
+    content:"|2e|"; distance:6; within:1; \
+    content:"|06|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6104012; rev:1;)
+
+# Setpoint Command (C_SE_NC_1 - Float)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Setpoint Command (Float)"; \
+    flow:to_server,established; \
+    content:"|32|"; distance:6; within:1; \
+    content:"|06|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6104013; rev:1;)
+
+# Clock Synchronization (C_CS_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Clock Synchronization"; \
+    flow:to_server,established; \
+    content:"|67|"; distance:6; within:1; \
+    content:"|06|"; distance:2; within:1; \
+    classtype:attempted-admin; sid:6104014; rev:1;)
+
+# Counter Interrogation (C_CI_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS RECON IEC 104 Counter Interrogation"; \
+    flow:to_server,established; \
+    content:"|65|"; distance:6; within:1; \
+    classtype:attempted-recon; sid:6104015; rev:1;)
+
+# Command Flood
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Command Flood"; \
+    flow:to_server,established; \
+    threshold: type both, track by_src, count 50, seconds 10; \
+    classtype:attempted-dos; sid:6104020; rev:1;)
+
+# Unknown Type ID (Possible Fuzzing)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Unknown Type ID - Possible Fuzzing"; \
+    flow:to_server,established; \
+    pcre:"/\x68.[\x80-\xFF]/"; \
+    classtype:attempted-dos; sid:6104021; rev:1;)
+
+# Read Command (C_RD_NA_1) Scanning
+alert tcp any any -> any 2404 (msg:"ICS RECON IEC 104 Read Command Scanning"; \
+    flow:to_server,established; \
+    content:"|66|"; distance:6; within:1; \
+    threshold: type both, track by_src, count 20, seconds 10; \
+    classtype:attempted-recon; sid:6104030; rev:1;)
+
+# File Transfer (F_FR_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 File Transfer Detected"; \
+    flow:to_server,established; \
+    content:"|78|"; distance:6; within:1; \
+    classtype:attempted-user; sid:6104040; rev:1;)
+
+# Parameter Activation (P_AC_NA_1)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Parameter Activation"; \
+    flow:to_server,established; \
+    content:"|71|"; distance:6; within:1; \
+    classtype:attempted-admin; sid:6104041; rev:1;)
+
+# Cause of Transmission: Spontaneous (Unexpected)
+alert tcp any any <- any 2404 (msg:"ICS INFO IEC 104 Spontaneous Data - Verify Legitimacy"; \
+    flow:from_server,established; \
+    content:"|03|"; distance:9; within:1; \
+    classtype:protocol-command-decode; sid:6104050; rev:1;)
+
+# Connection from Unauthorized Source
+alert tcp !$HOME_NET any -> any 2404 (msg:"ICS ATTACK IEC 104 Connection from External Network"; \
+    flow:to_server,established; \
+    classtype:attempted-admin; sid:6104060; rev:1;)
+
+# Multiple Commands in Single I-Frame (Unusual)
+alert tcp any any -> any 2404 (msg:"ICS ATTACK IEC 104 Multiple Commands in I-Frame"; \
+    flow:to_server,established; \
+    content:"|68|"; offset:0; depth:1; \
+    byte_test:1,>,30,1; \
+    classtype:attempted-admin; sid:6104070; rev:1;)
+
+# Sequence Number Anomaly
+alert tcp any any <> any 2404 (msg:"ICS ATTACK IEC 104 Sequence Number Anomaly"; \
+    flow:established; \
+    detection_filter: track by_src, count 5, seconds 2; \
+    classtype:protocol-command-decode; sid:6104080; rev:1;)

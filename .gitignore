@@ -1,5 +1,9 @@
-# Zenflow task management
+# Zenflow task management and worktrees
 .zenflow/
+.zenflow-*
+*/.zenflow/
+zenflow/
+worktrees/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -53,6 +57,18 @@ coverage.xml
 .pytest_cache/
 test-results/
 *.xml
+test_*.pyc
+*_test.pyc
+test_output/
+test_reports/
+.test/
+tests/__pycache__/
+**/test/__pycache__/
+**/tests/__pycache__/
+junit.xml
+test.log
+test_*.log
+*_test.log
 
 # Translations
 *.mo
@@ -153,10 +169,15 @@ logs/
 *.out
 *.err
 
-# PCAP files (optional - uncomment if you don't want to commit PCAPs)
-# *.pcap
-# *.pcapng
-# *.cap
+# PCAP files and network captures
+*.pcap
+*.pcapng
+*.cap
+*.dmp
+captures/
+pcaps/
+network_captures/
+traffic_dumps/
 
 # Config files with sensitive data (uncomment if needed)
 # config.yaml
@@ -204,7 +225,47 @@ results/
 exports/
 output/
 reports/
+analysis/
+analysis_results/
+scan_results/
+exploit_results/
+assessment_results/
+*_results.json
+*_results.txt
+*_results.csv
+*_report.json
+*_report.txt
+*_report.html
+*_report.pdf
 
 # Malware samples (if any are stored for testing)
 samples/
 malware/
+firmware_samples/
+extracted_firmware/
+firmware_extract/
+
+# ICS-specific test artifacts
+plc_backups/
+*.s7p
+*.ap13
+*.ap14
+*.ap15
+*.ap16
+*.acd
+*.ld
+*.st
+*.fbd
+project_backups/
+controller_dumps/
+logic_dumps/
+memory_dumps/
+*.memdump
+
+# Temporary analysis files
+*_analysis.txt
+*_scan.txt
+*_enum.txt
+enumeration_*.txt
+scan_*.txt
+recon_*.txt

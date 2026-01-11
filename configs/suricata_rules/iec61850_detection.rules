@@ -1,0 +1,100 @@
+# IEC 61850 GOOSE/MMS Detection Rules
+# Protocol: IEC 61850-8-1 (GOOSE), ISO 9506 (MMS)
+# Author: Ridpath
+# Version: 1.0
+
+# GOOSE Protocol Detection (Ethertype 0x88B8)
+alert ethernet any any -> any any (msg:"ICS PROTOCOL IEC 61850 GOOSE Traffic Detected"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    classtype:protocol-command-decode; sid:6185001; rev:1;)
+
+# GOOSE Trip Command
+alert ethernet any any -> any any (msg:"ICS ATTACK IEC 61850 GOOSE Trip Command"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    content:"|01 00|"; distance:20; within:100; \
+    classtype:attempted-dos; sid:6185002; rev:1;)
+
+# GOOSE Rapid State Number Change (Replay Attack)
+alert ethernet any any -> any any (msg:"ICS ATTACK IEC 61850 GOOSE Rapid StNum Change - Possible Replay"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    threshold: type both, track by_src, count 10, seconds 1; \
+    classtype:attempted-dos; sid:6185003; rev:1;)
+
+# GOOSE to Non-Standard Multicast Address
+alert ethernet any any -> !01:0c:cd:01:00:00/ff:ff:ff:00:00:00 any (msg:"ICS ATTACK IEC 61850 GOOSE to Unexpected Destination"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    classtype:protocol-command-decode; sid:6185004; rev:1;)
+
+# MMS Protocol Detection (Port 102)
+alert tcp any any -> any 102 (msg:"ICS PROTOCOL IEC 61850 MMS Connection Attempt"; \
+    flow:to_server,established; \
+    classtype:protocol-command-decode; sid:6185010; rev:1;)
+
+# MMS Initiate Request
+alert tcp any any -> any 102 (msg:"ICS PROTOCOL IEC 61850 MMS Initiate Request"; \
+    flow:to_server,established; \
+    content:"|a8|"; offset:0; depth:1; \
+    classtype:protocol-command-decode; sid:6185011; rev:1;)
+
+# MMS Write Request
+alert tcp any any -> any 102 (msg:"ICS ATTACK IEC 61850 MMS Write Request"; \
+    flow:to_server,established; \
+    content:"|a0|"; offset:0; depth:1; \
+    content:"|05|"; distance:2; within:10; \
+    classtype:attempted-admin; sid:6185012; rev:1;)
+
+# MMS Domain Enumeration (GetNameList)
+alert tcp any any -> any 102 (msg:"ICS RECON IEC 61850 MMS Domain Enumeration"; \
+    flow:to_server,established; \
+    content:"|a0|"; offset:0; depth:1; \
+    content:"|01|"; distance:2; within:10; \
+    classtype:attempted-recon; sid:6185013; rev:1;)
+
+# MMS Read Request Flood
+alert tcp any any -> any 102 (msg:"ICS ATTACK IEC 61850 MMS Read Flood"; \
+    flow:to_server,established; \
+    content:"|04|"; distance:0; \
+    threshold: type both, track by_src, count 50, seconds 10; \
+    classtype:attempted-dos; sid:6185014; rev:1;)
+
+# Sampled Values Protocol Detection (Ethertype 0x88BA)
+alert ethernet any any -> any any (msg:"ICS PROTOCOL IEC 61850 Sampled Values Traffic"; \
+    content:"|88 ba|"; offset:12; depth:2; \
+    classtype:protocol-command-decode; sid:6185020; rev:1;)
+
+# Sampled Values High Rate (Possible Injection)
+alert ethernet any any -> any any (msg:"ICS ATTACK IEC 61850 SV High Rate - Possible Injection"; \
+    content:"|88 ba|"; offset:12; depth:2; \
+    threshold: type both, track by_src, count 100, seconds 1; \
+    classtype:attempted-dos; sid:6185021; rev:1;)
+
+# GOOSE Test Bit Set
+alert ethernet any any -> any any (msg:"ICS INFO IEC 61850 GOOSE Test Mode Active"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    content:"|87 01 01|"; distance:0; \
+    classtype:protocol-command-decode; sid:6185030; rev:1;)
+
+# GOOSE Configuration Revision Change
+alert ethernet any any -> any any (msg:"ICS INFO IEC 61850 GOOSE Configuration Change Detected"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    content:"|88|"; distance:0; \
+    classtype:protocol-command-decode; sid:6185031; rev:1;)
+
+# MMS Identify Request (Recon)
+alert tcp any any -> any 102 (msg:"ICS RECON IEC 61850 MMS Identify Request"; \
+    flow:to_server,established; \
+    content:"|a0|"; offset:0; depth:1; \
+    content:"|82|"; distance:2; within:10; \
+    classtype:attempted-recon; sid:6185040; rev:1;)
+
+# MMS File Services (Potential Data Exfiltration)
+alert tcp any any -> any 102 (msg:"ICS ATTACK IEC 61850 MMS File Transfer Detected"; \
+    flow:to_server,established; \
+    content:"|19|"; distance:0; within:50; \
+    classtype:attempted-user; sid:6185041; rev:1;)
+
+# Multiple GOOSE Publishers Same APPID (Spoofing)
+alert ethernet any any -> any any (msg:"ICS ATTACK IEC 61850 Multiple GOOSE Sources Same APPID"; \
+    content:"|88 b8|"; offset:12; depth:2; \
+    threshold: type both, track by_dst, count 2, seconds 60; \
+    classtype:attempted-dos; sid:6185050; rev:1;)

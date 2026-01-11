@@ -1,0 +1,148 @@
+# DNP3 Enhanced Detection Rules
+# Protocol: DNP3 (Distributed Network Protocol 3)
+# Author: Ridpath
+# Version: 1.0
+
+# DNP3 Connection Detection
+alert tcp any any -> any 20000 (msg:"ICS PROTOCOL DNP3 Connection Attempt"; \
+    flow:to_server,established; \
+    classtype:protocol-command-decode; sid:6103001; rev:1;)
+
+# DNP3 Secure Authentication Port
+alert tcp any any -> any 19999 (msg:"ICS PROTOCOL DNP3 Secure Authentication (SA-DNP3)"; \
+    flow:to_server,established; \
+    classtype:protocol-command-decode; sid:6103002; rev:1;)
+
+# Direct Operate (No Select)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Direct Operate Command"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|05|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103010; rev:1;)
+
+# Direct Operate No Response (Stealthy)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Direct Operate No Response"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|06|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103011; rev:1;)
+
+# Cold Restart
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Cold Restart Command"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|0d|"; distance:8; within:1; \
+    classtype:attempted-dos; sid:6103020; rev:1;)
+
+# Warm Restart
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Warm Restart Command"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|0e|"; distance:8; within:1; \
+    classtype:attempted-dos; sid:6103021; rev:1;)
+
+# Write Time and Date
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Time Synchronization"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|02|"; distance:8; within:1; \
+    content:"|32|"; distance:0; within:10; \
+    classtype:attempted-admin; sid:6103030; rev:1;)
+
+# Enable Unsolicited
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Enable Unsolicited Messages"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|14|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103040; rev:1;)
+
+# Disable Unsolicited (Stealthy Attack)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Disable Unsolicited Messages"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|15|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103041; rev:1;)
+
+# File Operations (Open File)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 File Transfer - Open File"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|19|"; distance:8; within:1; \
+    classtype:attempted-user; sid:6103050; rev:1;)
+
+# Delete File
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 File Delete"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|1b|"; distance:8; within:1; \
+    classtype:attempted-user; sid:6103051; rev:1;)
+
+# Database Scan (Rapid Read Requests)
+alert tcp any any -> any 20000 (msg:"ICS RECON DNP3 Database Scanning"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|01|"; distance:8; within:1; \
+    threshold: type both, track by_src, count 30, seconds 10; \
+    classtype:attempted-recon; sid:6103060; rev:1;)
+
+# Integrity Poll
+alert tcp any any -> any 20000 (msg:"ICS PROTOCOL DNP3 Integrity Poll (Class 0)"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|01|"; distance:8; within:1; \
+    content:"|3c 01|"; distance:0; within:10; \
+    classtype:protocol-command-decode; sid:6103070; rev:1;)
+
+# Analog Output Command (Setpoint)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Analog Output Command"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|05|"; distance:8; within:1; \
+    content:"|29|"; distance:0; within:10; \
+    classtype:attempted-admin; sid:6103080; rev:1;)
+
+# Counter Reset
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Counter Reset"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|07|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103090; rev:1;)
+
+# Broadcast Message (Unusual)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Broadcast Message Detected"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|ff ff|"; distance:3; within:2; \
+    classtype:attempted-admin; sid:6103100; rev:1;)
+
+# Unsolicited Response (Should be from Outstation)
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Unsolicited Response from Wrong Direction"; \
+    flow:to_server,established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    content:"|82|"; distance:8; within:1; \
+    classtype:attempted-admin; sid:6103110; rev:1;)
+
+# CRC Error (Possible Tampering)
+alert tcp any any <> any 20000 (msg:"ICS ATTACK DNP3 CRC Error - Possible Tampering"; \
+    flow:established; \
+    content:"|05 64|"; offset:0; depth:2; \
+    detection_filter: track by_src, count 5, seconds 10; \
+    classtype:protocol-command-decode; sid:6103120; rev:1;)
+
+# Command Flood
+alert tcp any any -> any 20000 (msg:"ICS ATTACK DNP3 Command Flood - DoS Attempt"; \
+    flow:to_server,established; \
+    threshold: type both, track by_src, count 100, seconds 10; \
+    classtype:attempted-dos; sid:6103130; rev:1;)
+
+# External Connection Attempt
+alert tcp !$HOME_NET any -> any 20000 (msg:"ICS ATTACK DNP3 Connection from External Network"; \
+    flow:to_server,established; \
+    classtype:attempted-admin; sid:6103140; rev:1;)
+
+# Authentication Failure (SA-DNP3)
+alert tcp any any <> any [19999,20000] (msg:"ICS ATTACK DNP3 Authentication Failure"; \
+    flow:established; \
+    content:"auth"; nocase; \
+    content:"fail"; distance:0; nocase; \
+    classtype:attempted-admin; sid:6103150; rev:1;)
