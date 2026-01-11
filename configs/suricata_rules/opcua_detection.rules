@@ -1,0 +1,247 @@
+# OPC-UA Security Detection Rules for Suricata
+# Author: ICS Security Research Team
+# GitHub: https://github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook
+# Purpose: Detect OPC-UA security attacks and reconnaissance
+# Version: 1.0
+# Aligned with: tools/opcua_security_framework/opcua_exploit.py
+#
+# Variables (define in suricata.yaml for production use)
+# HOME_NET: [192.168.0.0/16]
+# EXTERNAL_NET: !$HOME_NET
+# AUTHORIZED_OPCUA_CLIENTS: [192.168.1.50, 192.168.1.51]
+# OPCUA_PORTS: [4840, 4841, 4843]
+
+# OPC-UA Endpoint Discovery from Unauthorized Source
+# Detects GetEndpoints service calls for reconnaissance
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:discover_endpoints()
+# MITRE: T0888 - Remote System Information Discovery
+# Priority: Medium - reconnaissance activity
+alert tcp !$AUTHORIZED_OPCUA_CLIENTS any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_ENDPOINT_DISCOVERY"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|01 ae 01|"; distance:17; within:10; \
+    threshold:type threshold, track by_src, count 3, seconds 300; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0888, attack_tactic=Discovery; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:3; \
+    sid:410001; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Session Creation with None Security
+# Detects insecure session creation attempts (SecurityMode=None)
+# MITRE: T0819 - Exploit Public-Facing Application
+# Priority: High - insecure communication
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_INSECURE_SESSION_CREATION"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|cd 01|"; distance:17; within:10; \
+    content:"|01 00 00 00|"; distance:0; within:50; \
+    flowbits:set,opcua_insecure_session; \
+    classtype:policy-violation; \
+    metadata: attack_technique=T0819, attack_tactic=Initial_Access; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410002; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Recursive Browse Operation
+# Detects extensive node enumeration via Browse service
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:enumerate_nodes()
+# MITRE: T0861 - Point & Tag Identification, T0801 - Monitor Process State
+# Priority: Medium - reconnaissance activity
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_RECURSIVE_NODE_ENUMERATION"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|0f 02|"; distance:17; within:10; \
+    detection_filter:track by_src, count 20, seconds 60; \
+    flowbits:set,opcua_enumeration; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0861, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:3; \
+    sid:410003; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Write Service Call from Unauthorized Source
+# Detects unauthorized write operations
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:fuzz_node_write()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: High - unauthorized control
+alert tcp !$AUTHORIZED_OPCUA_CLIENTS any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_UNAUTHORIZED_WRITE"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|a9 02|"; distance:17; within:10; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410004; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Subscription Creation with High Publishing Interval
+# Detects subscription manipulation attempts
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:create_malicious_subscription()
+# MITRE: T0801 - Monitor Process State, T0802 - Automated Collection
+# Priority: Medium - data collection
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_HIGH_RATE_SUBSCRIPTION"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|33 03|"; distance:17; within:10; \
+    threshold:type threshold, track by_src, count 5, seconds 300; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0801, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:3; \
+    sid:410005; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Method Call Service
+# Detects remote method execution attempts
+# MITRE: T0871 - Execution through API
+# Priority: High - remote code execution
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_METHOD_CALL"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|b2 02|"; distance:17; within:10; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0871, attack_tactic=Execution; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410006; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Session Hijacking Attempt
+# Detects session token reuse from different source IP
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:test_session_hijacking()
+# MITRE: T0819 - Exploit Public-Facing Application
+# Priority: Critical - session hijacking
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_POTENTIAL_SESSION_HIJACKING"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    flowbits:isset,opcua_insecure_session; \
+    threshold:type both, track by_src, count 2, seconds 60; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0819, attack_tactic=Initial_Access; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:1; \
+    sid:410007; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Certificate Error Response
+# Detects certificate validation bypass attempts
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:test_certificate_bypass()
+# MITRE: T0819 - Exploit Public-Facing Application
+# Priority: High - certificate bypass
+alert tcp $HOME_NET $OPCUA_PORTS -> $EXTERNAL_NET any ( \
+    msg:"OPCUA_CERTIFICATE_VALIDATION_ERROR"; \
+    flow:established,from_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|80 42 00 00|"; distance:0; within:100; \
+    threshold:type threshold, track by_dst, count 2, seconds 300; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0819, attack_tactic=Initial_Access; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410008; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Malformed Write Value
+# Detects fuzzing attempts with abnormal data types
+# Aligned with tools/opcua_security_framework/opcua_exploit.py:fuzz_node_write()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: High - protocol fuzzing
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_FUZZING_MALFORMED_WRITE"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|a9 02|"; distance:17; within:10; \
+    dsize:>1000; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410009; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Multi-Service Reconnaissance
+# Detects enumeration of multiple OPC-UA services
+# MITRE: T0888 - Remote System Information Discovery
+# Priority: High - advanced reconnaissance
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_MULTI_SERVICE_ENUMERATION"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    flowbits:isset,opcua_enumeration; \
+    detection_filter:track by_src, count 50, seconds 300; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0888, attack_tactic=Discovery; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:2; \
+    sid:410010; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Historical Data Access
+# Detects historical data read operations
+# MITRE: T0802 - Automated Collection
+# Priority: Medium - data exfiltration
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_HISTORICAL_DATA_ACCESS"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    content:"|a4 02|"; distance:17; within:10; \
+    threshold:type threshold, track by_src, count 10, seconds 600; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0802, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:3; \
+    sid:410011; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# OPC-UA Persistent Session
+# Detects long-lived sessions indicating persistence
+# MITRE: T0868 - Detect Operating Mode
+# Priority: Medium - persistence activity
+alert tcp $EXTERNAL_NET any -> $HOME_NET $OPCUA_PORTS ( \
+    msg:"OPCUA_PERSISTENT_SESSION_DETECTED"; \
+    flow:established,to_server; \
+    content:"|4f 50 4e|"; depth:3; \
+    content:"|46|"; distance:0; within:1; \
+    flowbits:isset,opcua_insecure_session; \
+    threshold:type both, track by_src, count 100, seconds 3600; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0868, attack_tactic=Discovery; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=opcua; \
+    priority:3; \
+    sid:410012; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)

@@ -1,0 +1,236 @@
+# PROFINET Security Detection Rules for Suricata
+# Author: ICS Security Research Team
+# GitHub: https://github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook
+# Purpose: Detect PROFINET DCP and RT class attacks
+# Version: 1.0
+# Aligned with: tools/profinet_exploitation/profinet_exploit.py
+#
+# Note: PROFINET uses Layer 2 (Ethernet) with EtherType 0x8892
+# Suricata must be configured for raw packet capture
+
+# PROFINET DCP Set NameOfStation
+# Detects unauthorized device name changes via DCP
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:set_device_name()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: High - device identity manipulation
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DCP_SET_NAMEOFSTATION"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fc|"; distance:0; within:2; \
+    content:"|04 00|"; distance:2; within:4; \
+    content:"|02 02|"; distance:0; within:20; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:2; \
+    sid:420001; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET DCP Set IP Address
+# Detects unauthorized IP address reconfiguration
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:set_device_ip()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: Critical - network configuration attack
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DCP_SET_IP_ADDRESS"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fc|"; distance:0; within:2; \
+    content:"|04 00|"; distance:2; within:4; \
+    content:"|01 02|"; distance:0; within:20; \
+    threshold:type threshold, track by_src, count 1, seconds 600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420002; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET DCP Factory Reset
+# Detects factory reset commands
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:factory_reset_device()
+# MITRE: T0809 - Data Destruction, T0858 - Change Operating Mode
+# Priority: Critical - device reset attack
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DCP_FACTORY_RESET"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fc|"; distance:0; within:2; \
+    content:"|04 00|"; distance:2; within:4; \
+    content:"|05 05|"; distance:0; within:20; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0809, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420003; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET DCP Identify Broadcast Storm
+# Detects excessive DCP Identify requests (reconnaissance)
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:discover_devices()
+# MITRE: T0888 - Remote System Information Discovery, T0868 - Detect Operating Mode
+# Priority: Medium - reconnaissance activity
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DCP_IDENTIFY_STORM"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fe|"; distance:0; within:2; \
+    content:"|05 00|"; distance:2; within:4; \
+    detection_filter:track by_src, count 10, seconds 30; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0888, attack_tactic=Discovery; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:3; \
+    sid:420004; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET RT Frame Injection (Class 1)
+# Detects real-time cyclic data injection
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:inject_rt_frame()
+# MITRE: T0855 - Unauthorized Command Message, T0803 - Block Command Message
+# Priority: Critical - process control manipulation
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_RT_CLASS1_INJECTION"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|80|"; distance:0; within:1; \
+    byte_test:1,&,0x80,14; \
+    threshold:type threshold, track by_src, count 50, seconds 60; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420005; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET Alarm Spoofing - High Priority
+# Detects spoofed high-priority alarms
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:spoof_alarm()
+# MITRE: T0878 - Alarm Suppression, T0804 - Block Reporting Message
+# Priority: Critical - safety alarm manipulation
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_ALARM_HIGH_SPOOFING"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fc 01|"; distance:0; within:2; \
+    threshold:type threshold, track by_src, count 3, seconds 300; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0878, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420006; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET Firmware Update Mode Activation
+# Detects activation of firmware update mode
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:activate_firmware_update_mode()
+# MITRE: T0800 - Activate Firmware Update Mode
+# Priority: Critical - firmware manipulation preparation
+alert tcp any any -> any any ( \
+    msg:"PROFINET_FIRMWARE_UPDATE_MODE"; \
+    flow:established,to_server; \
+    content:"|88 92|"; \
+    content:"PNIO"; distance:0; within:50; \
+    content:"FirmwareUpdate"; distance:0; within:100; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0800, attack_tactic=Persistence; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420007; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET TFTP Firmware Upload
+# Detects TFTP-based firmware reprogramming
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:reprogram_device_tftp()
+# MITRE: T0800 - Activate Firmware Update Mode, T0873 - Project File Infection
+# Priority: Critical - firmware replacement
+alert udp any any -> any 69 ( \
+    msg:"PROFINET_TFTP_FIRMWARE_UPLOAD"; \
+    flow:to_server; \
+    content:"|00 02|"; depth:2; \
+    pcre:"/\.(bin|fw|img|hex)$/i"; \
+    dsize:>10000; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0800, attack_tactic=Persistence; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420008; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET DCP Option Fuzzing
+# Detects malformed DCP packets indicating fuzzing
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:fuzz_dcp_options()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: High - vulnerability discovery
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DCP_FUZZING"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fc|"; distance:0; within:2; \
+    dsize:>500; \
+    detection_filter:track by_src, count 5, seconds 60; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:2; \
+    sid:420009; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET RT Traffic Monitoring Excessive
+# Detects unusual RT traffic capture patterns
+# Aligned with tools/profinet_exploitation/profinet_exploit.py:monitor_rt_traffic()
+# MITRE: T0801 - Monitor Process State, T0802 - Automated Collection
+# Priority: Medium - data collection
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_RT_TRAFFIC_CAPTURE"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    pcre:"/\x88\x92.{2}[\x80-\xFF]/s"; \
+    detection_filter:track by_src, count 1000, seconds 300; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0802, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:3; \
+    sid:420010; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET RT Class 3 IRT Traffic
+# Detects isochronous real-time (IRT) traffic manipulation
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: Critical - time-critical control manipulation
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_RT_CLASS3_IRT_MANIPULATION"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|f0|"; distance:0; within:1; \
+    byte_test:1,&,0xF0,14; \
+    threshold:type threshold, track by_src, count 10, seconds 30; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:1; \
+    sid:420011; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# PROFINET Device Communication Control
+# Detects attempts to block or control device communication
+# MITRE: T0803 - Block Command Message
+# Priority: High - communication disruption
+alert ethernet any any -> any any ( \
+    msg:"PROFINET_DEVICE_COMM_CONTROL"; \
+    content:"|88 92|"; offset:12; depth:2; \
+    content:"|fe fc|"; distance:0; within:2; \
+    content:"|05 01|"; distance:0; within:20; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0803, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=profinet; \
+    priority:2; \
+    sid:420012; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
