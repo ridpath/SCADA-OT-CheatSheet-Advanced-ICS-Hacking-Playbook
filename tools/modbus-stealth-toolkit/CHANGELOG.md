@@ -28,10 +28,10 @@ Added complete function code support per Modbus Application Protocol v1.1b3:
 
 **Advanced Functions (0x11-0x18):**
 - 0x11: Report Server ID
-- **0x14: Read File Record** ✨ NEW
-- **0x15: Write File Record** ✨ NEW
-- **0x16: Mask Write Register** ✨ NEW
-- **0x17: Read/Write Multiple Registers** ✨ NEW
+- **0x14: Read File Record** [NEW]
+- **0x15: Write File Record** [NEW]
+- **0x16: Mask Write Register** [NEW]
+- **0x17: Read/Write Multiple Registers** [NEW]
 - 0x18: Read FIFO Queue
 - 0x2B: Encapsulated Interface Transport
 

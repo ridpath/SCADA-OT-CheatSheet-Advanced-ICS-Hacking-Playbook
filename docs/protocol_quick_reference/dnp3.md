@@ -15,18 +15,18 @@
 ## Function Codes
 | Code | Function | Direction | MITRE |
 |------|----------|-----------|-------|
-| 0x01 | Read | Master→Outstation | T0801, T0861 |
-| 0x02 | Write | Master→Outstation | T0855, T0836 |
-| 0x03 | Select | Master→Outstation | T0855 |
-| 0x04 | Operate | Master→Outstation | T0855, T0836 |
-| 0x05 | Direct Operate | Master→Outstation | T0855, T0836 |
-| 0x06 | Direct Operate No Ack | Master→Outstation | T0855 |
-| 0x0D | Cold Restart | Master→Outstation | T0858, T0809 |
-| 0x0E | Warm Restart | Master→Outstation | T0858 |
-| 0x14 | Enable Unsolicited | Master→Outstation | T0804 |
-| 0x15 | Disable Unsolicited | Master→Outstation | T0804 |
-| 0x81 | Response | Outstation→Master | - |
-| 0x82 | Unsolicited Response | Outstation→Master | T0856 |
+| 0x01 | Read | Master->Outstation | T0801, T0861 |
+| 0x02 | Write | Master->Outstation | T0855, T0836 |
+| 0x03 | Select | Master->Outstation | T0855 |
+| 0x04 | Operate | Master->Outstation | T0855, T0836 |
+| 0x05 | Direct Operate | Master->Outstation | T0855, T0836 |
+| 0x06 | Direct Operate No Ack | Master->Outstation | T0855 |
+| 0x0D | Cold Restart | Master->Outstation | T0858, T0809 |
+| 0x0E | Warm Restart | Master->Outstation | T0858 |
+| 0x14 | Enable Unsolicited | Master->Outstation | T0804 |
+| 0x15 | Disable Unsolicited | Master->Outstation | T0804 |
+| 0x81 | Response | Outstation->Master | - |
+| 0x82 | Unsolicited Response | Outstation->Master | T0856 |
 
 ## Object Groups
 

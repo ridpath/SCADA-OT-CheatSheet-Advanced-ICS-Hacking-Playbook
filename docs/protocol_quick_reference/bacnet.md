@@ -15,13 +15,13 @@
 ## PDU Types
 | Type | Code | Description | Direction |
 |------|------|-------------|-----------|
-| Confirmed Request | 0x00 | Request requiring acknowledgment | Client→Server |
-| Unconfirmed Request | 0x10 | Request without acknowledgment | Client→Server |
-| Simple ACK | 0x20 | Simple acknowledgment | Server→Client |
-| Complex ACK | 0x30 | ACK with data | Server→Client |
+| Confirmed Request | 0x00 | Request requiring acknowledgment | Client->Server |
+| Unconfirmed Request | 0x10 | Request without acknowledgment | Client->Server |
+| Simple ACK | 0x20 | Simple acknowledgment | Server->Client |
+| Complex ACK | 0x30 | ACK with data | Server->Client |
 | Segment ACK | 0x40 | Segmentation acknowledgment | Bidirectional |
-| Error | 0x50 | Error response | Server→Client |
-| Reject | 0x60 | Request rejection | Server→Client |
+| Error | 0x50 | Error response | Server->Client |
+| Reject | 0x60 | Request rejection | Server->Client |
 | Abort | 0x70 | Transaction abort | Bidirectional |
 
 **Reference**: `bacnet_assessment.py:52-60`

@@ -847,24 +847,24 @@ def detect_safety_bypass():
 ## Attack Success Metrics
 
 ### Technical Success Criteria
-- ✓ CIP Safety packet spoofing successful
-- ✓ Safety I/O module compromised
-- ✓ Safety watchdog bypassed
-- ✓ Alarm suppression active
-- ✓ SCADA displays false safe status
-- ✓ Process manipulation achieved
+- [x] CIP Safety packet spoofing successful
+- [x] Safety I/O module compromised
+- [x] Safety watchdog bypassed
+- [x] Alarm suppression active
+- [x] SCADA displays false safe status
+- [x] Process manipulation achieved
 
 ### Physical Impact Success Criteria
-- ✓ Unsafe process condition created (overpressure)
-- ✓ Safety system failed to trip despite exceeding threshold
-- ✓ Process continued operation in unsafe state
-- ✓ Equipment stress approaching failure limits
+- [x] Unsafe process condition created (overpressure)
+- [x] Safety system failed to trip despite exceeding threshold
+- [x] Process continued operation in unsafe state
+- [x] Equipment stress approaching failure limits
 
 ### Stealth Success Criteria
-- ✓ No safety alarms generated
-- ✓ SCADA shows normal operations
-- ✓ Operators unaware of unsafe condition
-- ✓ Safety audit logs show no abnormalities
+- [x] No safety alarms generated
+- [x] SCADA shows normal operations
+- [x] Operators unaware of unsafe condition
+- [x] Safety audit logs show no abnormalities
 
 ---
 

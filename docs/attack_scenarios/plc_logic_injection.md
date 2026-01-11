@@ -657,7 +657,7 @@ severity: CRITICAL
 ```
 
 **PLC Behavioral Indicators**:
-- Increased OB1 scan time (50ms → 55ms) due to additional FC99 call
+- Increased OB1 scan time (50ms -> 55ms) due to additional FC99 call
 - New function block FC99 appeared without engineering session
 - DB100 modified outside maintenance window
 - Process behavior changes correlated with DB100.DBD100 value
@@ -858,25 +858,25 @@ if variance > 3.0:
 ## Attack Success Metrics
 
 ### Technical Success Criteria
-- ✓ FC99 malicious function injected successfully
-- ✓ OB1 modified to call FC99 without detection
-- ✓ Remote trigger mechanism functional
-- ✓ Backdoor activation verified
-- ✓ Data exfiltration channel established
-- ✓ Persistent access maintained
+- [x] FC99 malicious function injected successfully
+- [x] OB1 modified to call FC99 without detection
+- [x] Remote trigger mechanism functional
+- [x] Backdoor activation verified
+- [x] Data exfiltration channel established
+- [x] Persistent access maintained
 
 ### Persistence Success Criteria
-- ✓ Backdoor survives PLC power cycle
-- ✓ Backdoor survives PLC warm restart
-- ✓ Remote activation from external network functional
-- ✓ Exfiltration channel operates covertly
+- [x] Backdoor survives PLC power cycle
+- [x] Backdoor survives PLC warm restart
+- [x] Remote activation from external network functional
+- [x] Exfiltration channel operates covertly
 
 ### Stealth Success Criteria
-- ✓ No engineering session logged during injection
-- ✓ HMI displays normal values during manipulation
-- ✓ Scan time increase < 10% (within normal variance)
-- ✓ No authentication failures logged
-- ✓ Malicious logic disguised in legitimate function block
+- [x] No engineering session logged during injection
+- [x] HMI displays normal values during manipulation
+- [x] Scan time increase < 10% (within normal variance)
+- [x] No authentication failures logged
+- [x] Malicious logic disguised in legitimate function block
 
 ---
 

@@ -485,23 +485,23 @@ severity: CRITICAL
 ## Attack Success Metrics
 
 ### Technical Success Criteria
-- ✓ Historian data successfully modified without authentication bypass logs
-- ✓ Historical aggregates (hourly/daily) modified to hide anomaly
-- ✓ Alarm records deleted or suppressed
-- ✓ PLC setpoint manipulation achieved
-- ✓ OPC-UA session maintained for duration of attack
+- [x] Historian data successfully modified without authentication bypass logs
+- [x] Historical aggregates (hourly/daily) modified to hide anomaly
+- [x] Alarm records deleted or suppressed
+- [x] PLC setpoint manipulation achieved
+- [x] OPC-UA session maintained for duration of attack
 
 ### Physical Impact Success Criteria
-- ✓ Tank overflow achieved (100%+ level)
-- ✓ Environmental spill occurred
-- ✓ Process disruption duration: 60+ minutes
-- ✓ Equipment damage potential: High
+- [x] Tank overflow achieved (100%+ level)
+- [x] Environmental spill occurred
+- [x] Process disruption duration: 60+ minutes
+- [x] Equipment damage potential: High
 
 ### Stealth Success Criteria
-- ✓ Historian shows "normal" operations during attack window
-- ✓ No authentication failures logged
-- ✓ Session logs cleaned or obscured
-- ✓ Attack attribution difficult due to falsified timeline
+- [x] Historian shows "normal" operations during attack window
+- [x] No authentication failures logged
+- [x] Session logs cleaned or obscured
+- [x] Attack attribution difficult due to falsified timeline
 
 ---
 

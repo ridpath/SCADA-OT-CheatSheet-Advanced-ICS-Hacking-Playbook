@@ -1139,12 +1139,12 @@ def prioritize_targets(report):
 ## Attack Success Metrics
 
 ### Reconnaissance Success Criteria
-- ✓ Complete network topology mapped
-- ✓ All ICS devices identified and enumerated
-- ✓ Vulnerability assessment completed
-- ✓ Critical tags and control loops mapped
-- ✓ Attack surface analysis complete
-- ✓ Target prioritization list generated
+- [x] Complete network topology mapped
+- [x] All ICS devices identified and enumerated
+- [x] Vulnerability assessment completed
+- [x] Critical tags and control loops mapped
+- [x] Attack surface analysis complete
+- [x] Target prioritization list generated
 
 ### Information Gathering Metrics
 - **Devices Discovered**: 72
@@ -1222,19 +1222,19 @@ def detect_reconnaissance():
          |
     Firewall (DMZ)
          |
-[Level 3: SCADA/HMI] ← Read-only access to Level 2
+[Level 3: SCADA/HMI] <- Read-only access to Level 2
          |
     Firewall + IDS
          |
-[Level 2: Supervisory Control] ← Limited access to Level 1
+[Level 2: Supervisory Control] <- Limited access to Level 1
          |
     Firewall + IDS
          |
-[Level 1: PLCs and Controllers] ← Isolated from Level 0
+[Level 1: PLCs and Controllers] <- Isolated from Level 0
          |
     Unidirectional Gateway
          |
-[Level 0: Field Devices] ← No external access
+[Level 0: Field Devices] <- No external access
 ```
 
 **Authentication & Authorization**:

@@ -41,8 +41,8 @@ industrial crown jewel protection, production line security, smart factory defen
 HMI exploitation, historian tampering, OT SOC automation, SIEM correlation for ICS,
 ICS logging best practices, ICS asset discovery, PLC stop/start detection,
 process integrity monitoring, ICS threat hunting, ICS automation scanning detection,
-peak performance industrial cyber defense cheat sheet, top-tier OT security guide,
-ultimate ICS hacking reference, industry-leading SCADA security knowledge base
+comprehensive industrial cyber defense cheat sheet, professional OT security guide,
+advanced ICS hacking reference, SCADA security knowledge base
 -->
 
 
@@ -85,8 +85,8 @@ Zeek ICS monitoring, Suricata ICS rules, ICS SIEM correlation, OT SOC automation
 DCS cybersecurity, smart factory defense, OT zero-days, industrial firmware exploitation
 
 SEO Layer 3 — Long-Tail and Trending Phrases:
-“ICS hacking cheat sheet”, “best SCADA security guide”, “Stuxnet TRITON Industroyer detection lab”,
-“ICS offensive security training”, “ultimate OT/ICS hardening reference”, “PLC backdoor detection”
+"ICS hacking cheat sheet", "SCADA security guide", "Stuxnet TRITON Industroyer detection lab",
+"ICS offensive security training", "OT/ICS hardening reference", "PLC backdoor detection"
 
 SEO Layer 4 — GitHub Topic Boosting:
 ics-security, scada, plc, suricata, zeek, s7, modbus, opcua, mitre-attack-ics, cyber-range, fuzzing,
@@ -1067,8 +1067,8 @@ Zeek ICS monitoring, Suricata ICS rules, ICS SIEM correlation, OT SOC automation
 DCS cybersecurity, smart factory defense, OT zero-days, industrial firmware exploitation
 
 SEO Layer 3 — Long-Tail and Trending Phrases:
-“ICS hacking cheat sheet”, “best SCADA security guide”, “Stuxnet TRITON Industroyer detection lab”,
-“ICS offensive security training”, “ultimate OT/ICS hardening reference”, “PLC backdoor detection”
+"ICS hacking cheat sheet", "SCADA security guide", "Stuxnet TRITON Industroyer detection lab",
+"ICS offensive security training", "OT/ICS hardening reference", "PLC backdoor detection"
 
 SEO Layer 4 — GitHub Topic Boosting:
 ics-security, scada, plc, suricata, zeek, s7, modbus, opcua, mitre-attack-ics, cyber-range, fuzzing,
@@ -1113,14 +1113,14 @@ This comment improves organic discovery + GitHub code search ranking + domain re
 
 | Protocol | Port(s) | Use | Auth | Encryption | Primary Kinetic Effect | C2/Exfil Potential | Implementation |
 |----------|---------|-----|------|------------|----------------------|-------------------|----------------|
-| Modbus TCP | 502 | Read/write coils/registers | ❌ | ❌ | **Direct actuation**, override setpoints | **Low** (easy to fingerprint) | tools/modbus-stealth-toolkit/modbus_stealth_attack.py |
+| Modbus TCP | 502 | Read/write coils/registers | No | No | **Direct actuation**, override setpoints | **Low** (easy to fingerprint) | tools/modbus-stealth-toolkit/modbus_stealth_attack.py |
 | DNP3 | 20000 | Telemetry/control | Partial | Optional | **False feedback**, unsolicited spoofing | **Medium** | Detection: configs/suricata_rules/ics_malware_detection.rules:400003-400005 |
-| OPC UA | 4840 | Data broker | ✔️ | Optional | **HMI spoofing**, historian poisoning | **High** (normal channel blending) | tools/opcua_security_framework/opcua_exploit.py |
-| PROFINET | 34962/34964 | Real-time fieldbus | ❌ | ❌ | **Network DoS**, device identity spoof | **Low** | tools/profinet_exploitation/profinet_exploit.py |
-| CIP / EtherNet/IP | 44818/2222 | Rockwell interface | ❌ | ❌ | **Safety disablement, tag overwrite** | **Medium** (via rogue tags) | tools/cip_security_assessment/cip_exploiter.py |
-| S7Comm | 102 | Siemens control | ❌ | ❌ | **PLC halt/start, logic download** | **High** (block-level control) | tools/s7comm_security_framework/s7comm_exploit.py |
-| IEC-104 | 2404 | Euro grid SCADA | ❌ | ❌ | **Breaker trip, status fraud** | **Medium** | Not implemented |
-| BACnet | 47808 | HVAC/Building | ❌ | ❌ | **Environmental sabotage**, fire suppression | **Low** | tools/bacnet_security_assessment/bacnet_assessment.py |
+| OPC UA | 4840 | Data broker | Yes | Optional | **HMI spoofing**, historian poisoning | **High** (normal channel blending) | tools/opcua_security_framework/opcua_exploit.py |
+| PROFINET | 34962/34964 | Real-time fieldbus | No | No | **Network DoS**, device identity spoof | **Low** | tools/profinet_exploitation/profinet_exploit.py |
+| CIP / EtherNet/IP | 44818/2222 | Rockwell interface | No | No | **Safety disablement, tag overwrite** | **Medium** (via rogue tags) | tools/cip_security_assessment/cip_exploiter.py |
+| S7Comm | 102 | Siemens control | No | No | **PLC halt/start, logic download** | **High** (block-level control) | tools/s7comm_security_framework/s7comm_exploit.py |
+| IEC-104 | 2404 | Euro grid SCADA | No | No | **Breaker trip, status fraud** | **Medium** | Not implemented |
+| BACnet | 47808 | HVAC/Building | No | No | **Environmental sabotage**, fire suppression | **Low** | tools/bacnet_security_assessment/bacnet_assessment.py |
 | ICCP (Fox) | Varies | Grid-to-grid link | Varies | Varies | **Inter-grid sabotage** | **High** (trusted peer channel) | Not implemented |
 
 ### 3. ICS RECONNAISSANCE - PASSIVE AND ACTIVE PLAYBOOKS
