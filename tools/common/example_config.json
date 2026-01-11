@@ -1,0 +1,79 @@
+{
+  "dry_run": false,
+  "timeout": 5,
+  "max_retries": 3,
+  "log_level": "INFO",
+  
+  "safety_checks": {
+    "rate_limit": true,
+    "validate_targets": true,
+    "confirm_destructive": true
+  },
+  
+  "targets": [
+    {
+      "ip": "192.168.1.100",
+      "port": 502,
+      "protocol": "modbus",
+      "description": "PLC #1 - Production Line A"
+    },
+    {
+      "ip": "192.168.1.101",
+      "port": 102,
+      "protocol": "s7comm",
+      "description": "PLC #2 - Production Line B"
+    }
+  ],
+  
+  "scope": {
+    "enumerate": true,
+    "exploit": false,
+    "fuzz": false
+  },
+  
+  "export": {
+    "enabled": true,
+    "format": "json",
+    "output_dir": "./reports",
+    "filename_template": "{protocol}_{timestamp}.{format}"
+  },
+  
+  "modbus": {
+    "unit_id": 1,
+    "read_timeout": 2,
+    "function_codes": [3, 4]
+  },
+  
+  "s7comm": {
+    "rack": 0,
+    "slot": 2,
+    "pdu_size": 480
+  },
+  
+  "cip": {
+    "class_1_enabled": false,
+    "safety_enabled": false
+  },
+  
+  "opcua": {
+    "security_mode": "None",
+    "security_policy": "None"
+  },
+  
+  "rate_limits": {
+    "default": 10,
+    "enumerate": 5,
+    "fuzz": 1
+  },
+  
+  "mitre_filter": {
+    "techniques": ["T0801", "T0855", "T0836"],
+    "exclude_techniques": []
+  },
+  
+  "reporting": {
+    "include_metadata": true,
+    "include_timestamps": true,
+    "severity_threshold": "LOW"
+  }
+}

@@ -650,15 +650,117 @@ Verification: pytest execution successful, coverage 88% > 70% ✓
 
 ---
 
-### [ ] Step: Standardize Tool Interfaces
+### [x] Step: Standardize Tool Interfaces
+<!-- chat-id: 3bf0b953-8274-4aa0-906a-8ca6ab32dfe4 -->
 Apply standardization across all tools:
-- Add common base class `ICSSecurityTool`
-- Add YAML/JSON configuration support
-- Add dry-run mode to all tools
-- Add result export in multiple formats
-- Add safety validation checks
+- ✓ Created common base class `ICSSecurityTool`
+- ✓ Added YAML/JSON configuration support
+- ✓ Added dry-run mode to all tools
+- ✓ Added result export in multiple formats (JSON, XML, CSV, HTML, TXT)
+- ✓ Added safety validation checks
 
-Verification: Interface consistency check
+**Enhancements Completed:**
+
+**Base Class (`tools/common/ics_security_tool.py`):**
+- Created abstract base class ICSSecurityTool with standardized interface
+- Configuration management: Load settings from YAML/JSON files
+- Dry-run mode: Test operations without execution
+- Safety validation: Rate limiting, target validation, destructive operation confirmation
+- Event logging: Automatic tracking with MITRE ATT&CK mapping
+- Multi-format export: JSON, XML, CSV, HTML, TXT report generation
+- Severity levels: CRITICAL, HIGH, MEDIUM, LOW, INFO
+- Complete type hints and comprehensive docstrings
+- File size: 615 lines
+
+**Adapter Classes (`tools/common/tool_adapters.py`):**
+- Created adapter wrappers for all 6 protocols maintaining backward compatibility
+- ModbusToolAdapter: Wraps modbus_stealth_attack.py
+- S7CommToolAdapter: Wraps s7comm_exploit.py
+- CIPToolAdapter: Wraps cip_exploiter.py
+- OPCUAToolAdapter: Wraps opcua_exploit.py
+- PROFINETToolAdapter: Wraps profinet_exploit.py
+- BACnetToolAdapter: Wraps bacnet_assessment.py
+- All adapters inherit from ICSSecurityTool
+- File size: 375 lines
+
+**Unified CLI (`tools/common/ics_tool_cli.py`):**
+- Single command-line interface for all protocols
+- Protocol-specific subcommands with appropriate arguments
+- Global options: --config, --dry-run, --log-level, --export, --format
+- Automatic result export and summary display
+- Examples for all protocols
+- File size: 285 lines
+
+**Configuration Files:**
+- `example_config.yaml`: Complete YAML configuration template with all options
+- `example_config.json`: Complete JSON configuration template
+- Settings: dry_run, timeout, safety_checks, targets, scope, export, rate_limits
+- Protocol-specific configurations for Modbus, S7Comm, CIP, OPC-UA
+- MITRE ATT&CK filtering support
+
+**Documentation:**
+- `README.md`: Complete base class documentation with API reference (330 lines)
+- `USAGE_GUIDE.md`: Comprehensive usage guide with examples (500+ lines)
+  - Quick start guide
+  - Configuration management
+  - Dry-run mode
+  - Safety validation
+  - Result export examples
+  - Protocol-specific usage for all 6 protocols
+  - Advanced features
+  - Best practices
+  - Troubleshooting
+  - Reference tables
+
+**Testing:**
+- `test_standardized_interface.py`: Comprehensive test suite (380 lines)
+  - Test 1: Configuration loading (YAML/JSON)
+  - Test 2: Dry-run mode
+  - Test 3: Safety validation
+  - Test 4: Event logging
+  - Test 5: Result export (all formats)
+  - Test 6: All protocol adapters
+  - Test 7: Complete workflow
+
+**Features Implemented:**
+1. **Configuration Management**: Load/save settings in YAML or JSON format
+2. **Dry-Run Mode**: Test without execution for training and testing
+3. **Safety Validation**: Built-in checks to prevent accidental damage
+   - Target validation
+   - Rate limiting
+   - Destructive operation confirmation
+4. **Event Tracking**: Automatic logging with MITRE ATT&CK mapping
+5. **Multi-Format Export**: 
+   - JSON: Structured data for automation
+   - XML: Enterprise integration
+   - CSV: Spreadsheet analysis
+   - HTML: Professional reports
+   - TXT: Plain text logs
+6. **Standardized Logging**: Consistent logging across all tools with severity levels
+7. **Backward Compatibility**: Existing tools unchanged, adapters provide new interface
+
+**Files Created:**
+- `tools/common/__init__.py`: Module initialization
+- `tools/common/ics_security_tool.py`: Base class (615 lines)
+- `tools/common/tool_adapters.py`: Protocol adapters (375 lines)
+- `tools/common/ics_tool_cli.py`: Unified CLI (285 lines)
+- `tools/common/test_standardized_interface.py`: Test suite (380 lines)
+- `tools/common/example_config.yaml`: YAML configuration template
+- `tools/common/example_config.json`: JSON configuration template
+- `tools/common/README.md`: Base class documentation (330 lines)
+- `tools/common/USAGE_GUIDE.md`: Usage guide (500+ lines)
+- `tools/common/validate_configs.py`: Configuration validation script
+
+**Syntax Validation:**
+- ✓ All Python files validated with py_compile
+- ✓ ics_security_tool.py: Pass
+- ✓ tool_adapters.py: Pass
+- ✓ ics_tool_cli.py: Pass
+- ✓ test_standardized_interface.py: Pass
+
+**Total Lines Added:** 2,500+ lines of standardization code and documentation
+
+Verification: Interface consistency verified across all 6 protocols, syntax validation passed, comprehensive documentation created
 
 ---
 
