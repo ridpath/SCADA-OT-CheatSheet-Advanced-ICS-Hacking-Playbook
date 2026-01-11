@@ -1,0 +1,310 @@
+# BACnet Security Detection Rules for Suricata
+# Author: ICS Security Research Team
+# GitHub: https://github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook
+# Purpose: Detect BACnet/IP and MS/TP security attacks
+# Version: 1.0
+# Aligned with: tools/bacnet_security_assessment/bacnet_assessment.py
+#
+# Variables (define in suricata.yaml for production use)
+# HOME_NET: [192.168.0.0/16]
+# EXTERNAL_NET: !$HOME_NET
+# AUTHORIZED_BACNET_CLIENTS: [192.168.1.50, 192.168.1.51]
+# BACNET_PORT: 47808
+
+# BACnet Who-Is Broadcast Storm
+# Detects excessive device discovery attempts
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:discover_devices()
+# MITRE: T0888 - Remote System Information Discovery, T0868 - Detect Operating Mode
+# Priority: Medium - reconnaissance activity
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_WHOIS_BROADCAST_STORM"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|0a|"; distance:3; within:1; \
+    content:"|08|"; distance:0; within:1; \
+    detection_filter:track by_src, count 10, seconds 60; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0888, attack_tactic=Discovery; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:3; \
+    sid:430001; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet WriteProperty from Unauthorized Source
+# Detects unauthorized write operations
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:write_property()
+# MITRE: T0855 - Unauthorized Command Message, T0836 - Modify Parameter
+# Priority: High - unauthorized control
+alert udp !$AUTHORIZED_BACNET_CLIENTS any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_UNAUTHORIZED_WRITE_PROPERTY"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|0f|"; distance:0; within:1; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430002; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet ReadProperty Multiple Enumeration
+# Detects excessive property enumeration
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:enumerate_objects()
+# MITRE: T0861 - Point & Tag Identification
+# Priority: Medium - reconnaissance activity
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_PROPERTY_ENUMERATION"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|0c|"; distance:0; within:1; \
+    detection_filter:track by_src, count 20, seconds 60; \
+    classtype:network-scan; \
+    metadata: attack_technique=T0861, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:3; \
+    sid:430003; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet Priority Array Manipulation
+# Detects priority override attacks
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:manipulate_priority_array()
+# MITRE: T0855 - Unauthorized Command Message, T0836 - Modify Parameter
+# Priority: Critical - control override
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_PRIORITY_ARRAY_OVERRIDE"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|0f|"; distance:0; within:1; \
+    content:"|57|"; distance:0; within:10; \
+    threshold:type threshold, track by_src, count 1, seconds 300; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0836, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:1; \
+    sid:430004; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet DeviceCommunicationControl
+# Detects attempts to disable device communication
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:device_communication_control()
+# MITRE: T0803 - Block Command Message, T0804 - Block Reporting Message
+# Priority: Critical - communication disruption
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_DEVICE_COMMUNICATION_CONTROL"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|11|"; distance:0; within:1; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0803, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:1; \
+    sid:430005; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet ReinitializeDevice - Cold Restart
+# Detects device cold restart commands
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:reinitialize_device()
+# MITRE: T0858 - Change Operating Mode, T0871 - Execution through API
+# Priority: Critical - service disruption
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_COLD_RESTART"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|14|"; distance:0; within:1; \
+    content:"|00|"; distance:0; within:5; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0858, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:1; \
+    sid:430006; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet ReinitializeDevice - Warm Restart
+# Detects device warm restart commands
+# MITRE: T0858 - Change Operating Mode, T0871 - Execution through API
+# Priority: High - service disruption
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_WARM_RESTART"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|14|"; distance:0; within:1; \
+    content:"|01|"; distance:0; within:5; \
+    threshold:type threshold, track by_src, count 1, seconds 3600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0858, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430007; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet COV Subscription Excessive
+# Detects abnormal Change-of-Value subscription patterns
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:subscribe_cov()
+# MITRE: T0801 - Monitor Process State, T0802 - Automated Collection
+# Priority: Medium - data collection
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_COV_SUBSCRIPTION_STORM"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|05|"; distance:0; within:1; \
+    detection_filter:track by_src, count 10, seconds 60; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0802, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:3; \
+    sid:430008; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet AtomicWriteFile - Project Infection
+# Detects file write operations (potential project file infection)
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:atomic_write_file()
+# MITRE: T0873 - Project File Infection, T0871 - Execution through API
+# Priority: Critical - project file manipulation
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_ATOMIC_WRITE_FILE"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|07|"; distance:0; within:1; \
+    dsize:>200; \
+    threshold:type threshold, track by_src, count 1, seconds 300; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0873, attack_tactic=Persistence; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:1; \
+    sid:430009; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet AtomicReadFile - Data Exfiltration
+# Detects file read operations (potential data exfiltration)
+# MITRE: T0802 - Automated Collection
+# Priority: High - data exfiltration
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_ATOMIC_READ_FILE"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|06|"; distance:0; within:1; \
+    threshold:type threshold, track by_src, count 5, seconds 300; \
+    classtype:suspicious-traffic; \
+    metadata: attack_technique=T0802, attack_tactic=Collection; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430010; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet Service Fuzzing Detection
+# Detects malformed BACnet packets (fuzzing attempts)
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:fuzz_service()
+# MITRE: T0855 - Unauthorized Command Message
+# Priority: High - vulnerability discovery
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_SERVICE_FUZZING"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    dsize:>1000; \
+    detection_filter:track by_src, count 5, seconds 60; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0855, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430011; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet MS/TP Token Manipulation
+# Detects MS/TP token passing attacks (via serial/Ethernet gateway)
+# Aligned with tools/bacnet_security_assessment/bacnet_assessment.py:mstp_token_manipulation()
+# MITRE: T0803 - Block Command Message, T0804 - Block Reporting Message
+# Priority: High - network disruption
+alert tcp $EXTERNAL_NET any -> $HOME_NET any ( \
+    msg:"BACNET_MSTP_TOKEN_MANIPULATION"; \
+    flow:established,to_server; \
+    content:"MS/TP"; \
+    content:"|00|"; distance:0; within:10; \
+    pcre:"/\x55\xFF.[\x00-\x07]/s"; \
+    threshold:type threshold, track by_src, count 10, seconds 60; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0803, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430012; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet WritePropertyMultiple - Bulk Modification
+# Detects bulk property modification
+# MITRE: T0836 - Modify Parameter
+# Priority: High - bulk control manipulation
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_WRITE_PROPERTY_MULTIPLE"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|10|"; distance:0; within:1; \
+    dsize:>300; \
+    threshold:type threshold, track by_src, count 2, seconds 300; \
+    classtype:protocol-command-decode; \
+    metadata: attack_technique=T0836, attack_tactic=Impair_Process_Control; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430013; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet CreateObject Service
+# Detects unauthorized object creation
+# MITRE: T0871 - Execution through API
+# Priority: High - unauthorized system modification
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_UNAUTHORIZED_CREATE_OBJECT"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|0a|"; distance:0; within:1; \
+    threshold:type threshold, track by_src, count 1, seconds 600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0871, attack_tactic=Execution; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:2; \
+    sid:430014; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)
+
+# BACnet DeleteObject Service
+# Detects unauthorized object deletion
+# MITRE: T0809 - Data Destruction
+# Priority: Critical - data destruction
+alert udp $EXTERNAL_NET any -> $HOME_NET $BACNET_PORT ( \
+    msg:"BACNET_UNAUTHORIZED_DELETE_OBJECT"; \
+    flow:to_server; \
+    content:"|81|"; depth:1; \
+    content:"|00|"; distance:3; within:1; \
+    content:"|0b|"; distance:0; within:1; \
+    threshold:type threshold, track by_src, count 1, seconds 600; \
+    classtype:attempted-admin; \
+    metadata: attack_technique=T0809, attack_tactic=Inhibit_Response_Function; \
+    metadata: tag=SCADA-OT-CHEATSHEET, tag=redteam, tag=bacnet; \
+    priority:1; \
+    sid:430015; rev:1; gid:1; \
+    reference:url,github.com/ridpath/SCADA-OT-CheatSheet-Advanced-ICS-Hacking-Playbook; \
+)

@@ -1,0 +1,80 @@
+# Example configuration file for ICS security tools
+# This file can be customized for specific assessment scenarios
+
+# Global settings
+dry_run: false  # Set to true to test without executing operations
+timeout: 5  # Network timeout in seconds
+max_retries: 3  # Maximum retry attempts for failed operations
+log_level: INFO  # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+# Safety validation checks
+safety_checks:
+  rate_limit: true  # Limit request rate to avoid DoS
+  validate_targets: true  # Validate target IP addresses
+  confirm_destructive: true  # Confirm before destructive operations
+
+# Target configuration
+targets:
+  - ip: "192.168.1.100"
+    port: 502
+    protocol: "modbus"
+    description: "PLC #1 - Production Line A"
+  
+  - ip: "192.168.1.101"
+    port: 102
+    protocol: "s7comm"
+    description: "PLC #2 - Production Line B"
+
+# Assessment scope
+scope:
+  enumerate: true  # Perform enumeration
+  exploit: false  # Perform exploitation (requires confirmation)
+  fuzz: false  # Perform fuzzing (may cause instability)
+
+# Export settings
+export:
+  enabled: true
+  format: "json"  # json, xml, csv, html, txt
+  output_dir: "./reports"
+  filename_template: "{protocol}_{timestamp}.{format}"
+
+# Protocol-specific settings
+modbus:
+  unit_id: 1
+  read_timeout: 2
+  function_codes:
+    - 0x03  # Read Holding Registers
+    - 0x04  # Read Input Registers
+
+s7comm:
+  rack: 0
+  slot: 2
+  pdu_size: 480
+
+cip:
+  class_1_enabled: false  # Disable Class 1 connections by default
+  safety_enabled: false  # Disable safety I/O by default
+
+opcua:
+  security_mode: "None"  # None, Sign, SignAndEncrypt
+  security_policy: "None"  # None, Basic128Rsa15, Basic256, Basic256Sha256
+
+# Rate limiting (requests per second)
+rate_limits:
+  default: 10
+  enumerate: 5
+  fuzz: 1
+
+# MITRE ATT&CK filtering
+mitre_filter:
+  techniques:
+    - T0801  # Monitor Process State
+    - T0855  # Unauthorized Command Message
+    - T0836  # Modify Parameter
+  exclude_techniques: []
+
+# Reporting
+reporting:
+  include_metadata: true
+  include_timestamps: true
+  severity_threshold: "LOW"  # Only report events >= this severity
