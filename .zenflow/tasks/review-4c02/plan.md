@@ -465,14 +465,24 @@ Verification: All protocol packet structures validated against actual implementa
 
 ---
 
-### [ ] Step: README Code Accuracy Audit (Part 2: Lines 5001-10000)
+### [x] Step: README Code Accuracy Audit (Part 2: Lines 5001-10000)
+<!-- chat-id: 3a73b34a-1b45-4227-9b1e-478bdf71d95f -->
 Review README.md lines 5001-10000:
-- Continue accuracy verification
-- Add cross-references
-- Fix errors
-- Update content
+- ✓ Verified all code examples are technically accurate
+- ✓ Fixed Modbus function code range at line 5171 (changed from incorrect range 5-16 to correct set: 5,6,15,16,21,22,23)
+- ✓ Added cross-references to actual tool implementations
+- ✓ Fixed DNP3 function codes at line 5204 (corrected to check 2,4,5 for control operations)
+- ✓ Added cross-reference and documentation for S7Comm function codes (0x28, 0x29)
+- ✓ Added cross-reference for CIP packet structure at line 8503
+- ✓ Validated protocol packet structures against actual implementations
 
-Verification: Manual review
+**Corrections Made:**
+1. Line 5138: Added cross-reference to tools/s7comm_security_framework/s7comm_exploit.py:63-64
+2. Lines 5171-5173: Fixed Modbus write function code check from range (5-16) to specific codes (5,6,15,16,21,22,23) with reference to tools/modbus-stealth-toolkit/modbus_stealth_attack.py:87-97
+3. Lines 5208-5210: Fixed DNP3 control operation codes from (2,3) to (2,4,5) with protocol documentation
+4. Lines 8502-8504: Added cross-reference for CIP packet structure to tools/cip_security_assessment/cip_exploiter.py
+
+Verification: All protocol implementations verified against actual tool code, cross-references added
 
 ---
 
