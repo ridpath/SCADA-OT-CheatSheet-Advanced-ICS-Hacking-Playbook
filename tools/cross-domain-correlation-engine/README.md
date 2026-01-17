@@ -15,7 +15,6 @@ Advanced real‑time detection of **multi‑stage attacks** across **industrial 
 ![Status](https://img.shields.io/badge/status-Active--Research-green)
 ![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ICS-T0859%20T0865%20T0830%20T0889-orange)
 
-**Author**: [Ridpath](https://github.com/ridpath)  
 **Tool Path**: `/tools/cross-domain-correlation-engine/cross_domain_correlation.py`
 
 ---
