@@ -18,7 +18,6 @@ Supports **Modbus TCP**, coil/register manipulation, stealthy evasion, watchdog 
 ![Tool Type](https://img.shields.io/badge/type-red--team%2Fblue--team-lightgrey)
 
 
-**Author**: [Ridpath](https://github.com/ridpath)  
 **Tool Path**: `/tools/cyclic-stress-attack/cyclic_stress_attack.py`  
 **MITRE ICS ATT&CK**:
 - T0858 – Unauthorized Command Message  
