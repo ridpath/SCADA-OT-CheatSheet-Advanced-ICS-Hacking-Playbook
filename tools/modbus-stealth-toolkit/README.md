@@ -12,7 +12,6 @@ modbus toolkit, SCADA hacking tools, ICS cybersecurity, PLC spoofing, Modbus TCP
 ![Tool Type](https://img.shields.io/badge/type-red--team-lightgrey)
 ![Status](https://img.shields.io/badge/status-research--grade-success)
 
-**Author**: [Ridpath](https://github.com/ridpath)  
 **Tool Path**: `/tools/modbus-stealth-toolkit/modbus_stealth_attack.py`  
 ---
 
