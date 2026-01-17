@@ -13,7 +13,6 @@ stuxnet simulation, ICS malware framework, S7Comm attack tool, PLC logic injecti
 ![Tool Type](https://img.shields.io/badge/type-simulation%2Fmalware-lightgrey)
 
 
-**Author**: [Ridpath](https://github.com/ridpath)  
 **Tool Path**: `/tools/stuxnet_simulator/stuxnet_simulation.py`
 
 ---
